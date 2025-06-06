@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FastEndpoints.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using PortfolioHub.Projects;
 using PortfolioHub.Users;
 using Serilog;
 using System.Reflection;
@@ -19,7 +20,8 @@ builder.Services.AddSingleton(Log.Logger);
 Log.Information("Starting up application");
 
 IList<Assembly> assemblies = [typeof(Program).Assembly];
-builder.Services.AddUsersModule(builder.Configuration, assemblies);
+builder.Services.AddUsersModule(builder.Configuration, assemblies)
+    .AddProjectsModule(builder.Configuration, assemblies);
 builder.Services.AddFastEndpoints()
          .AddAuthenticationJwtBearer(options =>
 {
