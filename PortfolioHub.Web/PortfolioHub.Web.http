@@ -1,6 +1,11 @@
-@PortfolioHub.Web_HostAddress = http://localhost:5013
+@PortfolioHub.Web_HostAddress = https://localhost:7181
 
-GET {{PortfolioHub.Web_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{PortfolioHub.Web_HostAddress}}/user
+Content-Type: application/json
 
+{
+    "username": "testuser",
+    "email":"testuser@gmail.com",
+    "password": "Testpassword.99"
+}
 ###

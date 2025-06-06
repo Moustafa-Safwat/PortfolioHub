@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
 
 namespace PortfolioHub.Users.Infrastructure.Context;
