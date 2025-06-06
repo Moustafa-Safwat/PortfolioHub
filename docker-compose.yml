@@ -1,0 +1,18 @@
+version: "3.8"
+name: "PortfolioHub"
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: portfolio_db
+    env_file:
+      - config.env
+    environment:
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+      - ACCEPT_EULA=Y
+    ports:
+      - "3066:1433"
+    volumes:
+      - portfolio_db_data:/var/opt/mssql
+
+volumes:
+  portfolio_db_data: {}
