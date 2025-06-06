@@ -9,3 +9,12 @@ Content-Type: application/json
     "password": "Testpassword.99"
 }
 ###
+
+POST {{PortfolioHub.Web_HostAddress}}/user/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "Testpassword.99"
+}
+###

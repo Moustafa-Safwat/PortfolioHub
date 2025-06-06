@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PortfolioHub.Users.Infrastructure.Context;
+using PortfolioHub.Users.Usecases.User.Login;
 
 namespace PortfolioHub.Users;
 
@@ -26,6 +27,7 @@ public static class RegisterUsersModule
         })
             .AddEntityFrameworkStores<UsersDbContext>();
 
+        service.AddScoped<CreateUserToken>();
         assemblies.Add(typeof(RegisterUsersModule).Assembly);
         return service;
     }
