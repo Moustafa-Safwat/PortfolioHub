@@ -17,9 +17,9 @@ internal class Add(
 
     public override async Task HandleAsync(AddProjectReq req, CancellationToken ct)
     {
-        var userRoles = User.FindFirstValue(ClaimTypes.Role);
+        var isAdmin = User.FindAll(ClaimTypes.Role).Any(r => r.Value.ToLower() == "admin");
 
-        if (userRoles is null)
+        if (!isAdmin)
         {
             await SendUnauthorizedAsync(ct);
             return;
@@ -29,8 +29,7 @@ internal class Add(
             req.Title,
             req.Description,
             req.VideoUrl,
-            req.CreatedAt,
-            userRoles
+            req.CreatedAt
         );
 
         var result = await sender.Send(addProjectCommand, ct);

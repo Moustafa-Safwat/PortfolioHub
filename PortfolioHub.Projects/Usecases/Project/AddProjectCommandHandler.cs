@@ -13,12 +13,6 @@ internal sealed class AddProjectCommandHandler(
 {
     public async Task<Result<Guid>> Handle(AddProjectCommand request, CancellationToken cancellationToken)
     {
-        //if (adminEmail != request.UserEmail)
-        //{
-        //    logger.Warning("Unauthorized attempt to add project. UserEmail: {UserEmail} does not match AdminEmail: {AdminEmail}", request.UserEmail, adminEmail);
-        //    return Result.Unauthorized();
-        //}
-
         logger.Information("Attempting to add a new project with Title: {Title}", request.Title);
 
         var projectEntity = new Domain.Entities.Project(

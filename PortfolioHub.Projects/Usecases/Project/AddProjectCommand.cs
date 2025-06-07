@@ -8,7 +8,5 @@ internal sealed record AddProjectCommand(
     string Title,
     string Description,
     string? VideoUrl,
-    DateTime CreatedAt,
-    string UserRole
-    )
+    DateTime CreatedAt)
     : IRequest<Result<Guid>>;

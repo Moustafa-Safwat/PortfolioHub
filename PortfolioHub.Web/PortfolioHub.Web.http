@@ -1,15 +1,15 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkyOTYyNzUsImlhdCI6MTc0OTI5NTM3NSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6InNhZndhdEBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjM5ZWVjNjI0LTQzMWEtNGMwNi1hNTE0LWMyNjM3NThiMjg4NyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6ImFkbWluIiwibmJmIjoxNzQ5Mjk1Mzc1fQ.HySNtxJn5lRL3KTw2bnI4CDG8C4WWTrtxjrbQRyoXc0
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkyOTczOTUsImlhdCI6MTc0OTI5NjQ5NSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MDAzZjVjZS1jMjMzLTQwZGQtOWY0Mi1iMzQ0ZjI3OWMwMGUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJndWVzdCIsIm5iZiI6MTc0OTI5NjQ5NX0._2nTKcxHjJt2x_BgWPWibPjTox2DxSwC_3xmCPgQb_g
 
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
 Content-Type: application/json
 
 {
-    "username": "safwat",
+    "username": "safwat2",
     "email":"safwat@gmail.com",
     "password": "Ahmed.99",
-    "role": 1
+    "role": 0
 }
 ###
 
@@ -18,7 +18,7 @@ POST {{PortfolioHub.Web_HostAddress}}/user/login
 Content-Type: application/json
 
 {
-    "username": "safwat",
+    "username": "safwat2",
     "password": "Ahmed.99"
 }
 ###
