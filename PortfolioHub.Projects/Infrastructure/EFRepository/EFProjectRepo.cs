@@ -39,7 +39,7 @@ internal class EFProjectRepo(
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
 
         if (project is null)
-            return Result.NotFound();
+            return Result.NotFound("Project is not found");
 
         dbContext.Projects.Remove(project);
         return Result.Success();

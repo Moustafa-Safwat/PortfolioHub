@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkzMDM2MTUsImlhdCI6MTc0OTMwMjcxNSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDkzMDI3MTV9.JQVe3UruFPkQH57P8XpZLTTjfq-LdhLau7du2k9pAdk
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkzMTA4NDcsImlhdCI6MTc0OTMwOTk0NywiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDkzMDk5NDd9.kJ9G065iqNPerfWUn7kPZEXexoLd_XIMc5c2_RIwXj4
 
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -42,9 +42,32 @@ Content-Type: application/json
 Authorization: Bearer {{Auth.Token}}
 
 {
-    "Title": "Sample_Projectd",
+    "Title": "my project",
     "Description": "This is a sample project for testing purposes.",
     "VideoUrl": "https://sample.com/video.mp4",
     "CreatedAt": "2024-06-07T00:00:00"
 }
+###
+
+// get projects
+GET {{PortfolioHub.Web_HostAddress}}/project
+Content-Type: application/json
+
+{
+    "PageNumber": 1,
+    "PageSize": 10
+}
+###
+
+// get project by id
+GET {{PortfolioHub.Web_HostAddress}}/project/7f69c09f-2c3a-46f5-988c-2b419699dfe4
+Content-Type: application/json
+
+###
+
+// delete project by id
+DELETE {{PortfolioHub.Web_HostAddress}}/project/7f69c09f-2c3a-46f5-988c-2b419699dfe4
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
 ###

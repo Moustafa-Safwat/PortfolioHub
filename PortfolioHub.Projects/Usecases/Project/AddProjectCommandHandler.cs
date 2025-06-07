@@ -1,6 +1,5 @@
 ﻿using Ardalis.Result;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using PortfolioHub.Projects.Domain.Interfaces;
 using Serilog;
 
