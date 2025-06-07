@@ -1,13 +1,12 @@
 ﻿using Ardalis.GuardClauses;
 
-namespace PortfolioHub.Projects.Domain;
+namespace PortfolioHub.Projects.Domain.Entities;
 
-internal class Links
+internal class Links : BaseEntity
 {
-    public Guid Id { get; private set; }
     public string Url { get; private set; } = string.Empty;
     // Navigation property
-    public Project Project { get; private set; } = null!;
+    public Project? Project { get; private set; } = null!;
     public LinkProvider LinkProvider { get; private set; } = null!;
     // Parameterless constructor for EF Core
     private Links() { }

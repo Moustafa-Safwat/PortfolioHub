@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PortfolioHub.Projects.Infrastructure.Context;
 
-namespace PortfolioHub.Projects.Domain;
+namespace PortfolioHub.Projects.Domain.Entities;
 
 internal class GalleryVal : IEntityTypeConfiguration<Gallery>
 {

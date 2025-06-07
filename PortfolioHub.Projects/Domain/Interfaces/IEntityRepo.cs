@@ -1,0 +1,23 @@
+﻿using Ardalis.Result;
+using PortfolioHub.Projects.Domain.Entities;
+
+namespace PortfolioHub.Projects.Domain.Interfaces;
+
+
+internal interface IReadOnlyEntityRepo<TEntity> 
+    where TEntity : BaseEntity
+{
+    Task<Result<TEntity>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<IReadOnlyList<TEntity>>> GetAllAsync(int pageNumber, int pageSize,
+        CancellationToken cancellationToken = default);
+    Task<Result<bool>> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
+}
+internal interface IEntityRepo<TEntity> 
+    : IReadOnlyEntityRepo<TEntity> 
+    where TEntity : BaseEntity
+{
+    Task<Result> AddAsync(TEntity project, CancellationToken cancellationToken = default);
+    Task<Result> UpdateAsync(TEntity project, CancellationToken cancellationToken = default);
+    Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result> SaveChangesAsync(CancellationToken cancellationToken = default);
+}

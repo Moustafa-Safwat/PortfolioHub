@@ -1,13 +1,12 @@
 ﻿using Ardalis.GuardClauses;
 
-namespace PortfolioHub.Projects.Domain;
+namespace PortfolioHub.Projects.Domain.Entities;
 
-internal class TechanicalSkills
+internal class TechanicalSkills: BaseEntity
 {
-    public Guid Id { get; private set; }
     public string Name { get; private set; } = string.Empty;
     // Navigation property
-    public ICollection<Project> Projects { get; private set; } = new List<Project>();
+    public ICollection<Project>? Projects { get; private set; } = new List<Project>();
 
     // Parameterless constructor for EF Core
     public TechanicalSkills() { }

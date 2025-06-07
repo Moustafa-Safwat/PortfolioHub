@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PortfolioHub.Projects.Domain;
+using PortfolioHub.Projects.Domain.Entities;
 
 namespace PortfolioHub.Projects.Infrastructure.Context;
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortfolioHub.Projects.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using PortfolioHub.Projects.Infrastructure.Context;
 namespace PortfolioHub.Projects.Migrations
 {
     [DbContext(typeof(ProjectsDbContext))]
-    partial class ProjectsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250606234049_AllowNullInProjectIdForGalleryTable")]
+    partial class AllowNullInProjectIdForGalleryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +80,7 @@ namespace PortfolioHub.Projects.Migrations
                     b.Property<Guid>("LinkProviderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Url")
@@ -175,7 +178,8 @@ namespace PortfolioHub.Projects.Migrations
                     b.HasOne("PortfolioHub.Projects.Domain.Entities.Project", "Project")
                         .WithMany("Links")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("LinkProvider");
 

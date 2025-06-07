@@ -1,15 +1,14 @@
 ﻿using Ardalis.GuardClauses;
 
-namespace PortfolioHub.Projects.Domain;
+namespace PortfolioHub.Projects.Domain.Entities;
 
-internal class Gallery
+internal class Gallery: BaseEntity
 {
-    public Guid Id { get; private set; }
     public string ImageUrl { get; private set; } = string.Empty;
     public int Order { get; private set; }
 
     // Navigation property
-    public Project Project { get; private set; } = null!;
+    public Project? Project { get; private set; } = null!;
 
     // Parameterless constructor for EF Core
     private Gallery() { }

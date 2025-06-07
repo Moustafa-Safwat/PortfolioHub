@@ -1,20 +1,38 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkyOTMxNTgsImlhdCI6MTc0OTI5MjI1OCwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InRlc3R1c2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoidGVzdHVzZXJAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI1MjMyNjJiMC01ZWFlLTQwYWMtYWNhNi1hY2M1ODA4NjZhYjkiLCJuYmYiOjE3NDkyOTIyNTh9.uakLk52UG9BPgiqr69xf26eMbndkV2WWdKhoIdzVUi4
 
+// create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
 Content-Type: application/json
 
 {
-    "username": "testuser",
-    "email":"testuser@gmail.com",
-    "password": "Testpassword.99"
+    "username": "Moustafa.Safwat",
+    "email":"moustafa.safwat.iti.43@gmail.com",
+    "password": "Moustafa.99"
 }
 ###
 
+// login
 POST {{PortfolioHub.Web_HostAddress}}/user/login
 Content-Type: application/json
 
 {
     "username": "testuser",
     "password": "Testpassword.99"
+}
+###
+// TestUser: {"username":"testuser", "password":"Testpassword.99"}
+// AdminUser: {"username":"Moustafa.Safwat", "password":"Moustafa.99"}
+
+// add a new project
+POST {{PortfolioHub.Web_HostAddress}}/project
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+{
+    "Title": "Sample_Project",
+    "Description": "This is a sample project for testing purposes.",
+    "VideoUrl": "https://sample.com/video.mp4",
+    "CreatedAt": "2024-06-07T00:00:00"
 }
 ###
