@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkzMTA4NDcsImlhdCI6MTc0OTMwOTk0NywiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDkzMDk5NDd9.kJ9G065iqNPerfWUn7kPZEXexoLd_XIMc5c2_RIwXj4
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkzMzMwMzYsImlhdCI6MTc0OTMzMjEzNiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDkzMzIxMzZ9.1PNAcDpTg5ihRmtpUWQeATcicFgS_xE9SX_T2hRMrhs
 
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -70,4 +70,21 @@ DELETE {{PortfolioHub.Web_HostAddress}}/project/7f69c09f-2c3a-46f5-988c-2b419699
 Content-Type: application/json
 Authorization: Bearer {{Auth.Token}}
 
+###
+
+// add gallery
+POST {{PortfolioHub.Web_HostAddress}}/gallery
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+{
+    "imageUrl":"https://www.freepik.com/free-vector/blue-circle-with-white-user_145857007.htm#fromView=keyword&page=1&position=0&uuid=f225a35a-4c27-4332-a3fc-0aa408f446f8&query=Avatar",
+    "order":1
+}
+###
+
+// delete gallery
+DELETE {{PortfolioHub.Web_HostAddress}}/gallery/69628b05-3601-403a-91cc-6e2054363d60
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
 ###
