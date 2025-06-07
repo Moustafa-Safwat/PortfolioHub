@@ -25,7 +25,7 @@ internal sealed class CreateUserReqValidator : Validator<CreateUserReq>
             .Matches(@"[\W_]").WithMessage("Password must contain at least one special character.");
 
         RuleFor(x => x.Role)
-            .IsInEnum().WithMessage("User role must be either Guest or Admin.");
+            .MinimumLength(3).WithMessage("User name must be at least 3 characters long.");
 
     }
 }

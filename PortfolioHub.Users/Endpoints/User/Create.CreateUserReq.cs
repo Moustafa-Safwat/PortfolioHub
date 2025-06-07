@@ -4,11 +4,5 @@ internal record CreateUserReq(
     string UserName,
     string Email,
     string Password,
-    CreateUserRole Role
+    string Role
     );
-
-internal enum CreateUserRole
-{
-    Guest,
-    Admin
-}

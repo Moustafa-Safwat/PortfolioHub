@@ -36,7 +36,7 @@ internal sealed class CreateUserCommandHandler(
             }
 
             // Check if role exists using RoleManager  
-            var roleExists = await roleManager.RoleExistsAsync(request.Role.ToString());
+            var roleExists = await roleManager.RoleExistsAsync(request.Role);
             if (!roleExists)
             {
                 // Rollback user creation  
@@ -46,7 +46,7 @@ internal sealed class CreateUserCommandHandler(
                 return Result.Error($"Role '{request.Role}' does not exist.");
             }
 
-            var addRoleResult = await userManager.AddToRoleAsync(identityUser, request.Role.ToString());
+            var addRoleResult = await userManager.AddToRoleAsync(identityUser, request.Role);
             if (!addRoleResult.Succeeded)
             {
                 // Rollback user creation  
