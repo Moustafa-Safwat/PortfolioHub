@@ -13,19 +13,11 @@ internal sealed class Add(
     public override void Configure()
     {
         Post("/role");
-        Claims(ClaimTypes.Role);
+        Roles("admin");
     }
 
     public override async Task HandleAsync(AddRoleReq req, CancellationToken ct)
     {
-        var isAdmin = User.FindAll(ClaimTypes.Role).Any(r => r.Value.ToLower() == "admin");
-
-        if (!isAdmin)
-        {
-            await SendUnauthorizedAsync(ct);
-            return;
-        }
-
         var command = new AddRoleCommand(req.Name);
         var result = await sender.Send(command, ct);
 

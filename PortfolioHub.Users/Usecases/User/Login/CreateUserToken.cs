@@ -30,14 +30,13 @@ internal sealed class CreateUserToken(
             new Claim(ClaimTypes.Email, user.Email!),
             new Claim(ClaimTypes.NameIdentifier, user.Id!),
         };
-        // Add a claim for each user role
-        userRoles.ToList().ForEach(role => claims.Add(new Claim(ClaimTypes.Role, role)));
 
         var token = JwtBearer.CreateToken(options =>
         {
             options.SigningKey = jwtSecret!;
             options.ExpireAt = DateTime.Now.AddMinutes(15);
             options.User.Claims.AddRange(claims);
+            options.User.Roles.AddRange(userRoles);
         });
 
 

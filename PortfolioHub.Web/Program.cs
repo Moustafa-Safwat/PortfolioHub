@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FastEndpoints.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using PortfolioHub.Projects;
 using PortfolioHub.Users;
 using Serilog;
@@ -22,12 +23,13 @@ Log.Information("Starting up application");
 IList<Assembly> assemblies = [typeof(Program).Assembly];
 builder.Services.AddUsersModule(builder.Configuration, assemblies)
     .AddProjectsModule(builder.Configuration, assemblies);
-builder.Services.AddFastEndpoints()
-         .AddAuthenticationJwtBearer(options =>
-{
-    options.SigningKey = builder.Configuration["Auth:JwtSecret"];
-})
-                .AddAuthorization();
+builder.Services
+    .AddAuthenticationJwtBearer(options =>
+    {
+        options.SigningKey = builder.Configuration["Auth:JwtSecret"];
+    })
+    .AddAuthorization()
+    .AddFastEndpoints();
 builder.Services.AddMediatR(options =>
 {
     options.RegisterServicesFromAssemblies(assemblies.ToArray());
@@ -54,9 +56,8 @@ var app = builder.Build();
 //if (app.Environment.IsDevelopment()) { }
 
 app.UseAuthentication()
-  .UseAuthorization();
-
-app.UseFastEndpoints();
+   .UseAuthorization()
+   .UseFastEndpoints();
 
 app.Run();
 
