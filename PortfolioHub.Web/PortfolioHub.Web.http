@@ -6,9 +6,10 @@ POST {{PortfolioHub.Web_HostAddress}}/user
 Content-Type: application/json
 
 {
-    "username": "Moustafa.Safwat",
-    "email":"moustafa.safwat.iti.43@gmail.com",
-    "password": "Moustafa.99"
+    "username": "ahmed",
+    "email":"ahmed@gmail.com",
+    "password": "Ahmed.99",
+    "role": 0
 }
 ###
 

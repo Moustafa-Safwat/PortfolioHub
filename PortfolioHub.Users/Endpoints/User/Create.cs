@@ -17,7 +17,8 @@ internal class Create(ISender sender)
     {
         var createUserCommand = new CreateUserCommand(req.UserName,
               req.Email,
-              req.Password);
+              req.Password,
+              req.Role);
 
         var createUserResult = await sender.Send(createUserCommand, ct);
 

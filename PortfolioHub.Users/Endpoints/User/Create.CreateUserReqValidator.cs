@@ -23,5 +23,9 @@ internal sealed class CreateUserReqValidator : Validator<CreateUserReq>
             .Matches(@"[a-z]").WithMessage("Password must contain at least one lowercase letter.")
             .Matches(@"\d").WithMessage("Password must contain at least one digit.")
             .Matches(@"[\W_]").WithMessage("Password must contain at least one special character.");
+
+        RuleFor(x => x.Role)
+            .IsInEnum().WithMessage("User role must be either Guest or Admin.");
+
     }
 }
