@@ -8,18 +8,16 @@ namespace PortfolioHub.Projects.Usecases.Project;
 
 internal sealed class AddProjectCommandHandler(
     IProjectsRepo projectsRepo,
-    ILogger logger,
-    IConfiguration configuration
+    ILogger logger
     ) : IRequestHandler<AddProjectCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(AddProjectCommand request, CancellationToken cancellationToken)
     {
-        string adminEmail = configuration["Auth:AdminEmail"]!;
-        if (adminEmail != request.UserEmail)
-        {
-            logger.Warning("Unauthorized attempt to add project. UserEmail: {UserEmail} does not match AdminEmail: {AdminEmail}", request.UserEmail, adminEmail);
-            return Result.Unauthorized();
-        }
+        //if (adminEmail != request.UserEmail)
+        //{
+        //    logger.Warning("Unauthorized attempt to add project. UserEmail: {UserEmail} does not match AdminEmail: {AdminEmail}", request.UserEmail, adminEmail);
+        //    return Result.Unauthorized();
+        //}
 
         logger.Information("Attempting to add a new project with Title: {Title}", request.Title);
 

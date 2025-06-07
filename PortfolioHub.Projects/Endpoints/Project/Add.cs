@@ -12,14 +12,14 @@ internal class Add(
     public override void Configure()
     {
         Post("/project");
-        Claims(ClaimTypes.Email);
+        Claims(ClaimTypes.Role);
     }
 
     public override async Task HandleAsync(AddProjectReq req, CancellationToken ct)
     {
-        var userEmail = User.FindFirstValue(ClaimTypes.Email);
+        var userRoles = User.FindFirstValue(ClaimTypes.Role);
 
-        if (userEmail is null)
+        if (userRoles is null)
         {
             await SendUnauthorizedAsync(ct);
             return;
@@ -30,7 +30,7 @@ internal class Add(
             req.Description,
             req.VideoUrl,
             req.CreatedAt,
-            userEmail
+            userRoles
         );
 
         var result = await sender.Send(addProjectCommand, ct);

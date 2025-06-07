@@ -21,6 +21,8 @@ internal sealed class CreateUserToken(
             return Result.Unauthorized("User email is not found");
         }
 
+        var userRoles = await userManager.GetRolesAsync(user);
+
         var jwtSecret = config["Auth:JwtSecret"];
         var claims = new List<Claim>
         {
@@ -28,6 +30,8 @@ internal sealed class CreateUserToken(
             new Claim(ClaimTypes.Email, user.Email!),
             new Claim(ClaimTypes.NameIdentifier, user.Id!),
         };
+        // Add a claim for each user role
+        userRoles.ToList().ForEach(role => claims.Add(new Claim(ClaimTypes.Role, role)));
 
         var token = JwtBearer.CreateToken(options =>
         {

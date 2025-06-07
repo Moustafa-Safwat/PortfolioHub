@@ -9,6 +9,6 @@ internal sealed record AddProjectCommand(
     string Description,
     string? VideoUrl,
     DateTime CreatedAt,
-    string UserEmail
+    string UserRole
     )
     : IRequest<Result<Guid>>;
