@@ -18,8 +18,10 @@ internal sealed class AddProjectCommandHandler(
             Guid.NewGuid(),
             request.Title,
             request.Description,
+            request.LongDescription,
             request.VideoUrl ?? "",
-            request.CreatedAt
+            request.CreatedAt,
+            request.CoverImageUrl ?? ""
         );
 
         var addResult = await projectsRepo.AddAsync(projectEntity, cancellationToken);

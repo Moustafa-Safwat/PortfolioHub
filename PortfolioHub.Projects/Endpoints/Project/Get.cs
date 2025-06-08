@@ -1,4 +1,5 @@
-﻿using FastEndpoints;
+﻿using Ardalis.Result;
+using FastEndpoints;
 using MediatR;
 using PortfolioHub.Projects.Usecases.Project;
 
@@ -6,7 +7,7 @@ namespace PortfolioHub.Projects.Endpoints.Project;
 
 internal sealed class Get(
     ISender sender
-    ) : Endpoint<GetProjectsReq, GetProjectsResp>
+    ) : Endpoint<GetProjectsReq, Result<GetProjectsResp>>
 {
     public override void Configure()
     {
@@ -24,11 +25,15 @@ internal sealed class Get(
             return;
         }
         var projectDtos = result.Value
-            .Select(p => new ProjectDto(
+            .Select(p => new ProjectsDto(
                 p.Id,
                 p.Title,
                 p.Description,
-                p.CreatedAt
+                p.CreatedAt,
+                p.CoverImageUrl,
+                p.Tech,
+                p.Category,
+                p.gitHubLink
             ))
             .ToList()
             .AsReadOnly();

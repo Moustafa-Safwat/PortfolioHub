@@ -19,7 +19,9 @@ internal class Add(
         var addProjectCommand = new AddProjectCommand(
             req.Title,
             req.Description,
+            req.LongDescription,
             req.VideoUrl,
+            req.CoverImageUrl,
             req.CreatedAt
         );
 

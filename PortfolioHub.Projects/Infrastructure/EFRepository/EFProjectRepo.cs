@@ -68,6 +68,7 @@ internal class EFProjectRepo(
             .Include(p => p.Images)
             .Include(p => p.Skills)
             .Include(p => p.Links)
+            .Include(p=>p.Category)
             .OrderByDescending(p => p.CreatedDate)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
@@ -111,7 +112,9 @@ internal class EFProjectRepo(
         // Update scalar properties
         existingProject.SetTitle(project.Title);
         existingProject.SetDescription(project.Description);
+        existingProject.SetLongDescription(project.LongDescription);
         existingProject.SetVideoUrl(project.VideoUrl);
+        existingProject.SetCoverImageUrl(project.CoverImageUrl);
         existingProject.SetCreatedDate(project.CreatedDate);
 
         // Update Images

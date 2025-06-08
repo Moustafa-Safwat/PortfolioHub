@@ -9,9 +9,9 @@ namespace PortfolioHub.Projects.Usecases.Project;
 internal sealed class GetProjectsQueryHandler(
     IProjectsRepo projectsRepo,
     ILogger logger
-    ) : IRequestHandler<GetProjectsQuery, Result<IReadOnlyList<ProjectDto>>>
+    ) : IRequestHandler<GetProjectsQuery, Result<IReadOnlyList<ProjectsDto>>>
 {
-    public async Task<Result<IReadOnlyList<ProjectDto>>> Handle(GetProjectsQuery request,
+    public async Task<Result<IReadOnlyList<ProjectsDto>>> Handle(GetProjectsQuery request,
         CancellationToken cancellationToken)
     {
         logger.Information("Handling GetProjectsQuery: PageNumber={PageNumber}, PageSize={PageSize}", request.PageNumber, request.PageSize);
@@ -25,18 +25,22 @@ internal sealed class GetProjectsQueryHandler(
 
         var projectDtos = projectsRes.Value
             .Select(p =>
-            new ProjectDto
+            new ProjectsDto
             (
                 p.Id,
                 p.Title,
                 p.Description,
-                p.CreatedDate
+                p.CreatedDate,
+                p.CoverImageUrl,
+                p.Skills?.Take(4).Select(s => s.Name).ToArray() ?? [],
+                p.Category?.Name ?? "",
+                p.Links?.FirstOrDefault(l => l.LinkProvider.Name == "Github")?.Url ?? ""
             ))
             .ToList()
             .AsReadOnly();
 
         logger.Information("Successfully retrieved {Count} projects.", projectDtos.Count);
 
-        return Result.Success<IReadOnlyList<ProjectDto>>(projectDtos);
+        return Result.Success<IReadOnlyList<ProjectsDto>>(projectDtos);
     }
 }
