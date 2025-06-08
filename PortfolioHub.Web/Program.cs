@@ -49,7 +49,16 @@ builder.Services.AddAuthentication(options =>
 //builder.Services.AddValidationBehaviour();
 // ----------------------------------------
 
-
+// Add CORS policy to allow any method, header, and origin
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,6 +67,10 @@ var app = builder.Build();
 app.UseAuthentication()
    .UseAuthorization()
    .UseFastEndpoints();
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("Frontend");
+}
 
 app.Run();
 

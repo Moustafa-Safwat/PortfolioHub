@@ -67,7 +67,8 @@ internal class EFProjectRepo(
         var projects = await dbContext.Projects
             .Include(p => p.Images)
             .Include(p => p.Skills)
-            .Include(p => p.Links)
+            .Include(p => p.Links)!
+            .ThenInclude(l=>l.LinkProvider)
             .Include(p=>p.Category)
             .OrderByDescending(p => p.CreatedDate)
             .Skip((pageNumber - 1) * pageSize)
