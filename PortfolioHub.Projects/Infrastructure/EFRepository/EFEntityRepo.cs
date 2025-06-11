@@ -10,6 +10,7 @@ internal class EFEntityRepo<TEntity>(
     ProjectsDbContext dbContext
     ) : IEntityRepo<TEntity> where TEntity : BaseEntity
 {
+    protected readonly ProjectsDbContext dbContext = dbContext;
 
     public async Task<Result> AddAsync(TEntity entity,
         CancellationToken cancellationToken = default)
@@ -104,5 +105,37 @@ internal class EFEntityRepo<TEntity>(
             return Result.Success();
         else
             return Result.Error("No changes were made to the database.");
+    }
+
+    public async Task<Result<IReadOnlyList<TEntity>>> IsEntitiesIdValidAsync(IList<Guid> ids,
+        CancellationToken cancellationToken = default)
+    {
+        if (ids == null || ids.Count == 0)
+        {
+            return Result.Invalid(new ValidationError
+            {
+                ErrorMessage = "Ids list cannot be null or empty."
+            });
+        }
+
+        var entities = await dbContext.Set<TEntity>()
+            .Where(e => ids.Contains(e.Id))
+            .ToListAsync(cancellationToken);
+
+        if (entities.Count == 0)
+            return Result.NotFound();
+
+        return Result.Success((IReadOnlyList<TEntity>)entities);
+    }
+
+    public async Task<Result<TEntity>> IsEntitiyIdValidAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var entity = await dbContext.Set<TEntity>()
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+
+        if (entity is null)
+            return Result.NotFound();
+
+        return Result.Success(entity);
     }
 }

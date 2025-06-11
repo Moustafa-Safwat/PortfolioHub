@@ -35,33 +35,32 @@ internal class Project : BaseEntity
     }
 
     public void SetTitle(string title)
-    {
-        Title = Guard.Against.NullOrEmpty(title);
-    }
+        => Title = Guard.Against.NullOrEmpty(title);
 
     public void SetDescription(string description)
-    {
-        Description = Guard.Against.NullOrEmpty(description);
-    }
+        => Description = Guard.Against.NullOrEmpty(description);
 
     public void SetLongDescription(string longDescription)
-    {
-        LongDescription = Guard.Against.NullOrEmpty(longDescription);
-    }
+        => LongDescription = Guard.Against.NullOrEmpty(longDescription);
 
     public void SetCoverImageUrl(string coverImageUrl)
-    {
-        CoverImageUrl = Guard.Against.NullOrEmpty(coverImageUrl);
-    }
+        => CoverImageUrl = Guard.Against.NullOrEmpty(coverImageUrl);
 
     public void SetVideoUrl(string videoUrl)
-    {
-        VideoUrl = Guard.Against.Null(videoUrl);
-    }
+        => VideoUrl = Guard.Against.Null(videoUrl);
 
     public void SetCreatedDate(DateTime createdDate)
-    {
-        CreatedDate = Guard.Against.OutOfSQLDateRange(createdDate);
-    }
+        => CreatedDate = Guard.Against.OutOfSQLDateRange(createdDate);
 
+    public void SetTechanicalSkills(IList<TechanicalSkills> techanicalSkills)
+        => Skills = Guard.Against.NullOrEmpty(techanicalSkills).ToList();
+
+    public void SetImages(IList<Gallery> images)
+        => Images = Guard.Against.NullOrEmpty(images).ToList();
+
+    public void SetLinks(IList<Links> links)
+        => Links = Guard.Against.NullOrEmpty(links).ToList();
+
+    public void SetCategory(Category category)
+        => Category = Guard.Against.Null(category);
 }

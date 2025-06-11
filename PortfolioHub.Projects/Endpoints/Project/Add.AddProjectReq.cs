@@ -4,7 +4,16 @@ internal sealed record AddProjectReq(
     string Title,
     string Description,
     string LongDescription,
+    DateTime CreatedDate,
+    string CategoryId, // GUID
     string? VideoUrl,
     string? CoverImageUrl,
-    DateTime CreatedAt
+    string[] ImagesUrls,
+    string[] SkillsId, // GUID
+    AddLinksDto[] Links
+    );
+
+internal sealed record AddLinksDto(
+    string ProviderId, // GUID
+    string Link
     );

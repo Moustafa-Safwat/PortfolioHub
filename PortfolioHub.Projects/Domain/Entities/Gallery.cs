@@ -2,7 +2,7 @@
 
 namespace PortfolioHub.Projects.Domain.Entities;
 
-internal class Gallery: BaseEntity
+internal class Gallery : BaseEntity
 {
     public string ImageUrl { get; private set; } = string.Empty;
     public int Order { get; private set; }

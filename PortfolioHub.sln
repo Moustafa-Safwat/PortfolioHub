@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioHub.Projects", "PortfolioHub.Projects\PortfolioHub.Projects.csproj", "{A3E36117-238F-4966-833B-323574982D6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioHub.SharedKernal", "PortfolioHub.SharedKernal\PortfolioHub.SharedKernal.csproj", "{A434AF85-F86B-44E9-9C04-4E8190D3821C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,18 @@ Global
 		{A3E36117-238F-4966-833B-323574982D6F}.Release|x64.Build.0 = Release|Any CPU
 		{A3E36117-238F-4966-833B-323574982D6F}.Release|x86.ActiveCfg = Release|Any CPU
 		{A3E36117-238F-4966-833B-323574982D6F}.Release|x86.Build.0 = Release|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Debug|x64.Build.0 = Debug|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Debug|x86.Build.0 = Debug|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Release|x64.ActiveCfg = Release|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Release|x64.Build.0 = Release|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Release|x86.ActiveCfg = Release|Any CPU
+		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

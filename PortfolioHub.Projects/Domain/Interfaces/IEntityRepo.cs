@@ -4,16 +4,20 @@ using PortfolioHub.Projects.Domain.Entities;
 namespace PortfolioHub.Projects.Domain.Interfaces;
 
 
-internal interface IReadOnlyEntityRepo<TEntity> 
+internal interface IReadOnlyEntityRepo<TEntity>
     where TEntity : BaseEntity
 {
     Task<Result<TEntity>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Result<IReadOnlyList<TEntity>>> GetAllAsync(int pageNumber, int pageSize,
         CancellationToken cancellationToken = default);
     Task<Result<bool>> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<IReadOnlyList<TEntity>>> IsEntitiesIdValidAsync(IList<Guid> ids,
+    CancellationToken cancellationToken = default);
+    Task<Result<TEntity>> IsEntitiyIdValidAsync(Guid id,
+    CancellationToken cancellationToken = default);
 }
-internal interface IEntityRepo<TEntity> 
-    : IReadOnlyEntityRepo<TEntity> 
+internal interface IEntityRepo<TEntity>
+    : IReadOnlyEntityRepo<TEntity>
     where TEntity : BaseEntity
 {
     Task<Result> AddAsync(TEntity project, CancellationToken cancellationToken = default);

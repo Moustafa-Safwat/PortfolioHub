@@ -24,4 +24,8 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\PortfolioHub.SharedKernal\PortfolioHub.SharedKernal.csproj" />
+	</ItemGroup>
+
 </Project>

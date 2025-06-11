@@ -20,9 +20,13 @@ internal class Add(
             req.Title,
             req.Description,
             req.LongDescription,
+            req.CreatedDate,
+            Guid.Parse(req.CategoryId),
             req.VideoUrl,
             req.CoverImageUrl,
-            req.CreatedAt
+            req.ImagesUrls,
+            req.SkillsId.Select(skillId => Guid.Parse(skillId)).ToArray(),
+            req.Links.Select(link => (Guid.Parse(link.ProviderId), link.Link)).ToArray()
         );
 
         var result = await sender.Send(addProjectCommand, ct);

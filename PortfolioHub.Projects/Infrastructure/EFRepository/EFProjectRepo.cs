@@ -18,7 +18,7 @@ internal class EFProjectRepo(
 
         try
         {
-            await dbContext.Projects.AddAsync(project, cancellationToken);
+            var result = await dbContext.Projects.AddAsync(project, cancellationToken);
             return Result.Success();
         }
         catch (DbUpdateException ex)
@@ -68,8 +68,8 @@ internal class EFProjectRepo(
             .Include(p => p.Images)
             .Include(p => p.Skills)
             .Include(p => p.Links)!
-            .ThenInclude(l=>l.LinkProvider)
-            .Include(p=>p.Category)
+            .ThenInclude(l => l.LinkProvider)
+            .Include(p => p.Category)
             .OrderByDescending(p => p.CreatedDate)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)

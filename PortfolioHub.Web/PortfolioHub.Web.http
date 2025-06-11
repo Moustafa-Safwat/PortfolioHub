@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDkzODIzMTcsImlhdCI6MTc0OTM4MTQxNywiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDkzODE0MTd9.qI4mivsOT-3BZj6XZENupYArbgql4XAnfMtFNl6_D-Y
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDk2MDExMDQsImlhdCI6MTc0OTYwMDIwNCwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDk2MDAyMDR9.u11OCWcPnoTpyYqMkCGQTPeQmfOAUpb4qNLX1Z2SGPk
 
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -42,10 +42,22 @@ Content-Type: application/json
 Authorization: Bearer {{Auth.Token}}
 
 {
-    "Title": "my project",
-    "Description": "This is a sample project for testing purposes.",
-    "VideoUrl": "https://sample.com/video.mp4",
-    "CreatedAt": "2024-06-07T00:00:00"
+    "title": "Test Project",
+    "description": "This is a sample project for testing purposes.",
+    "longDescription": "This is a sample project for testing purposes.",
+    "createdDate": "2024-06-07T00:00:00",
+    "categoryId": "72b7c49e-8c0e-47ee-b803-3421bb88b606",
+    "videoUrl": "https://sample.com/video.mp4",
+    "coverImageUrl": "https://sample.com/video.mp4",
+    "imagesUrls": ["https://sample.com/video.mp4"],
+    "skillsId": ["44444444-4444-4444-4444-444444444444"],
+    "links":
+    [
+        {
+            "providerId":"55555555-5555-5555-5555-555555555555",
+            "link":"https://sample.com/video.mp4"
+        }
+    ]
 }
 ###
 

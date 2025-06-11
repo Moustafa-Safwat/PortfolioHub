@@ -15,4 +15,10 @@ internal class Links : BaseEntity
         Id = Guard.Against.Default(id);
         Url = Guard.Against.NullOrEmpty(url);
     }
+
+    public Links SetLinkProvider(LinkProvider linkProvider)
+    {
+        LinkProvider = Guard.Against.Null(linkProvider);
+        return this;
+    }
 }

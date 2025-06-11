@@ -1,6 +1,5 @@
 ﻿using Ardalis.Result;
 using MediatR;
-using PortfolioHub.Projects.Domain.Entities;
 
 namespace PortfolioHub.Projects.Usecases.Project;
 
@@ -8,7 +7,12 @@ internal sealed record AddProjectCommand(
     string Title,
     string Description,
     string LongDescription,
+    DateTime CreatedDate,
+    Guid CategoryId,
     string? VideoUrl,
     string? CoverImageUrl,
-    DateTime CreatedAt)
+    string[] ImagesUrls,
+    Guid[] SkillsId,
+    (Guid ProviderId, string Link)[] Links
+    )
     : IRequest<Result<Guid>>;

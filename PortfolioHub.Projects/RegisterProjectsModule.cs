@@ -5,6 +5,7 @@ using PortfolioHub.Projects.Infrastructure.Context;
 using PortfolioHub.Projects.Domain.Interfaces;
 using PortfolioHub.Projects.Infrastructure.EFRepository;
 using PortfolioHub.Projects.Domain.Entities;
+using PortfolioHub.Projects.Infrastructure;
 
 namespace PortfolioHub.Projects;
 
@@ -16,6 +17,7 @@ public static class RegisterProjectsModule
         service.AddSqlServer<ProjectsDbContext>(configuration.GetConnectionString("ProjectsDb"));
 
         service.AddScoped<IProjectsRepo, EFProjectRepo>();
+        service.AddScoped<IUnitOfWork, UnitOfWork>();
 
         var entityTypes = typeof(Gallery).Assembly
             .GetTypes()

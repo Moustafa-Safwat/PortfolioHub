@@ -1,11 +1,10 @@
+using System.Reflection;
 using FastEndpoints;
 using FastEndpoints.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using PortfolioHub.Projects;
 using PortfolioHub.Users;
 using Serilog;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +58,7 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -67,6 +67,7 @@ var app = builder.Build();
 app.UseAuthentication()
    .UseAuthorization()
    .UseFastEndpoints();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("Frontend");
