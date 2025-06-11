@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDk2MDExMDQsImlhdCI6MTc0OTYwMDIwNCwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDk2MDAyMDR9.u11OCWcPnoTpyYqMkCGQTPeQmfOAUpb4qNLX1Z2SGPk
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDk2NjU1MTcsImlhdCI6MTc0OTY2NDYxNywiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDk2NjQ2MTd9.mfuwRTT1LUNEIUFBrqmU5bmeJCJ-QuYaycxvqCjnFpw
 
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -109,4 +109,26 @@ Content-Type: application/json
     "PageNumber": 1,
     "PageSize": 10
 }
+###
+
+// add new category
+POST {{PortfolioHub.Web_HostAddress}}/category
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+{
+    "name":"Web Development"
+}
+###
+// delete category by
+DELETE {{PortfolioHub.Web_HostAddress}}/category/11111111-1111-1111-1111-111111111111
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+###
+
+// get categories
+GET {{PortfolioHub.Web_HostAddress}}/category
+Content-Type: application/json
+
 ###

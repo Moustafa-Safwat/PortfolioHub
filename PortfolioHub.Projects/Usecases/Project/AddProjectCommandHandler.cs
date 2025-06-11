@@ -11,7 +11,7 @@ internal sealed class AddProjectCommandHandler(
     IProjectsRepo projectsRepo,
     IEntityRepo<LinkProvider> linkProviderRepo,
     IEntityRepo<TechanicalSkills> techinicalSkillsRepo,
-    IEntityRepo<Category> categoryRepo,
+    IEntityRepo<Domain.Entities.Category> categoryRepo,
     IUnitOfWork unitOfWork,
     ILogger logger
     ) : IRequestHandler<AddProjectCommand, Result<Guid>>
@@ -100,6 +100,5 @@ internal sealed class AddProjectCommandHandler(
                 return Result.Error("Failed to add project due to an unexpected error.");
             }
         }
-
     }
 }
