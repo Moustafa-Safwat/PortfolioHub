@@ -9,7 +9,7 @@ namespace PortfolioHub.Projects.Usecases.Project;
 
 internal sealed class AddProjectCommandHandler(
     IProjectsRepo projectsRepo,
-    IEntityRepo<LinkProvider> linkProviderRepo,
+    IEntityRepo<Domain.Entities.LinkProvider> linkProviderRepo,
     IEntityRepo<TechanicalSkills> techinicalSkillsRepo,
     IEntityRepo<Domain.Entities.Category> categoryRepo,
     IUnitOfWork unitOfWork,

@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDk3NTI4NjMsImlhdCI6MTc0OTc1MTk2MywiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDk3NTE5NjN9.15KEFbTdk9UM0CiYWw1iJyaKT58pxYnTetAIEmyXiD8
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDk3NjI2MTgsImlhdCI6MTc0OTc2MTcxOCwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NDk3NjE3MTh9.5CqmJdDYjkHCY-rx38hEbegayof1rs_Lb7XmhQKYNa8
 
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -152,6 +152,30 @@ Authorization: Bearer {{Auth.Token}}
 
 // get tech skill
 GET {{PortfolioHub.Web_HostAddress}}/tech-skill
+Content-Type: application/json
+
+###
+
+// Add link provider
+POST {{PortfolioHub.Web_HostAddress}}/link-provider
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+{
+    "name":"Youtube",
+    "baseUrl":"https://www.Youtube.com/"
+}
+###
+
+// delete link Provider
+DELETE {{PortfolioHub.Web_HostAddress}}/link-provider/70b6ceea-4b42-4f49-b2be-6b12d8a689e9
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+###
+
+// get tech skill
+GET {{PortfolioHub.Web_HostAddress}}/link-provider
 Content-Type: application/json
 
 ###
