@@ -1,7 +1,7 @@
 using System.Reflection;
 using FastEndpoints;
-using FastEndpoints.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using PortfolioHub.Projects;
 using PortfolioHub.Users;
 using Serilog;
@@ -23,22 +23,32 @@ IList<Assembly> assemblies = [typeof(Program).Assembly];
 builder.Services.AddUsersModule(builder.Configuration, assemblies)
     .AddProjectsModule(builder.Configuration, assemblies);
 builder.Services
-    .AddAuthenticationJwtBearer(options =>
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        options.SigningKey = builder.Configuration["Auth:JwtSecret"];
-    })
-    .AddAuthorization()
-    .AddFastEndpoints();
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Auth:JwtSecret"] ??
+                throw new InvalidOperationException("JWT Secret is not configured."))),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+builder.Services.AddAuthorization()
+                .AddFastEndpoints();
 builder.Services.AddMediatR(options =>
 {
     options.RegisterServicesFromAssemblies(assemblies.ToArray());
 });
 // Have to define the Auth schema of the FastEndpoints in the Authentication
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-});
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//});
 // ----------------------------------------
 // ===== Register pipeline behaviours =====
 // ----------------------------------------
@@ -68,9 +78,11 @@ if (app.Environment.IsDevelopment())
     app.UseCors("Frontend");
 }
 
-app.UseAuthentication()
-   .UseAuthorization()
-   .UseFastEndpoints();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseFastEndpoints(options => options.Endpoints
+    .Configurator = (configure) => configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme)
+);
 
 
 
