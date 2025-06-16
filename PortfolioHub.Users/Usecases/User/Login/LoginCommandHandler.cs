@@ -13,6 +13,7 @@ internal sealed class LoginCommandHandler(
     UserManager<IdentityUser> userManager,
     ILogger logger,
     JwtService jwtService,
+    TokenHasher tokenHasher,
     IEntityRepo<RefreshToken> refreshTokenRepo,
     IConfiguration configuration
     ) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
@@ -35,19 +36,22 @@ internal sealed class LoginCommandHandler(
         }
         // Additional logic for successful login can be added here
         var tokenResult = await jwtService.GenerateAccessTokenAsync(user, cancellationToken);
-        var refreshToken = (await jwtService.GenerateRefreshTokenAsync(user, cancellationToken)).Value;
-
         if (!tokenResult.IsSuccess)
         {
             return Result.Error(new ErrorList(tokenResult.Errors));
         }
+
+        var refreshToken = (await jwtService.GenerateRefreshTokenAsync(user, cancellationToken)).Value;
+
         if (!double.TryParse(configuration["Auth:RefreshTokenExpirationDays"], out double refreshTokenExpirationDays))
             throw new InvalidOperationException("Refresh token expiration time is not configured or is invalid.");
+
+        var hashedRefreshToken = tokenHasher.HashToken(refreshToken);
 
         var refreseTokenEntity = new RefreshToken(
             id: Guid.NewGuid(),
             userId: user.Id,
-            hasedToken: refreshToken,
+            hasedToken: hashedRefreshToken,
             device: request.Device,
             ipAddress: request.IpAddress,
             expiresAt: DateTime.UtcNow.AddDays(refreshTokenExpirationDays),
