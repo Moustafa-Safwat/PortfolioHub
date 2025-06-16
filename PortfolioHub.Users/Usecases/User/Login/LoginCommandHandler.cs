@@ -2,23 +2,21 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using PortfolioHub.SharedKernal.Domain.Interfaces;
-using PortfolioHub.Users.Domain.Entities;
+using PortfolioHub.Users.Domain.Interfaces;
 using Serilog;
-using static PortfolioHub.Users.Usecases.User.Login.LoginCommandHandler;
 
 namespace PortfolioHub.Users.Usecases.User.Login;
 
+internal sealed record LoginDtoResult(string AccessToken, string RefreshToken);
 internal sealed class LoginCommandHandler(
     UserManager<IdentityUser> userManager,
     ILogger logger,
     JwtService jwtService,
     TokenHasher tokenHasher,
-    IEntityRepo<RefreshToken> refreshTokenRepo,
+    IRefreshTokenRepo refreshTokenRepo,
     IConfiguration configuration
     ) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
 {
-    internal sealed record LoginDtoResult(string AccessToken, string RefreshToken);
 
     public async Task<Result<LoginDtoResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
@@ -48,7 +46,7 @@ internal sealed class LoginCommandHandler(
 
         var hashedRefreshToken = tokenHasher.HashToken(refreshToken);
 
-        var refreseTokenEntity = new RefreshToken(
+        var refreseTokenEntity = new Domain.Entities.RefreshToken(
             id: Guid.NewGuid(),
             userId: user.Id,
             hasedToken: hashedRefreshToken,

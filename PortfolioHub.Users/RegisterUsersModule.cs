@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PortfolioHub.SharedKernal.Domain.Interfaces;
 using PortfolioHub.Users.Domain.Entities;
+using PortfolioHub.Users.Domain.Interfaces;
 using PortfolioHub.Users.Infrastructure.Context;
 using PortfolioHub.Users.Infrastructure.EFRepository;
 using PortfolioHub.Users.Usecases.User.Login;
@@ -32,7 +33,7 @@ public static class RegisterUsersModule
 
         service.AddScoped<JwtService>();
         service.AddSingleton<TokenHasher>();
-        service.AddScoped<IEntityRepo<RefreshToken>, EFRefreshTokenRepo>();
+        service.AddScoped<IRefreshTokenRepo, EFRefreshTokenRepo>();
         assemblies.Add(typeof(RegisterUsersModule).Assembly);
         return service;
     }

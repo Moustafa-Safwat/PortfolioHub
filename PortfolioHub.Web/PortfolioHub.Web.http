@@ -26,6 +26,15 @@ Content-Type: application/json
 // AdminUser: {"username":"Moustafa.Safwat", "password":"Moustafa.99"}
 // AdminUser: {"username":"ahmed", "password":"Ahmed.99"}
 
+// refresh token
+POST {{PortfolioHub.Web_HostAddress}}/user/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken": "YoN33jlZa4WZsA0xfGgCZ/MN59HC9xqYzvsXXFBzXadVpIPtWZP7wgvQA3cJ21AN1WWTvJTicDM9Ek5ZgFrwwA=="
+}
+###
+
 // add a new role
 POST {{PortfolioHub.Web_HostAddress}}/role
 Content-Type: application/json

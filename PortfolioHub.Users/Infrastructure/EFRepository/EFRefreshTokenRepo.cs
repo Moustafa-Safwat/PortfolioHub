@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PortfolioHub.SharedKernal.Domain.Interfaces;
 using PortfolioHub.Users.Domain.Entities;
+using PortfolioHub.Users.Domain.Interfaces;
 using PortfolioHub.Users.Infrastructure.Context;
 using Serilog;
 
@@ -10,7 +11,7 @@ namespace PortfolioHub.Users.Infrastructure.EFRepository;
 internal sealed class EFRefreshTokenRepo(
     UsersDbContext usersDbContext,
     ILogger logger
-    ) : IEntityRepo<RefreshToken>
+    ) : IRefreshTokenRepo
 {
     public async Task<Result> AddAsync(RefreshToken project, CancellationToken cancellationToken = default)
     {
@@ -107,6 +108,22 @@ internal sealed class EFRefreshTokenRepo(
             logger.Error(ex, "Error retrieving RefreshToken with Id: {RefreshTokenId}", id);
             return Result.Error(new ErrorList([ex.Message]));
         }
+    }
+
+    public async Task<Result<RefreshToken>> GetActiveRefreshTokenByHashedTokenAsync(string hashedToken, CancellationToken cancellationToken = default)
+    {
+        var existing = await usersDbContext.RefreshTokens
+            .Include(u=>u.User)
+            .Where(r => r.HasedToken == hashedToken && r.RevokedAt == null && r.ExpiresAt > DateTime.Now)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (existing is null)
+        {
+            logger.Warning("No active RefreshToken found for HashedToken: {HashedToken}", hashedToken);
+            return Result.Unauthorized("No active refresh token found for the provided hashed token, or the token has expired or been revoked.");
+        }
+
+        return Result.Success(existing);
     }
 
     public async Task<Result<IReadOnlyList<RefreshToken>>> IsEntitiesIdValidAsync(IList<Guid> ids, CancellationToken cancellationToken = default)
