@@ -113,7 +113,7 @@ internal sealed class EFRefreshTokenRepo(
     public async Task<Result<RefreshToken>> GetActiveRefreshTokenByHashedTokenAsync(string hashedToken, CancellationToken cancellationToken = default)
     {
         var existing = await usersDbContext.RefreshTokens
-            .Include(u=>u.User)
+            .Include(u => u.User)
             .Where(r => r.HasedToken == hashedToken && r.RevokedAt == null && r.ExpiresAt > DateTime.Now)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -205,5 +205,21 @@ internal sealed class EFRefreshTokenRepo(
             logger.Error(ex, "Error updating RefreshToken with Id: {RefreshTokenId}", project.Id);
             return Result.Error(new ErrorList([ex.Message]));
         }
+    }
+
+    public async Task<Result<RefreshToken>> GetActiveRefreshTokenByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        var existing = await usersDbContext.RefreshTokens
+           .Include(u => u.User)
+           .Where(r => r.UserId == userId && r.RevokedAt == null && r.ExpiresAt > DateTime.Now)
+           .FirstOrDefaultAsync(cancellationToken);
+
+        if (existing is null)
+        {
+            logger.Warning("No active RefreshToken found for userId: {userId}", userId);
+            return Result.Unauthorized("No active refresh token found for the provided hashed token, or the token has expired or been revoked.");
+        }
+
+        return Result.Success(existing);
     }
 }
