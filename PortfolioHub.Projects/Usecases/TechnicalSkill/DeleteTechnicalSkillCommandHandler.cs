@@ -1,7 +1,7 @@
 ﻿using Ardalis.Result;
 using MediatR;
 using PortfolioHub.Projects.Domain.Entities;
-using PortfolioHub.Projects.Domain.Interfaces;
+using PortfolioHub.SharedKernal.Domain.Interfaces;
 using Serilog;
 
 namespace PortfolioHub.Projects.Usecases.TechnicalSkill;

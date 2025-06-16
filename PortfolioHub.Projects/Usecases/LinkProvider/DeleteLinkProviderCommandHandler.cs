@@ -1,6 +1,6 @@
 ﻿using Ardalis.Result;
 using MediatR;
-using PortfolioHub.Projects.Domain.Interfaces;
+using PortfolioHub.SharedKernal.Domain.Interfaces;
 
 namespace PortfolioHub.Projects.Usecases.LinkProvider;
 

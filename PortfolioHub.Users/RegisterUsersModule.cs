@@ -3,7 +3,10 @@ using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PortfolioHub.SharedKernal.Domain.Interfaces;
+using PortfolioHub.Users.Domain.Entities;
 using PortfolioHub.Users.Infrastructure.Context;
+using PortfolioHub.Users.Infrastructure.EFRepository;
 using PortfolioHub.Users.Usecases.User.Login;
 
 namespace PortfolioHub.Users;
@@ -11,7 +14,7 @@ namespace PortfolioHub.Users;
 public static class RegisterUsersModule
 {
     public static IServiceCollection AddUsersModule(this IServiceCollection service,
-        IConfiguration configuration,IList<Assembly> assemblies)
+        IConfiguration configuration, IList<Assembly> assemblies)
     {
         service.AddSqlServer<UsersDbContext>(configuration.GetConnectionString("UsersDb"));
         service.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -27,7 +30,9 @@ public static class RegisterUsersModule
         })
             .AddEntityFrameworkStores<UsersDbContext>();
 
-        service.AddScoped<CreateUserToken>();
+        service.AddScoped<JwtService>();
+        service.AddSingleton<TokenHasher>();
+        service.AddScoped<IEntityRepo<RefreshToken>, EFRefreshTokenRepo>();
         assemblies.Add(typeof(RegisterUsersModule).Assembly);
         return service;
     }

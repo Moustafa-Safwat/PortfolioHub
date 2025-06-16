@@ -1,8 +1,8 @@
 ﻿using Ardalis.Result;
 using Microsoft.EntityFrameworkCore;
-using PortfolioHub.Projects.Domain.Entities;
-using PortfolioHub.Projects.Domain.Interfaces;
 using PortfolioHub.Projects.Infrastructure.Context;
+using PortfolioHub.SharedKernal.Domain.Entities;
+using PortfolioHub.SharedKernal.Domain.Interfaces;
 
 namespace PortfolioHub.Projects.Infrastructure.EFRepository;
 

@@ -6,7 +6,7 @@ using Serilog;
 namespace PortfolioHub.Projects.Usecases.Gallery;
 
 internal sealed class DeleteGalleryCommandHandler(
-    IEntityRepo<Domain.Entities.Gallery> repo,
+    SharedKernal.Domain.Interfaces.IEntityRepo<Domain.Entities.Gallery> repo,
     ILogger logger
     ) : IRequestHandler<DeleteGalleryCommand, Result<string>>
 {

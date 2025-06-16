@@ -1,4 +1,4 @@
-﻿namespace PortfolioHub.Projects.Domain.Entities;
+﻿namespace PortfolioHub.SharedKernal.Domain.Entities;
 
 public abstract class BaseEntity
 {

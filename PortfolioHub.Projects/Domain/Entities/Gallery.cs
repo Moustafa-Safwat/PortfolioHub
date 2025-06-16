@@ -1,4 +1,5 @@
 ﻿using Ardalis.GuardClauses;
+using PortfolioHub.SharedKernal.Domain.Entities;
 
 namespace PortfolioHub.Projects.Domain.Entities;
 

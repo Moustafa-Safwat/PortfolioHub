@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using PortfolioHub.Users.Domain.Entities;
 
 namespace PortfolioHub.Users.Infrastructure.Context;
 
@@ -10,6 +11,7 @@ internal class UsersDbContext(
     )
     : IdentityDbContext(options)
 {
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

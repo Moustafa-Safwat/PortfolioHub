@@ -1,8 +1,8 @@
 ﻿using Ardalis.Result;
 using MediatR;
 using PortfolioHub.Projects.Domain.Entities;
-using PortfolioHub.Projects.Domain.Interfaces;
 using PortfolioHub.Projects.Endpoints.TechanicalSkills;
+using PortfolioHub.SharedKernal.Domain.Interfaces;
 using Serilog;
 
 namespace PortfolioHub.Projects.Usecases.TechnicalSkill;
@@ -32,8 +32,8 @@ internal sealed class GetTechnicalSkillQueryHandler(
 
         var dto = techSkill.Select(tech => new TechSkillDto(tech.Id, tech.Name));
 
-        logger.Information("Successfully retrieved {Count} technical skills. Ids: {Ids}", 
-            techSkill.Count(), 
+        logger.Information("Successfully retrieved {Count} technical skills. Ids: {Ids}",
+            techSkill.Count(),
             string.Join(", ", techSkill.Select(t => t.Id)));
 
         return Result.Success(dto);

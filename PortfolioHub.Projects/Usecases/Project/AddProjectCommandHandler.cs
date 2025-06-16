@@ -3,6 +3,7 @@ using MediatR;
 using PortfolioHub.Projects.Domain.Entities;
 using PortfolioHub.Projects.Domain.Interfaces;
 using PortfolioHub.Projects.Infrastructure;
+using PortfolioHub.SharedKernal.Domain.Interfaces;
 using Serilog;
 
 namespace PortfolioHub.Projects.Usecases.Project;

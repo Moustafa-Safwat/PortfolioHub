@@ -78,11 +78,11 @@ if (app.Environment.IsDevelopment())
     app.UseCors("Frontend");
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseFastEndpoints(options => options.Endpoints
-    .Configurator = (configure) => configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme)
-);
+app.UseAuthentication()
+   .UseAuthorization()
+   .UseFastEndpoints(options => options.Endpoints
+   .Configurator = (configure) => configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme)
+   );
 
 
 

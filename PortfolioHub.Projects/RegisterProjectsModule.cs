@@ -1,11 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Reflection;
+﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PortfolioHub.Projects.Infrastructure.Context;
-using PortfolioHub.Projects.Domain.Interfaces;
-using PortfolioHub.Projects.Infrastructure.EFRepository;
 using PortfolioHub.Projects.Domain.Entities;
+using PortfolioHub.Projects.Domain.Interfaces;
 using PortfolioHub.Projects.Infrastructure;
+using PortfolioHub.Projects.Infrastructure.Context;
+using PortfolioHub.Projects.Infrastructure.EFRepository;
+using PortfolioHub.SharedKernal.Domain.Entities;
+using PortfolioHub.SharedKernal.Domain.Interfaces;
 
 namespace PortfolioHub.Projects;
 
@@ -21,9 +23,9 @@ public static class RegisterProjectsModule
 
         var entityTypes = typeof(Gallery).Assembly
             .GetTypes()
-            .Where(t => t.IsClass 
-            && !t.IsAbstract 
-            && typeof(BaseEntity).IsAssignableFrom(t) 
+            .Where(t => t.IsClass
+            && !t.IsAbstract
+            && typeof(BaseEntity).IsAssignableFrom(t)
             && t.Name != nameof(Project));
 
         foreach (var entityType in entityTypes)

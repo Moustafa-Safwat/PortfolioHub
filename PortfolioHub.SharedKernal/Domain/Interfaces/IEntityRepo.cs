@@ -1,10 +1,10 @@
 ﻿using Ardalis.Result;
-using PortfolioHub.Projects.Domain.Entities;
+using PortfolioHub.SharedKernal.Domain.Entities;
 
-namespace PortfolioHub.Projects.Domain.Interfaces;
+namespace PortfolioHub.SharedKernal.Domain.Interfaces;
 
 
-internal interface IReadOnlyEntityRepo<TEntity>
+public interface IReadOnlyEntityRepo<TEntity>
     where TEntity : BaseEntity
 {
     Task<Result<TEntity>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
@@ -16,7 +16,7 @@ internal interface IReadOnlyEntityRepo<TEntity>
     Task<Result<TEntity>> IsEntitiyIdValidAsync(Guid id,
     CancellationToken cancellationToken = default);
 }
-internal interface IEntityRepo<TEntity>
+public interface IEntityRepo<TEntity>
     : IReadOnlyEntityRepo<TEntity>
     where TEntity : BaseEntity
 {
