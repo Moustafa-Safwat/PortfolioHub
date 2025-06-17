@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTAxMTMxNjMsImlhdCI6MTc1MDExMjI2MywiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTAxMTIyNjN9.8KDOYfVmFkUxDBi-279JoEHaq4Pp532i7YSd-qqj6uI
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTAxMjMyNjIsImlhdCI6MTc1MDEyMjM2MiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTAxMjIzNjJ9.TE2lqVWl4SQoDJ_r5pHnCV30hJcajpbKpGCahl0gFlg
 
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -169,6 +169,17 @@ Authorization: Bearer {{Auth.Token}}
 GET {{PortfolioHub.Web_HostAddress}}/tech-skill
 Content-Type: application/json
 
+###
+
+// update tech skill
+PUT {{PortfolioHub.Web_HostAddress}}/tech-skill
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+{
+    "id":"ef163968-d8a0-4cc6-8c0a-10b64a5bb7b1",
+    "name":"test"
+}
 ###
 
 // Add link provider
