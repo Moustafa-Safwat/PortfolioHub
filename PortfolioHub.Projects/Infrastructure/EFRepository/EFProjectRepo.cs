@@ -84,8 +84,10 @@ internal class EFProjectRepo(
 
         var project = await dbContext.Projects
             .Include(p => p.Images)
+            .Include(p => p.Category)
             .Include(p => p.Skills)
-            .Include(p => p.Links)
+            .Include(p => p.Links)!
+            .ThenInclude(l => l.LinkProvider)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
 
         if (project is not null)

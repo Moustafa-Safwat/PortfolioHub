@@ -32,7 +32,8 @@ internal sealed class AddProjectReqValidator : Validator<AddProjectReq>
             .Must(id => Guid.TryParse(id, out _)).WithMessage("CategoryId must be a valid GUID.");
 
         RuleFor(x => x.VideoUrl)
-            .Must(url => url!.BeAValidUrl()).WithMessage("Video URL must be a valid URL format.");
+            .Must(url => string.IsNullOrWhiteSpace(url) || url.BeAValidUrl())
+            .WithMessage("Video URL must be a valid URL format.");
 
         RuleFor(x => x.CoverImageUrl)
             .Must(url => url!.BeAValidUrl()).WithMessage("Cover image URL must be a valid URL format.");
@@ -45,6 +46,7 @@ internal sealed class AddProjectReqValidator : Validator<AddProjectReq>
             .NotNull().WithMessage("Skills are required.")
             .Must(ids => ids.Length > 0 && ids.All(id => Guid.TryParse(id, out _)))
             .WithMessage("At least one skill is required.");
+
         RuleFor(x => x.Links)
             .NotNull().WithMessage("Links are required.")
             .ForEach(linkRule => linkRule.SetValidator(new LinkValidator()));

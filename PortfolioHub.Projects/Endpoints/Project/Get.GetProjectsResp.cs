@@ -16,10 +16,3 @@ internal sealed record ProjectsDto(
     string Category,
     string gitHubLink
 );
-
-internal sealed record ProjectDto(
-    Guid Id,
-    string Title,
-    string Description,
-    DateTime CreatedAt
-);

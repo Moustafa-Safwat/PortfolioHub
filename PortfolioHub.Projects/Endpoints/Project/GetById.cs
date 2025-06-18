@@ -1,14 +1,14 @@
-﻿using FastEndpoints;
+﻿using Ardalis.Result;
+using FastEndpoints;
 using MediatR;
 using PortfolioHub.Projects.Usecases.Project;
 
 namespace PortfolioHub.Projects.Endpoints.Project;
 
-internal sealed record GetProjectByIdResp(ProjectDto ProjectDto);
 
 internal class GetById(
     ISender sender
-    ) : EndpointWithoutRequest<GetProjectByIdResp>
+    ) : EndpointWithoutRequest<Result<ProjectDto>>
 {
     public override void Configure()
     {
@@ -26,13 +26,8 @@ internal class GetById(
             await SendErrorsAsync();
             return;
         }
-        var projectDto = new ProjectDto(
-            projectByIdRes.Value.Id,
-            projectByIdRes.Value.Title,
-            projectByIdRes.Value.Description,
-            projectByIdRes.Value.CreatedAt
-        );
-        var response = new GetProjectByIdResp(projectDto);
+        var projectDto = projectByIdRes.Value;
+        var response = Result.Success(projectDto);
         await SendAsync(response, cancellation: ct);
 
     }

@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using PortfolioHub.Projects.Domain.Interfaces;
 using PortfolioHub.Projects.Endpoints.Project;
+using PortfolioHub.Projects.Endpoints.TechanicalSkills;
 
 namespace PortfolioHub.Projects.Usecases.Project;
 
@@ -24,10 +25,24 @@ internal sealed class GetProjectByIdQueryHandler(
         }
         var project = projectRes.Value;
         var projectDto = new ProjectDto(
-            project.Id,
             project.Title,
             project.Description,
-            project.CreatedDate
+            project.LongDescription,
+            project.CreatedDate,
+            new Endpoints.Category.CategoryDto(
+                project.Category!.Id,
+                project.Category.Name
+            ),
+            project.VideoUrl,
+            project.CoverImageUrl,
+            project.Images!.OrderBy(i => i.Order).Select(i => i.ImageUrl).ToArray(),
+            project.Skills!.Select(s => new TechSkillDto(s.Id, s.Name)).ToArray(),
+            project.Links!.Select(l => new LinkDto(
+                l.LinkProvider!.Id.ToString(),
+                l.Url,
+                l.LinkProvider.Name,
+                l.LinkProvider.BaseUrl
+            )).ToArray()
         );
 
         logger.LogInformation("Successfully retrieved project with Id: {ProjectId}", project.Id);
