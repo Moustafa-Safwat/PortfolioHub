@@ -26,13 +26,13 @@ internal class ProjectVal : IEntityTypeConfiguration<Project>
 
         builder.HasMany(p => p.Images)
             .WithOne(g => g.Project)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(p => p.Skills)
             .WithMany(s => s.Projects);
 
         builder.HasMany(p => p.Links)
             .WithOne(l => l.Project)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
