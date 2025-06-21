@@ -31,7 +31,7 @@ internal sealed class ContactMessage(
         );
 
         var sendEmailCommand = new SendEmailCommand(
-            configuration.GetValue<string>("EmailSettings:UserName")!,
+            configuration.GetValue<string>("EmailSettings:FromEmail")!,
             configuration.GetValue<string>("Auth:AdminEmail")!,
             req.Subject,
             formatedMessage

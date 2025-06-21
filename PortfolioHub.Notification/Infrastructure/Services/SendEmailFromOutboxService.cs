@@ -26,11 +26,19 @@ class SendEmailFromOutboxService(
                     unsentEmail.Subject,
                     unsentEmail.Body,
                     cancellationToken);
-
                 if (sendResult.IsSuccess)
                 {
+                    logger.LogInformation("Email with Id: {id} sent successfully to {To} with subject '{Subject}'", unsentEmail.Id, unsentEmail.To, unsentEmail.Subject);
                     unsentEmail.MarkAsSent();
                     await outboxService.SaveChangesAsync(cancellationToken);
+                }
+                else
+                {
+                    logger.LogWarning("Failed to send email with Id: {id} to {To} with subject '{Subject}'. Errors: {Errors}",
+                        unsentEmail.Id,
+                        unsentEmail.To,
+                        unsentEmail.Subject,
+                        string.Join(", ", sendResult.Errors ?? []));
                 }
             }
             catch (Exception ex)
