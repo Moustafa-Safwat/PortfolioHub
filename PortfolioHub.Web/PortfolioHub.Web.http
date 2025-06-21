@@ -213,3 +213,14 @@ Authorization: Bearer {{Auth.Token}}
     "baseUrl":"https://www.Youtube.com/"
 }
 ###
+
+// send contact message 
+POST {{PortfolioHub.Web_HostAddress}}/contact-message
+Content-Type: application/json
+
+{
+    "name":"test user",
+    "email":"testmail@tesl.com",
+    "subject":"test subject",
+    "message":"this message was sent for testing only"
+}

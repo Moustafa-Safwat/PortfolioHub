@@ -2,6 +2,7 @@ using System.Reflection;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using PortfolioHub.Notification;
 using PortfolioHub.Projects;
 using PortfolioHub.Users;
 using Serilog;
@@ -21,7 +22,8 @@ Log.Information("Starting up application");
 
 IList<Assembly> assemblies = [typeof(Program).Assembly];
 builder.Services.AddUsersModule(builder.Configuration, assemblies)
-    .AddProjectsModule(builder.Configuration, assemblies);
+    .AddProjectsModule(builder.Configuration, assemblies)
+    .AddNotificationModule(builder.Configuration, assemblies);
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
