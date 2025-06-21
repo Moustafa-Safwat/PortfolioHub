@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioHub.Projects", "Po
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioHub.SharedKernal", "PortfolioHub.SharedKernal\PortfolioHub.SharedKernal.csproj", "{A434AF85-F86B-44E9-9C04-4E8190D3821C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioHub.Notification", "PortfolioHub.Notification\PortfolioHub.Notification.csproj", "{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,18 @@ Global
 		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Release|x64.Build.0 = Release|Any CPU
 		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Release|x86.ActiveCfg = Release|Any CPU
 		{A434AF85-F86B-44E9-9C04-4E8190D3821C}.Release|x86.Build.0 = Release|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Debug|x64.Build.0 = Debug|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Debug|x86.Build.0 = Debug|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Release|x64.ActiveCfg = Release|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Release|x64.Build.0 = Release|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Release|x86.ActiveCfg = Release|Any CPU
+		{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
