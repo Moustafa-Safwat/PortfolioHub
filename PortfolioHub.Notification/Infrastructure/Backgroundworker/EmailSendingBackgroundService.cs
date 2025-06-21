@@ -11,11 +11,13 @@ internal sealed class EmailSendingBackgroundService(
     )
     : BackgroundService
 {
+    private static readonly TimeSpan CheckInterval = TimeSpan.FromSeconds(60);
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        int delayInMelliseconds = 10_000;// delay for 10 seconds
+        using var timer = new PeriodicTimer(CheckInterval);
 
-        while (!stoppingToken.IsCancellationRequested)
+        do
         {
             try
             {
@@ -29,13 +31,10 @@ internal sealed class EmailSendingBackgroundService(
             {
                 logger.LogError(ex, "Error sending email");
             }
-            finally
-            {
-                // Wait for a period before checking again
-                await Task.Delay(TimeSpan.FromMilliseconds(delayInMelliseconds), stoppingToken);
-                logger.LogInformation("Waiting for the next email check...");
-            }
+
+            logger.LogInformation("Waiting for the next email check...");
         }
+        while (await timer.WaitForNextTickAsync(stoppingToken));
     }
 }
 
