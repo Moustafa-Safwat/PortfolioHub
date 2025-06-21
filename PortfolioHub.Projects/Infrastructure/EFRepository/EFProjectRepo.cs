@@ -57,20 +57,30 @@ internal class EFProjectRepo(
         return Result.Success(false);
     }
 
-    public async Task<Result<IReadOnlyList<Project>>> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<Result<IReadOnlyList<Project>>> GetAllAsync(int pageNumber, int pageSize, Guid? categoryId = null,
+        string? search = null, CancellationToken cancellationToken = default)
     {
         if (pageNumber <= 0)
             return Result.Invalid(new ValidationError("Page number must be greater than zero."));
         if (pageSize <= 0)
             return Result.Invalid(new ValidationError("Page size must be greater than zero."));
 
-        var projects = await dbContext.Projects
-            .Include(p => p.Images)
-            .Include(p => p.Skills)
-            .Include(p => p.Links)!
-            .ThenInclude(l => l.LinkProvider)
-            .Include(p => p.Category)
-            .OrderByDescending(p => p.CreatedDate)
+        var queryable = dbContext.Projects
+           .Include(p => p.Images)
+           .Include(p => p.Skills)
+           .Include(p => p.Links)!
+               .ThenInclude(l => l.LinkProvider)
+           .Include(p => p.Category)
+           .OrderByDescending(p => p.CreatedDate)
+           .AsQueryable();
+
+        if (categoryId.HasValue)
+            queryable = queryable.Where(p => p.Category != null && p.Category.Id == categoryId.Value);
+
+        if (!string.IsNullOrEmpty(search))
+            queryable = queryable.Where(p => p.Title.Contains(search) || p.Description.Contains(search));
+
+        var projects = await queryable
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
@@ -161,5 +171,19 @@ internal class EFProjectRepo(
             return Result.Success();
         else
             return Result.Error("No changes were made to the database.");
+    }
+
+    public async Task<Result<int>> GetTotalCount(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var count = await dbContext.Projects.CountAsync(cancellationToken);
+            return Result.Success(count);
+        }
+        catch (Exception ex)
+        {
+            // Optionally log the exception here
+            return Result<int>.Error($"Failed to get total project count: {ex.Message}");
+        }
     }
 }

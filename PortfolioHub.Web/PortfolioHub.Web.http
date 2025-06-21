@@ -77,17 +77,13 @@ Authorization: Bearer {{Auth.Token}}
 ###
 
 // get projects
-GET {{PortfolioHub.Web_HostAddress}}/project
+GET {{PortfolioHub.Web_HostAddress}}/project?page=1&pagesize=10&categoryid=72b7c49e-8c0e-47ee-b803-3421bb88b606&search=indoor
 Content-Type: application/json
 
-{
-    "PageNumber": 1,
-    "PageSize": 10
-}
 ### 
 
 // get project by id
-GET {{PortfolioHub.Web_HostAddress}}/project/d5c656c5-efb3-4f30-be8d-58ce60e48c58
+GET {{PortfolioHub.Web_HostAddress}}/project/6a3b77d6-5b04-4730-b748-9870c8a2d161
 Content-Type: application/json
 
 ###

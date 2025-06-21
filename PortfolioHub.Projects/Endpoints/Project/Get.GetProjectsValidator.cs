@@ -3,6 +3,7 @@ using FluentValidation;
 
 namespace PortfolioHub.Projects.Endpoints.Project;
 
+// TODO: this class should be removed
 internal sealed class GetProjectsValidator : Validator<GetProjectsReq>
 {
     public GetProjectsValidator()

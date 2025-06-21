@@ -9,15 +9,19 @@ namespace PortfolioHub.Projects.Usecases.Project;
 internal sealed class GetProjectsQueryHandler(
     IProjectsRepo projectsRepo,
     ILogger logger
-    ) : IRequestHandler<GetProjectsQuery, Result<IReadOnlyList<ProjectsDto>>>
+    ) : IRequestHandler<GetProjectsQuery, Result<GetProjectsQueryResponse>>
 {
-    public async Task<Result<IReadOnlyList<ProjectsDto>>> Handle(GetProjectsQuery request,
+    public async Task<Result<GetProjectsQueryResponse>> Handle(GetProjectsQuery request,
         CancellationToken cancellationToken)
     {
         logger.Information("Handling GetProjectsQuery: PageNumber={PageNumber}, PageSize={PageSize}", request.PageNumber, request.PageSize);
 
-        var projectsRes = await projectsRepo.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
-        if (!projectsRes.IsSuccess)
+        var projectsRes = await projectsRepo.GetAllAsync(request.PageNumber, request.PageSize,
+            request.CategoryId, request.Search, cancellationToken);
+
+        var countRes = await projectsRepo.GetTotalCount(cancellationToken);
+
+        if (!(projectsRes.IsSuccess && countRes.IsSuccess))
         {
             logger.Warning("Failed to retrieve projects. Errors: {@Errors}", projectsRes.Errors);
             return Result.Error(new ErrorList(projectsRes.Errors));
@@ -41,6 +45,11 @@ internal sealed class GetProjectsQueryHandler(
 
         logger.Information("Successfully retrieved {Count} projects.", projectDtos.Count);
 
-        return Result.Success<IReadOnlyList<ProjectsDto>>(projectDtos);
+        var response = new GetProjectsQueryResponse
+        (
+            projectDtos,
+            countRes.Value
+        );
+        return Result.Success<GetProjectsQueryResponse>(response);
     }
 }
