@@ -34,6 +34,7 @@ public static class RegisterUsersModule
         service.AddScoped<JwtService>();
         service.AddSingleton<TokenHasher>();
         service.AddScoped<IRefreshTokenRepo, EFRefreshTokenRepo>();
+        service.AddScoped<IInfoRepo, EFInfoRepository>();
         assemblies.Add(typeof(RegisterUsersModule).Assembly);
         return service;
     }

@@ -6,10 +6,10 @@ using PortfolioHub.Users.Infrastructure.Context;
 
 namespace PortfolioHub.Users.Infrastructure.EFRepository;
 
-internal class EFInfoRepository (UsersDbContext dbContext) : IInfoRepo
+internal class EFInfoRepository(UsersDbContext dbContext) : IInfoRepo
 {
 
-    public async Task<Result> AddRangeAsync(IEnumerable<Info> infos, CancellationToken cancellationToken = default)
+    public async Task<Result<Guid[]>> AddRangeAsync(IEnumerable<Info> infos, CancellationToken cancellationToken = default)
     {
         if (infos == null) return Result.Invalid(new List<ValidationError> { new("Infos", "Infos collection is null") });
 
@@ -18,8 +18,13 @@ internal class EFInfoRepository (UsersDbContext dbContext) : IInfoRepo
             return Result.Invalid(new List<ValidationError> { new("Infos", "Infos collection is empty") });
 
         await dbContext.Infos.AddRangeAsync(infoList, cancellationToken);
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return Result.Success();
+        var effectedRows = await SaveChangesAsync(cancellationToken);
+
+        if (!effectedRows.IsSuccess)
+            return Result<Guid[]>.Invalid(effectedRows.ValidationErrors);
+
+        var ids = infoList.Select(i => i.Id).ToArray();
+        return Result.Success(ids);
     }
 
     public async Task<Result> DeleteRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
@@ -35,7 +40,7 @@ internal class EFInfoRepository (UsersDbContext dbContext) : IInfoRepo
             return Result.NotFound();
 
         dbContext.Infos.RemoveRange(infos);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await SaveChangesAsync(cancellationToken);
         return Result.Success();
     }
 
@@ -63,6 +68,8 @@ internal class EFInfoRepository (UsersDbContext dbContext) : IInfoRepo
         return Result.Success((IReadOnlyList<Info>)infos);
     }
 
+
+
     public async Task<Result> UpdateRangeAsync(IEnumerable<Info> infos, CancellationToken cancellationToken = default)
     {
         if (infos == null) return Result.Invalid(new List<ValidationError> { new("Infos", "Infos collection is null") });
@@ -86,7 +93,24 @@ internal class EFInfoRepository (UsersDbContext dbContext) : IInfoRepo
             }
         }
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await SaveChangesAsync(cancellationToken);
         return Result.Success();
+    }
+
+    public async Task<Result> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var effectedRows = await dbContext.SaveChangesAsync(cancellationToken);
+            return Result.Success();
+        }
+        catch (DbUpdateException ex)
+        {
+            return Result.Invalid(new List<ValidationError>
+            {
+                new("Database", $"Failed to save changes: {ex.Message}"),
+                new ("InnerException",$"{ex.InnerException?.Message??string.Empty}")
+            });
+        }
     }
 }

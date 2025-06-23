@@ -28,8 +28,4 @@
 	  <ProjectReference Include="..\PortfolioHub.SharedKernal\PortfolioHub.SharedKernal.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Usecases\Info\" />
-	</ItemGroup>
-
 </Project>

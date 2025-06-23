@@ -13,7 +13,7 @@ internal sealed class InfoVal : IEntityTypeConfiguration<Info>
         builder.Property(i => i.InfoKey).IsRequired().HasMaxLength(100);
         builder.Property(i => i.InfoValue).IsRequired().HasMaxLength(500);
         builder.HasIndex(i => i.InfoKey)
-               .IsUnique(false)
+               .IsUnique(true)
                .IsClustered(false);
     }
 }

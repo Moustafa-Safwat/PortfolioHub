@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTAyODI1NjMsImlhdCI6MTc1MDI4MTY2MywiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTAyODE2NjN9.tBAPQKfsdV-G_-83404Dllnkvgp9X0K7Rf7_x-FsSv0
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA3MTQ3MjgsImlhdCI6MTc1MDcxMzgyOCwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTA3MTM4Mjh9.fgtnqORVGw5AfVzppIYObY3bV1TDQ9IAaUpm4kpbvXQ
 @Auth.RefreshToken = kk2RnLRj7QPcRjYVX1Ea7wqz0Ja+MAiCECqSeTIT2MtrDxkykeAh6jJDFBN799c9N5x6BYGh5nBsXUn4SD02Pg==
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -224,3 +224,24 @@ Content-Type: application/json
     "subject":"test subject",
     "message":"this message was sent for testing only"
 }
+###
+
+// add info endpoint
+POST {{PortfolioHub.Web_HostAddress}}/info
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+{
+    "infos":
+    [
+        {
+            "infoKey": "Name",
+            "infoValue": "Moustafa"
+        },
+        {
+            "infoKey": "BirthYear",
+            "infoValue": "1999"
+        }
+    ]
+}
+###
