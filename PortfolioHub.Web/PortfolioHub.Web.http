@@ -245,3 +245,9 @@ Authorization: Bearer {{Auth.Token}}
     ]
 }
 ###
+
+// get info endpoint
+GET {{PortfolioHub.Web_HostAddress}}/info?keys=name
+Content-Type: application/json
+
+###

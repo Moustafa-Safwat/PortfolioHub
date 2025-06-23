@@ -2,7 +2,7 @@
 
 namespace PortfolioHub.Users.Endpoints.Info;
 
-internal sealed class InfoDtoValidator : AbstractValidator<InfoDto>
+internal sealed class InfoDtoValidator : AbstractValidator<InfoAddDto>
 {
     public InfoDtoValidator()
     {

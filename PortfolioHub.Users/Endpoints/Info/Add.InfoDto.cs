@@ -1,3 +1,3 @@
 ﻿namespace PortfolioHub.Users.Endpoints.Info;
 
-internal sealed record InfoDto(string InfoKey, string InfoValue);
+internal sealed record InfoAddDto(string InfoKey, string InfoValue);

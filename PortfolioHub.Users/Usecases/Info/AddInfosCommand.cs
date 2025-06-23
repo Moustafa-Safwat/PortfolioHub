@@ -5,5 +5,5 @@ using PortfolioHub.Users.Endpoints.Info;
 namespace PortfolioHub.Users.Usecases.Info;
 
 internal sealed record AddInfosCommand(
-    IEnumerable<InfoDto> Infos
+    IEnumerable<InfoAddDto> Infos
     ) : IRequest<Result<Guid[]>>;
