@@ -12,6 +12,7 @@ internal class UsersDbContext(
     : IdentityDbContext(options)
 {
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<Info> Infos => Set<Info>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

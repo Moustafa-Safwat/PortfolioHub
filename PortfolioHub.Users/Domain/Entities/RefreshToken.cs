@@ -3,7 +3,7 @@ using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Identity;
 using PortfolioHub.SharedKernal.Domain.Entities;
 
-internal class RefreshToken :BaseEntity
+internal class RefreshToken : BaseEntity
 {
     public string UserId { get; private set; } = null!;
     public string HasedToken { get; private set; } = null!;

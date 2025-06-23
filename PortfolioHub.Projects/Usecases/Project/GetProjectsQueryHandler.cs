@@ -38,8 +38,9 @@ internal sealed class GetProjectsQueryHandler(
                 p.CoverImageUrl,
                 p.Skills?.Take(4).Select(s => s.Name).ToArray() ?? [],
                 p.Category?.Name ?? "",
-                p.Links?.FirstOrDefault(l => l.LinkProvider.Name == "Github")?.Url ?? ""
-            ))
+                p.Links?.FirstOrDefault(l => l.Url.Contains("github.com", StringComparison.OrdinalIgnoreCase) ||
+                l.LinkProvider.BaseUrl.Contains("github", StringComparison.OrdinalIgnoreCase))?.Url ?? string.Empty)
+            )
             .ToList()
             .AsReadOnly();
 

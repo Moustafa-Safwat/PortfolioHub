@@ -1,4 +1,6 @@
-﻿namespace PortfolioHub.Users.Domain.Entities;
+﻿using PortfolioHub.Users.Domain.Entities;
+
+namespace PortfolioHub.Users.Infrastructure.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

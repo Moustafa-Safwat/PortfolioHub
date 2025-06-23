@@ -76,8 +76,8 @@ Authorization: Bearer {{Auth.Token}}
 }
 ###
 
-// get projects
-GET {{PortfolioHub.Web_HostAddress}}/project?page=1&pagesize=10&categoryid=72b7c49e-8c0e-47ee-b803-3421bb88b606&search=indoor
+// get projects => Query params [page, pagesize, categoryid, search]
+GET {{PortfolioHub.Web_HostAddress}}/project?page=1&pagesize=10&categoryid=72b7c49e-8c0e-47ee-b803-3421bb88b606
 Content-Type: application/json
 
 ### 
