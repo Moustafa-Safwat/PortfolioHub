@@ -40,7 +40,11 @@ internal class EFInfoRepository(UsersDbContext dbContext) : IInfoRepo
             return Result.NotFound();
 
         dbContext.Infos.RemoveRange(infos);
-        await SaveChangesAsync(cancellationToken);
+        var effectedRowsResult = await SaveChangesAsync(cancellationToken);
+
+        if (!effectedRowsResult.IsSuccess)
+            return Result.Invalid(effectedRowsResult.ValidationErrors);
+
         return Result.Success();
     }
 
