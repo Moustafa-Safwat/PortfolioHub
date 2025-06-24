@@ -2,6 +2,7 @@ using System.Reflection;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using PortfolioHub.Achievements;
 using PortfolioHub.Notification;
 using PortfolioHub.Projects;
 using PortfolioHub.Users;
@@ -23,6 +24,7 @@ Log.Information("Starting up application");
 IList<Assembly> assemblies = [typeof(Program).Assembly];
 builder.Services.AddUsersModule(builder.Configuration, assemblies)
     .AddProjectsModule(builder.Configuration, assemblies)
+    .AddAchievementsModule(builder.Configuration, assemblies)
     .AddNotificationModule(builder.Configuration, assemblies);
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -45,12 +47,6 @@ builder.Services.AddMediatR(options =>
 {
     options.RegisterServicesFromAssemblies(assemblies.ToArray());
 });
-// Have to define the Auth schema of the FastEndpoints in the Authentication
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//});
 // ----------------------------------------
 // ===== Register pipeline behaviours =====
 // ----------------------------------------
@@ -85,8 +81,6 @@ app.UseAuthentication()
    .UseFastEndpoints(options => options.Endpoints
    .Configurator = (configure) => configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme)
    );
-
-
 
 app.Run();
 

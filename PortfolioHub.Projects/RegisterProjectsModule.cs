@@ -21,7 +21,7 @@ public static class RegisterProjectsModule
         service.AddScoped<IProjectsRepo, EFProjectRepo>();
         service.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        var entityTypes = typeof(Gallery).Assembly
+        var entityTypes = typeof(RegisterProjectsModule).Assembly
             .GetTypes()
             .Where(t => t.IsClass
             && !t.IsAbstract
