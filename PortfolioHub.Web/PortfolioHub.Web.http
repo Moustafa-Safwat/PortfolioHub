@@ -269,3 +269,9 @@ Authorization: Bearer {{Auth.Token}}
     "EndDate":"2022-01-01T00:00:00"
 }
 ###
+
+// get education endpoitn
+GET {{PortfolioHub.Web_HostAddress}}/education?page=1&pagesize=5
+Content-Type: application/json
+
+###
