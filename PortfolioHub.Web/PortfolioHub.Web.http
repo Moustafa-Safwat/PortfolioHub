@@ -294,3 +294,10 @@ Authorization: Bearer {{Auth.Token}}
     "Date":"2022-01-01T00:00:00"
 }
 ###
+
+
+// get certificate endpoint
+GET {{PortfolioHub.Web_HostAddress}}/certificate?page=1&pagesize=5
+Content-Type: application/json
+
+###
