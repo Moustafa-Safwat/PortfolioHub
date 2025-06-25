@@ -8,6 +8,7 @@ internal class AchievementsDbContext(
     ) : DbContext(options)
 {
     public DbSet<Education> Educations => Set<Education>();
+    public DbSet<Certificate> Certificates => Set<Certificate>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

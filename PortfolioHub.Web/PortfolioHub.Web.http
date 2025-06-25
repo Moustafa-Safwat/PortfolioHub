@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA4MDU2NjEsImlhdCI6MTc1MDgwNDc2MSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTA4MDQ3NjF9.yrus4teai95P05ltB0yo2VVv1hCemKpCvx008AR1EDY
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA4NzM0ODQsImlhdCI6MTc1MDg3MjU4NCwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTA4NzI1ODV9.ldfWmUZRm81Z1gAuWXuYdGUcCV2GlDEY_Y-p4NVRYtU
 @Auth.RefreshToken = kk2RnLRj7QPcRjYVX1Ea7wqz0Ja+MAiCECqSeTIT2MtrDxkykeAh6jJDFBN799c9N5x6BYGh5nBsXUn4SD02Pg==
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -281,4 +281,16 @@ DELETE {{PortfolioHub.Web_HostAddress}}/education/50e64ce2-7bef-4e9d-a27e-74cb55
 Content-Type: application/json
 Authorization: Bearer {{Auth.Token}}
 
+###
+
+// add certificate endpoint
+POST {{PortfolioHub.Web_HostAddress}}/certificate
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+{
+    "Name":"Civil Engineering",
+    "Issuer":"Cairo University",
+    "Date":"2022-01-01T00:00:00"
+}
 ###
