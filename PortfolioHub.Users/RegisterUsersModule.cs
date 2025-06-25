@@ -3,6 +3,8 @@ using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PortfolioHub.Projects.Infrastructure.EFRepository;
+using PortfolioHub.SharedKernal.Domain.Entities;
 using PortfolioHub.SharedKernal.Domain.Interfaces;
 using PortfolioHub.Users.Domain.Entities;
 using PortfolioHub.Users.Domain.Interfaces;
@@ -35,6 +37,20 @@ public static class RegisterUsersModule
         service.AddSingleton<TokenHasher>();
         service.AddScoped<IRefreshTokenRepo, EFRefreshTokenRepo>();
         service.AddScoped<IInfoRepo, EFInfoRepository>();
+
+        var entityTypes = typeof(RegisterUsersModule).Assembly
+           .GetTypes()
+           .Where(t => t.IsClass
+           && !t.IsAbstract
+           && typeof(BaseEntity).IsAssignableFrom(t));
+
+        foreach (var entityType in entityTypes)
+        {
+            var repoInterface = typeof(IEntityRepo<>).MakeGenericType(entityType);
+            var repoImplementation = typeof(EFEntityRepo<>).MakeGenericType(entityType);
+            service.AddScoped(repoInterface, repoImplementation);
+        }
+
         assemblies.Add(typeof(RegisterUsersModule).Assembly);
         return service;
     }

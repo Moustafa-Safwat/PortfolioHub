@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA4NzQ3NzcsImlhdCI6MTc1MDg3Mzg3NywiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTA4NzM4Nzd9.zvoqAhYD3BDrE_vB2l8_1AYOSoW3H18GoymNvHPxDO8
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA4ODQ4NjYsImlhdCI6MTc1MDg4Mzk2NiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTA4ODM5NjZ9.Jkj-VxxN-XJHl7OOypEV2-lforo72K_BBxW0XfjNUKY
 @Auth.RefreshToken = kk2RnLRj7QPcRjYVX1Ea7wqz0Ja+MAiCECqSeTIT2MtrDxkykeAh6jJDFBN799c9N5x6BYGh5nBsXUn4SD02Pg==
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -235,15 +235,31 @@ Authorization: Bearer {{Auth.Token}}
     "infos":
     [
         {
-            "infoKey": "Name",
+            "infoKey": "name",
             "infoValue": "Moustafa"
+        },
+        {
+            "infoKey": "description_01",
+            "infoValue": "I'm a passionate AEC Software Engineer with over 3 years of experience bridging the gap between architectural vision and cutting-edge technology. My expertise lies in developing innovative solutions that streamline construction workflows and enhance collaboration across AEC teams."
+        },
+        {
+            "infoKey": "description_02",
+            "infoValue": "Based in Cairo, Egypt, I specialize in creating custom Revit plugins, IFC data processing tools, and cloud-based BIM synchronization platforms. My goal is to push the boundaries of what's possible in architectural technology through clean, efficient, and scalable code."
+        },
+        {
+            "infoKey": "imageUrl",
+            "infoValue": "https://static.vecteezy.com/system/resources/previews/000/439/863/large_2x/vector-users-icon.jpg"
+        },
+        {
+            "infoKey": "resumeUrl",
+            "infoValue": "https://static.vecteezy.com/system/resources/previews/000/439/863/large_2x/vector-users-icon.jpg"
         }
     ]
 }
 ###
 
 // get info endpoint
-GET {{PortfolioHub.Web_HostAddress}}/info?keys=name
+GET {{PortfolioHub.Web_HostAddress}}/info?keys=name&keys=description_01&keys=description_02&keys=imageUrl&keys=resumeUrl
 Content-Type: application/json
 
 ###
@@ -261,12 +277,11 @@ Content-Type: application/json
 Authorization: Bearer {{Auth.Token}}
 
 {
-    "Degree":"Civil Engineering",
-    "Institution":"Cairo University",
-    "FieldOfStudy":"Engineering",
-    "Description":"Cairo,Egypt",
-    "StartDate":"2017-01-01T00:00:00",
-    "EndDate":"2022-01-01T00:00:00"
+    "Degree":"Civil Engineering Informatics",
+    "Institution":"ITI",
+    "FieldOfStudy":"IT",
+    "Description":"Smart village, Cairo, Egypt",
+    "StartDate":"2023-01-01T00:00:00"
 }
 ###
 
@@ -291,7 +306,7 @@ Authorization: Bearer {{Auth.Token}}
 {
     "Name":"Civil Engineering",
     "Issuer":"Cairo University",
-    "Date":"2022-01-01T00:00:00"
+    "Date":"2020-01-01T00:00:00"
 }
 ###
 
@@ -304,6 +319,29 @@ Content-Type: application/json
 
 // delete certificate endpont
 DELETE {{PortfolioHub.Web_HostAddress}}/certificate/d82de019-3c3c-48ef-90c3-1bdfde7bdb19
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+###
+
+// add professional skill endpoint
+POST {{PortfolioHub.Web_HostAddress}}/professional-skills
+Content-Type: application/json
+Authorization: Bearer {{Auth.Token}}
+
+{
+    "name":"Professional"
+}
+###
+
+// get professional skill endpoint
+GET {{PortfolioHub.Web_HostAddress}}/professional-skills?page=1&pagesize=5
+Content-Type: application/json
+
+###
+
+// delete professional skill endpoint
+DELETE {{PortfolioHub.Web_HostAddress}}/professional-skills/0fe6dfa9-3186-46f3-ab46-9806b82d9c6a
 Content-Type: application/json
 Authorization: Bearer {{Auth.Token}}
 

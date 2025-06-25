@@ -13,6 +13,7 @@ internal class UsersDbContext(
 {
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Info> Infos => Set<Info>();
+    public DbSet<ProfessionalSkill> ProfessionalSkills => Set<ProfessionalSkill>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
