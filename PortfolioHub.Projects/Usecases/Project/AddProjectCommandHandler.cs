@@ -27,7 +27,6 @@ internal sealed class AddProjectCommandHandler(
             {
                 Guid projectId = Guid.NewGuid();
 
-                // Validate all IDs in parallel to minimize DB roundtrips
                 var skillsIdList = request.SkillsId.ToList();
                 var linksProviderIds = request.Links.Select(link => link.ProviderId).Distinct().ToList();
 
@@ -72,7 +71,8 @@ internal sealed class AddProjectCommandHandler(
                     request.LongDescription,
                     request.VideoUrl ?? string.Empty,
                     request.CreatedDate,
-                    request.CoverImageUrl ?? string.Empty
+                    request.CoverImageUrl ?? string.Empty,
+                    request.IsFeatured
                 );
 
                 projectEntity.SetLinks(linksToAdd);

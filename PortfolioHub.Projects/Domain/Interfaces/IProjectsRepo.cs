@@ -7,7 +7,7 @@ internal interface IReadOnlyProjectsRepo
 {
     Task<Result<Project>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Result<IReadOnlyList<Project>>> GetAllAsync(int pageNumber, int pageSize, Guid? categoryId = null,
-        string? search = null, CancellationToken cancellationToken = default);
+        string? search = null, bool isFeatured = false, CancellationToken cancellationToken = default);
     Task<Result<bool>> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Result<int>> GetTotalCount(CancellationToken cancellationToken = default);
 }

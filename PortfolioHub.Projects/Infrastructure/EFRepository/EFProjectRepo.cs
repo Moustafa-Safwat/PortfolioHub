@@ -58,7 +58,7 @@ internal class EFProjectRepo(
     }
 
     public async Task<Result<IReadOnlyList<Project>>> GetAllAsync(int pageNumber, int pageSize, Guid? categoryId = null,
-        string? search = null, CancellationToken cancellationToken = default)
+        string? search = null, bool isFeatured = false, CancellationToken cancellationToken = default)
     {
         if (pageNumber <= 0)
             return Result.Invalid(new ValidationError("Page number must be greater than zero."));
@@ -79,6 +79,9 @@ internal class EFProjectRepo(
 
         if (!string.IsNullOrEmpty(search))
             queryable = queryable.Where(p => p.Title.Contains(search) || p.Description.Contains(search));
+
+        if (isFeatured)
+            queryable = queryable.Where(p => p.IsFeatured == isFeatured);
 
         var projects = await queryable
             .Skip((pageNumber - 1) * pageSize)

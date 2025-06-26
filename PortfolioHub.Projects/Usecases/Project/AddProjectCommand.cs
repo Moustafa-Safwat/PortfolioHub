@@ -8,6 +8,7 @@ internal sealed record AddProjectCommand(
     string Description,
     string LongDescription,
     DateTime CreatedDate,
+    bool IsFeatured,
     Guid CategoryId,
     string? VideoUrl,
     string? CoverImageUrl,

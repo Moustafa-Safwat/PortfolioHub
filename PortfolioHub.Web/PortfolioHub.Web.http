@@ -1,5 +1,5 @@
 @PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA4ODQ4NjYsImlhdCI6MTc1MDg4Mzk2NiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTA4ODM5NjZ9.Jkj-VxxN-XJHl7OOypEV2-lforo72K_BBxW0XfjNUKY
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA5MzMyMDUsImlhdCI6MTc1MDkzMjMwNSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTA5MzIzMDV9.zw_uuPN0OjbEa0_dLkPAX8pGNZC25braOqJMAeJaqO8
 @Auth.RefreshToken = kk2RnLRj7QPcRjYVX1Ea7wqz0Ja+MAiCECqSeTIT2MtrDxkykeAh6jJDFBN799c9N5x6BYGh5nBsXUn4SD02Pg==
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -61,6 +61,7 @@ Authorization: Bearer {{Auth.Token}}
     "description": "this project is created to show my power in using revit api.this project is cr.",
     "longDescription": "this plugin is created using C# and best practice.",
     "createdDate": "2024-06-07T00:00:00",
+    "isFeatured":true,
     "categoryId": "72b7c49e-8c0e-47ee-b803-3421bb88b606",
     "videoUrl": "https://sample.com/video.mp4",
     "coverImageUrl": "https://media.licdn.com/dms/image/v2/D5612AQGeyYvEaH-o3A/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1721174071771?e=2147483647&v=beta&t=gsam3lpDXt98b_RqJLUnLm0jzOOnGPz2wt1ycWYQK5s",
@@ -76,8 +77,8 @@ Authorization: Bearer {{Auth.Token}}
 }
 ###
 
-// get projects => Query params [page, pagesize, categoryid, search]
-GET {{PortfolioHub.Web_HostAddress}}/project?page=1&pagesize=10&categoryid=72b7c49e-8c0e-47ee-b803-3421bb88b606
+// get projects => Query params [page, pagesize, categoryid, search,isfeatured]
+GET {{PortfolioHub.Web_HostAddress}}/project?page=1&pagesize=10&categoryid=2ebe240b-2dc6-4d1e-88f5-154c98885b3f&isfeatured=true
 Content-Type: application/json
 
 ### 

@@ -1,12 +1,14 @@
-﻿using FastEndpoints;
+﻿using Ardalis.Result;
+using FastEndpoints;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using PortfolioHub.Projects.Usecases.Project;
 
 namespace PortfolioHub.Projects.Endpoints.Project;
 
 internal class Add(
     ISender sender
-    ) : Endpoint<AddProjectReq, AddProjectRes>
+    ) : Endpoint<AddProjectReq, Result<Guid>>
 {
     public override void Configure()
     {
@@ -21,6 +23,7 @@ internal class Add(
             req.Description,
             req.LongDescription,
             req.CreatedDate,
+            req.IsFeatured,
             Guid.Parse(req.CategoryId),
             req.VideoUrl,
             req.CoverImageUrl,
@@ -33,11 +36,11 @@ internal class Add(
         if (result.IsSuccess)
         {
             var response = new AddProjectRes(result.Value);
-            await SendOkAsync(response, ct);
+            await SendOkAsync(result, ct);
         }
         else
         {
-            await SendErrorsAsync(cancellation: ct);
+            await SendAsync(result, StatusCodes.Status400BadRequest, cancellation: ct);
         }
     }
 }

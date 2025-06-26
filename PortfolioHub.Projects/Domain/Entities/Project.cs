@@ -11,6 +11,7 @@ internal class Project : BaseEntity
     public string VideoUrl { get; private set; } = string.Empty;
     public DateTime CreatedDate { get; private set; }
     public string CoverImageUrl { get; private set; } = string.Empty;
+    public bool IsFeatured { get; private set; } = false;
 
     // Navigation property
     public ICollection<Gallery>? Images { get; private set; } = new List<Gallery>();
@@ -24,7 +25,7 @@ internal class Project : BaseEntity
 
     public Project(Guid id, string title, string description,
         string longDescription, string videoUrl, DateTime createdDate,
-        string coverImageUrl)
+        string coverImageUrl, bool isFeatured = false)
     {
         Id = Guard.Against.Default(id);
         Title = Guard.Against.NullOrEmpty(title);
@@ -33,6 +34,7 @@ internal class Project : BaseEntity
         VideoUrl = Guard.Against.Null(videoUrl);
         CreatedDate = Guard.Against.OutOfSQLDateRange(createdDate);
         CoverImageUrl = Guard.Against.NullOrEmpty(coverImageUrl);
+        IsFeatured = Guard.Against.Null(isFeatured);
     }
 
     public void SetTitle(string title)
@@ -64,4 +66,10 @@ internal class Project : BaseEntity
 
     public void SetCategory(Category category)
         => Category = Guard.Against.Null(category);
+    public void MarkAsFeatured()
+        => IsFeatured = true;
+
+    public void UnmarkAsFeatured()
+        => IsFeatured = false;
+
 }

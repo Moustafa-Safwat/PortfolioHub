@@ -9,7 +9,8 @@ internal sealed record GetProjectsQuery(
     int PageNumber,
     int PageSize,
     Guid? CategoryId,
-    string? Search) : IRequest<Result<GetProjectsQueryResponse>>;
+    string? Search,
+    bool isFeatured) : IRequest<Result<GetProjectsQueryResponse>>;
 
 
 internal sealed record GetProjectsQueryResponse(

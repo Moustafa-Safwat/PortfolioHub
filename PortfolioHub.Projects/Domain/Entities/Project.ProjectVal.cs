@@ -34,5 +34,12 @@ internal class ProjectVal : IEntityTypeConfiguration<Project>
         builder.HasMany(p => p.Links)
             .WithOne(l => l.Project)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Property(p => p.IsFeatured)
+            .IsRequired();
+
+        builder.HasIndex(p => p.IsFeatured)
+            .IsUnique(false)
+            .IsClustered(false);
     }
 }

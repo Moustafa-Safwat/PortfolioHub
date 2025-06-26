@@ -1,10 +1,13 @@
-﻿namespace PortfolioHub.Projects.Endpoints.Project;
+﻿using Microsoft.AspNetCore.Components.Web;
+
+namespace PortfolioHub.Projects.Endpoints.Project;
 
 internal sealed record AddProjectReq(
     string Title,
     string Description,
     string LongDescription,
     DateTime CreatedDate,
+    bool IsFeatured,
     string CategoryId, // GUID
     string? VideoUrl,
     string? CoverImageUrl,

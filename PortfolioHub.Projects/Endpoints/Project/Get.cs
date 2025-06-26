@@ -22,6 +22,7 @@ internal sealed class Get(
         var search = Query<string>("Search", false);
         var pageNumber = Query<int>("Page", false);
         var pageSize = Query<int>("PageSize", false);
+        var isFeatured = Query<bool>("IsFeatured", false);
 
         Guid? categoryId = null;
         if (!string.IsNullOrEmpty(category))
@@ -35,7 +36,7 @@ internal sealed class Get(
             categoryId = parsedCategoryId;
         }
 
-        var query = new GetProjectsQuery(pageNumber, pageSize, categoryId, search);
+        var query = new GetProjectsQuery(pageNumber, pageSize, categoryId, search, isFeatured);
         var result = await sender.Send(query, ct);
         if (!result.IsSuccess)
         {

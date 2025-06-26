@@ -17,7 +17,7 @@ internal sealed class GetProjectsQueryHandler(
         logger.Information("Handling GetProjectsQuery: PageNumber={PageNumber}, PageSize={PageSize}", request.PageNumber, request.PageSize);
 
         var projectsRes = await projectsRepo.GetAllAsync(request.PageNumber, request.PageSize,
-            request.CategoryId, request.Search, cancellationToken);
+            request.CategoryId, request.Search,request.isFeatured, cancellationToken);
 
         var countRes = await projectsRepo.GetTotalCount(cancellationToken);
 
