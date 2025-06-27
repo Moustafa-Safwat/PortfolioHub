@@ -1,6 +1,7 @@
 using System.Reflection;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PortfolioHub.Achievements;
 using PortfolioHub.Notification;
@@ -76,11 +77,19 @@ if (app.Environment.IsDevelopment())
     app.UseCors("Frontend");
 }
 
+app.UseHttpsRedirection();
+
 app.UseAuthentication()
    .UseAuthorization()
-   .UseFastEndpoints(options => options.Endpoints
-   .Configurator = (configure) => configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme)
-   );
+   .UseFastEndpoints(options =>
+   {
+       options.Endpoints.RoutePrefix = "api";
+       options.Endpoints
+              .Configurator = (configure) =>
+              {
+                  configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
+              };
+   });
 
 app.Run();
 

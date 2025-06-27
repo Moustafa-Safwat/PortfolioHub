@@ -14,5 +14,36 @@ services:
     volumes:
       - portfolio_db_data:/var/opt/mssql
 
+  backend:
+    build: .
+    container_name: portfolio_backend
+    depends_on:
+      - db
+    expose:
+      - "8090"
+    env_file:
+      - config.env
+
+  frontend:
+    build: ../frontend
+    container_name: portfolio_frontend
+    depends_on:
+      - backend
+    expose:
+      - "3050"
+
+  nginx:
+    image: nginx:alpine
+    container_name: portfolio_nginx
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - "8020:8020"
+      - "8050:8050"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+
 volumes:
   portfolio_db_data: {}

@@ -1,5 +1,6 @@
-@PortfolioHub.Web_HostAddress = https://localhost:7181
-@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA5MzMyMDUsImlhdCI6MTc1MDkzMjMwNSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTA5MzIzMDV9.zw_uuPN0OjbEa0_dLkPAX8pGNZC25braOqJMAeJaqO8
+@PortfolioHub.Web_HostAddress = https://localhost:7181/api
+# @PortfolioHub.Web_HostAddress = http://localhost:8095/api 
+@Auth.Token = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTA5MzUyNzEsImlhdCI6MTc1MDkzNDM3MSwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6InNhZndhdDQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzYWZ3YXRAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiI2MzUzOTRjMC1iNGNiLTRjNTAtYTkzMC1mMGE3M2YwZjEzNDIiLCJyb2xlIjoiYWRtaW4iLCJuYmYiOjE3NTA5MzQzNzF9.vEujXDHLwW17lwo5xuUtypmSYEVIGsrSI4R7bGmHP8c
 @Auth.RefreshToken = kk2RnLRj7QPcRjYVX1Ea7wqz0Ja+MAiCECqSeTIT2MtrDxkykeAh6jJDFBN799c9N5x6BYGh5nBsXUn4SD02Pg==
 // create a new user
 POST {{PortfolioHub.Web_HostAddress}}/user
@@ -236,31 +237,35 @@ Authorization: Bearer {{Auth.Token}}
     "infos":
     [
         {
-            "infoKey": "name",
-            "infoValue": "Moustafa"
+            "infoKey": "Skill_01",
+            "infoValue": "Revit API"
         },
         {
-            "infoKey": "description_01",
-            "infoValue": "I'm a passionate AEC Software Engineer with over 3 years of experience bridging the gap between architectural vision and cutting-edge technology. My expertise lies in developing innovative solutions that streamline construction workflows and enhance collaboration across AEC teams."
+            "infoKey": "Skill_02",
+            "infoValue": ".NET"
         },
         {
-            "infoKey": "description_02",
-            "infoValue": "Based in Cairo, Egypt, I specialize in creating custom Revit plugins, IFC data processing tools, and cloud-based BIM synchronization platforms. My goal is to push the boundaries of what's possible in architectural technology through clean, efficient, and scalable code."
+            "infoKey": "Skill_03",
+            "infoValue": "IFC"
         },
         {
-            "infoKey": "imageUrl",
-            "infoValue": "https://static.vecteezy.com/system/resources/previews/000/439/863/large_2x/vector-users-icon.jpg"
+            "infoKey": "Skill_04",
+            "infoValue": "Dokcer"
         },
         {
-            "infoKey": "resumeUrl",
-            "infoValue": "https://static.vecteezy.com/system/resources/previews/000/439/863/large_2x/vector-users-icon.jpg"
+            "infoKey": "Skill_05",
+            "infoValue": "SignalR"
+        },
+        {
+            "infoKey": "Skill_06",
+            "infoValue": "C#"
         }
     ]
 }
 ###
 
 // get info endpoint
-GET {{PortfolioHub.Web_HostAddress}}/info?keys=name&keys=description_01&keys=description_02&keys=imageUrl&keys=resumeUrl
+GET {{PortfolioHub.Web_HostAddress}}/info?keys=skill_01&keys=skill_02&keys=skill_03&keys=skill_04&keys=skill_05&keys=skill_06
 Content-Type: application/json
 
 ###

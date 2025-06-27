@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 *.env
+nginx/certs/nginx-selfsingned.crt
+nginx/certs/nginx-selfsigned.key
