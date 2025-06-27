@@ -50,9 +50,6 @@ internal sealed class AddProjectReqValidator : Validator<AddProjectReq>
         RuleFor(x => x.Links)
             .NotNull().WithMessage("Links are required.")
             .ForEach(linkRule => linkRule.SetValidator(new LinkValidator()));
-
-        RuleFor(x => x.IsFeatured)
-            .NotEmpty().WithMessage("IsFeatured is required.");
     }
 }
 
