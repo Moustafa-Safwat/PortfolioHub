@@ -3,14 +3,15 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
 # Install git and clone only the latest commit
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends git && \
-    git clone --depth 1 https://github.com/Moustafa-Safwat/PortfolioHub repo && \
-    apt-get remove -y git && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && \
+    #apt-get install -y --no-install-recommends git && \
+    #git clone --depth 1 https://github.com/Moustafa-Safwat/PortfolioHub repo && \
+    #apt-get remove -y git && \
+    #apt-get autoremove -y && \
+    #rm -rf /var/lib/apt/lists/*
+#WORKDIR /src/repo
 
-WORKDIR /src/repo
+COPY . .
 
 # Restore and build using the cloned source
 RUN dotnet restore
@@ -28,8 +29,8 @@ COPY --from=build /app/publish ./
 
 EXPOSE 8090
 
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV ASPNETCORE_URLS=http://+:8090
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_HTTP_PORTS=8090
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD curl --fail http://localhost:8090/health || exit 1

@@ -1,7 +1,6 @@
 using System.Reflection;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PortfolioHub.Achievements;
 using PortfolioHub.Notification;
