@@ -28,7 +28,7 @@ COPY --from=build /app/publish ./
 
 EXPOSE 8090
 
-ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_URLS=http://+:8090
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
