@@ -72,12 +72,10 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment()) { }
-if (app.Environment.IsDevelopment())
-{
-    app.UseCors("Frontend");
-}
 
-app.UseHttpsRedirection();
+app.UseCors("Frontend");
+
+//app.UseHttpsRedirection();
 
 app.UseAuthentication()
    .UseAuthorization()
@@ -90,6 +88,7 @@ app.UseAuthentication()
                   configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
               };
    });
+
 
 app.Run();
 

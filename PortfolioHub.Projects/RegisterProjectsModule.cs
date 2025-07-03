@@ -35,6 +35,8 @@ public static class RegisterProjectsModule
             service.AddScoped(repoInterface, repoImplementation);
         }
 
+        
+
         assemblies.Add(typeof(RegisterProjectsModule).Assembly);
         return service;
     }

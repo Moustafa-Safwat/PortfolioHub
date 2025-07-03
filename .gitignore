@@ -365,3 +365,7 @@ FodyWeavers.xsd
 *.env
 nginx/certs/nginx-selfsingned.crt
 nginx/certs/nginx-selfsigned.key
+
+PortfolioHub.Web/appsettings.Production.json
+site1.PublishSettings
+*.PublishSettings
