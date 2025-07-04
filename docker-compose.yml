@@ -24,6 +24,23 @@ services:
     env_file:
       - config.env
 
+  logging:
+    image: datalust/seq:latest
+    container_name: portfolio_logging
+    depends_on:
+      - backend
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FLEET_ENABLED=true
+    env_file:
+      - config.env
+    volumes:
+      - seq_data:/data
+    expose:
+      - "5341"
+    ports:
+      - "8081:80" 
+
   frontend:
     build: ../frontend
     container_name: portfolio_frontend
@@ -48,4 +65,5 @@ services:
       - ./nginx/certs:/etc/nginx/certs:ro
 
 volumes:
-  portfolio_db_data: {}
+  portfolio_db_data: {}  
+  seq_data: {}

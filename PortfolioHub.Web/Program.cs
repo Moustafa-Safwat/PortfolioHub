@@ -1,25 +1,23 @@
 using System.Reflection;
 using FastEndpoints;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using PortfolioHub.Achievements;
 using PortfolioHub.Notification;
 using PortfolioHub.Projects;
 using PortfolioHub.Users;
+using PortfolioHub.Web.Infra.Crosscutting;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .CreateLogger();
-
-builder.Host.UseSerilog();
-builder.Services.AddSingleton(Log.Logger);
-
-Log.Information("Starting up application");
+builder.Host.UseSerilog((context, config) =>
+{
+    config.ReadFrom.Configuration(context.Configuration);
+    //config.Enrich.
+});
 
 IList<Assembly> assemblies = [typeof(Program).Assembly];
 builder.Services.AddUsersModule(builder.Configuration, assemblies)
@@ -47,34 +45,37 @@ builder.Services.AddMediatR(options =>
 {
     options.RegisterServicesFromAssemblies(assemblies.ToArray());
 });
-// ----------------------------------------
-// ===== Register pipeline behaviours =====
-// ----------------------------------------
-// 1) Register logging pipeline
-//builder.Services.AddLoggingBehaviour();
-// 2) Register validation pipeline
-//builder.Services.AddValidationBehaviour();
-// ----------------------------------------
+
+// Register logging pipeline
+builder.Services.AddScoped(
+    typeof(IPipelineBehavior<,>),
+    typeof(LoggingPipeLineBehaviour<,>));
+
 
 // Add CORS policy to allow any method, header, and origin
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Frontend", policy =>
+    options.AddPolicy("AllowReverseProxyOnly", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        policy.WithOrigins(
+                "http://portfolio_nginx:8050",
+                "http://portfolio_nginx:8020",
+                "https://localhost:8050",
+                "https://192.168.8.21:8050"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment()) { }
+app.UseCors("AllowReverseProxyOnly");
 
-app.UseCors("Frontend");
+app.UseSerilogRequestLogging();
 
-//app.UseHttpsRedirection();
+var hostName = System.Net.Dns.GetHostName();
+Log.Information($"Starting up application at Host:{hostName}");
 
 app.UseAuthentication()
    .UseAuthorization()
@@ -87,7 +88,6 @@ app.UseAuthentication()
                   configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
               };
    });
-
 
 app.Run();
 
