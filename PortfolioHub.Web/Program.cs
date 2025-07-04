@@ -7,6 +7,7 @@ using PortfolioHub.Achievements;
 using PortfolioHub.Notification;
 using PortfolioHub.Projects;
 using PortfolioHub.Users;
+using PortfolioHub.Web.Infra;
 using PortfolioHub.Web.Infra.Crosscutting;
 using Serilog;
 
@@ -88,6 +89,8 @@ app.UseAuthentication()
                   configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
               };
    });
+
+app.ApplyPendingMigrations(assemblies);
 
 app.Run();
 
