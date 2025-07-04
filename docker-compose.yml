@@ -38,8 +38,7 @@ services:
       - seq_data:/data
     expose:
       - "5341"
-    ports:
-      - "8081:80" 
+      - "80"
 
   frontend:
     build: ../frontend
