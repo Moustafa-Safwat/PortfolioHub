@@ -363,9 +363,17 @@ MigrationBackup/
 FodyWeavers.xsd
 
 *.env
+*.env.*
 nginx/certs/nginx-selfsingned.crt
 nginx/certs/nginx-selfsigned.key
 
 PortfolioHub.Web/appsettings.Production.json
 site1.PublishSettings
 *.PublishSettings
+
+docker-compose.prod.yml
+docker-compose.pre.yml
+
+nginx/nginx.pre.conf
+nginx/nginx.prod.conf
+

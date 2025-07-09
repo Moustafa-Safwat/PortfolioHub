@@ -9,10 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioHub.Users", "Portf
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
-		config.env = config.env
-		docker-compose.yml = docker-compose.yml
-		Dockerfile = Dockerfile
-		nginx\nginx.conf = nginx\nginx.conf
+		Makefile = Makefile
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioHub.Projects", "PortfolioHub.Projects\PortfolioHub.Projects.csproj", "{A3E36117-238F-4966-833B-323574982D6F}"
@@ -22,6 +19,31 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioHub.Notification", "PortfolioHub.Notification\PortfolioHub.Notification.csproj", "{B828BA89-CF05-4F2E-B11B-5FEBB181EF97}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioHub.Achievements", "PortfolioHub.Achievements\PortfolioHub.Achievements.csproj", "{2FFB5D60-1094-453E-8A33-FA930BF971F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dockerfile", "Dockerfile", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile.dev = Dockerfile.dev
+		Dockerfile.pre = Dockerfile.pre
+		Dockerfile.prod = Dockerfile.prod
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker-compose", "docker-compose", "{4E07B891-0C37-4CA6-9487-F764BC2C265C}"
+	ProjectSection(SolutionItems) = preProject
+		.env.dev = .env.dev
+		.env.pre = .env.pre
+		.env.prod = .env.prod
+		docker-compose.dev.yml = docker-compose.dev.yml
+		docker-compose.pre.yml = docker-compose.pre.yml
+		docker-compose.prod.yml = docker-compose.prod.yml
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nginx", "nginx", "{CDFBB33F-4312-4F95-BD44-AA99FBF92ADA}"
+	ProjectSection(SolutionItems) = preProject
+		nginx\nginx.dev.conf = nginx\nginx.dev.conf
+		nginx\nginx.pre.conf = nginx\nginx.pre.conf
+		nginx\nginx.prod.conf = nginx\nginx.prod.conf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,6 +130,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}
+		{4E07B891-0C37-4CA6-9487-F764BC2C265C} = {8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}
+		{CDFBB33F-4312-4F95-BD44-AA99FBF92ADA} = {8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B07D3FE7-61EC-432E-99E5-63E19F4602B5}

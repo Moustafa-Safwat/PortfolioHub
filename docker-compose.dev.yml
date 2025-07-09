@@ -1,0 +1,43 @@
+name: "PortfolioHub:Dev"
+services:
+  db:
+    env_file:
+      - .env.dev
+    ports:
+      - "3066:1433"
+    volumes:
+      - portfolio_db_data_dev:/var/opt/mssql 
+
+  backend:
+    image: portfoliohub_backend:dev
+    build: 
+        context: .
+        dockerfile: Dockerfile.dev
+    env_file:
+      - .env.dev
+
+  logging:
+    env_file:
+      - .env.dev
+    volumes:
+      - seq_data_dev:/data
+
+  frontend:
+    image: portfoliohub_frontend:dev
+    build: 
+        context: ../frontend
+        dockerfile: Dockerfile.dev
+    env_file:
+      - .env.dev
+
+  nginx:
+    ports:
+      - "8020:8020"
+      - "8050:8050"
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+
+volumes:
+  portfolio_db_data_dev: {}  
+  seq_data_dev: {}

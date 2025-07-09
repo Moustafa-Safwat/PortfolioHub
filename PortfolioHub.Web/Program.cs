@@ -17,7 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, config) =>
 {
     config.ReadFrom.Configuration(context.Configuration);
-    //config.Enrich.
 });
 
 IList<Assembly> assemblies = [typeof(Program).Assembly];
@@ -54,16 +53,13 @@ builder.Services.AddScoped(
 
 
 // Add CORS policy to allow any method, header, and origin
+var allowedOrigins = builder.Configuration["ALLOWED_ORIGINS"]?
+    .Split(',', StringSplitOptions.RemoveEmptyEntries) ?? [];
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReverseProxyOnly", policy =>
     {
-        policy.WithOrigins(
-                "http://portfolio_nginx:8050",
-                "http://portfolio_nginx:8020",
-                "https://localhost:8050",
-                "https://192.168.8.21:8050"
-            )
+        policy.WithOrigins(allowedOrigins)
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
