@@ -7,14 +7,16 @@ WORKDIR /src
 RUN --mount=type=ssh \
     apt-get update && \
     apt-get install -y --no-install-recommends git openssh-client && \
-    git clone --depth 1 git@github.com:Moustafa-Safwat/PortfolioHub.git repo && \
+    mkdir -p ~/.ssh && \
+    ssh-keyscan github.com >> ~/.ssh/known_hosts && \
+    git clone --depth 1 git@github.com:Moustafa-Safwat/PortfolioHub.git repo#master && \
     apt-get purge -y --auto-remove git openssh-client && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src/repo
 
 # Restore and build using the cloned source
-RUN dotnet restore
+RUN dotnet restore PortfolioHub.Web/PortfolioHub.Web.csproj
 RUN dotnet publish PortfolioHub.Web/PortfolioHub.Web.csproj -c Release -o /app/publish --no-restore
 
 # Stage 2: Runtime
