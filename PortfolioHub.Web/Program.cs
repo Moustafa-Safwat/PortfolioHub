@@ -84,7 +84,8 @@ app.UseSerilogRequestLogging(options =>
 });
 
 var hostName = System.Net.Dns.GetHostName();
-Log.Information($"Starting up application at Host:{hostName}");
+var environment = app.Environment.EnvironmentName;
+Log.Information($"Starting up application at Host:{hostName} at:{environment}");
 
 app.UseAuthentication()
    .UseAuthorization()
