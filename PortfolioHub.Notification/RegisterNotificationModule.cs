@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PortfolioHub.Notification.Application;
-using PortfolioHub.Notification.Domain.Entities;
 using PortfolioHub.Notification.Domain.Interfaces;
 using PortfolioHub.Notification.Infrastructure;
 using PortfolioHub.Notification.Infrastructure.Backgroundworker;

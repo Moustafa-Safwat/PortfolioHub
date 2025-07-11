@@ -10,13 +10,16 @@ using PortfolioHub.Users;
 using PortfolioHub.Web.Infra;
 using PortfolioHub.Web.Infra.Crosscutting;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure Serilog
-builder.Host.UseSerilog((context, config) =>
+// Ensure Serilog reads configuration from appsettings.json/appsettings.Production.json only
+builder.Host.UseSerilog((context, services, configuration) =>
 {
-    config.ReadFrom.Configuration(context.Configuration);
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services);
 });
 
 IList<Assembly> assemblies = [typeof(Program).Assembly];
