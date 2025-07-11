@@ -14,8 +14,6 @@ internal sealed class QueueEmailInOutboxSendEmailHandler(
 {
     public async Task<Result<Guid>> Handle(SendEmailCommand request, CancellationToken cancellationToken)
     {
-        logger.Information("Handling SendEmailCommand for To: {To}, Subject: {Subject}", request.To, request.Subject);
-
         EmailOutBox emailOutBox = new EmailOutBox(
             request.From,
             request.To,
@@ -33,7 +31,6 @@ internal sealed class QueueEmailInOutboxSendEmailHandler(
                 return Result.Error(new ErrorList(result.Errors.ToArray()));
             }
 
-            logger.Information("Email queued successfully with Id: {EmailId}", emailOutBox.Id);
             return Result.Success(emailOutBox.Id);
         }
         catch (Exception ex)

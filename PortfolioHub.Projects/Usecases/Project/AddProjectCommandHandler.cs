@@ -4,7 +4,6 @@ using PortfolioHub.Projects.Domain.Entities;
 using PortfolioHub.Projects.Domain.Interfaces;
 using PortfolioHub.Projects.Infrastructure;
 using PortfolioHub.SharedKernal.Domain.Interfaces;
-using Serilog;
 
 namespace PortfolioHub.Projects.Usecases.Project;
 
@@ -13,14 +12,11 @@ internal sealed class AddProjectCommandHandler(
     IEntityRepo<Domain.Entities.LinkProvider> linkProviderRepo,
     IEntityRepo<TechanicalSkills> techinicalSkillsRepo,
     IEntityRepo<Domain.Entities.Category> categoryRepo,
-    IUnitOfWork unitOfWork,
-    ILogger logger
+    IUnitOfWork unitOfWork
     ) : IRequestHandler<AddProjectCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(AddProjectCommand request, CancellationToken cancellationToken)
     {
-        logger.Information("Attempting to add a new project with Title: {Title}", request.Title);
-
         using (unitOfWork.BeginTransactionAsync(cancellationToken))
         {
             try
@@ -84,20 +80,17 @@ internal sealed class AddProjectCommandHandler(
                 if (!addResult.IsSuccess)
                 {
                     await unitOfWork.RollbackTransactionAsync(cancellationToken);
-                    logger.Error("Failed to add project entity to repository.");
                     return Result.Error("Failed to add project.");
                 }
 
                 await unitOfWork.CompleteAsync(cancellationToken);
                 await unitOfWork.CommitTransactionAsync(cancellationToken);
 
-                logger.Information("Project with Title: {Title} added successfully. Id: {Id}", request.Title, projectId);
                 return Result.Success(projectId);
             }
-            catch (Exception ex)
+            catch 
             {
                 await unitOfWork.RollbackTransactionAsync(cancellationToken);
-                logger.Error(ex, "Exception occurred while adding project.");
                 return Result.Error("Failed to add project due to an unexpected error.");
             }
         }

@@ -2,26 +2,20 @@
 using MediatR;
 using PortfolioHub.Projects.Endpoints.Gallery;
 using PortfolioHub.SharedKernal.Domain.Interfaces;
-using Serilog;
 
 namespace PortfolioHub.Projects.Usecases.Gallery;
 
 internal sealed class GetGalleryQueryHandler(
-    IEntityRepo<Domain.Entities.Gallery> repo,
-    ILogger logger
+    IEntityRepo<Domain.Entities.Gallery> repo
     ) : IRequestHandler<GetGalleryQuery, Result<IReadOnlyList<GalleryDto>>>
 {
     public async Task<Result<IReadOnlyList<GalleryDto>>> Handle(GetGalleryQuery request,
         CancellationToken cancellationToken)
     {
-        logger.Information("Handling GetGalleryQuery: PageNumber={PageNumber}, PageSize={PageSize}", request.PageNumber, request.PageSize);
-
         var getGalleries = await repo.GetAllAsync(request.PageNumber, request.PageSize, cancellationToken);
         if (!getGalleries.IsSuccess)
-        {
-            logger.Warning("Failed to retrieve galleries: {@Errors}", getGalleries.Errors);
             return Result.Error(new ErrorList(getGalleries.Errors));
-        }
+
         var galleryDtos = getGalleries.Value
             .Select(g => new GalleryDto(
                 g.Id,
@@ -31,7 +25,6 @@ internal sealed class GetGalleryQueryHandler(
             .ToList()
             .AsReadOnly() as IReadOnlyList<GalleryDto>;
 
-        logger.Information("Successfully retrieved {Count} galleries.", galleryDtos.Count);
         return Result.Success(galleryDtos);
     }
 }

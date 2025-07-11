@@ -3,12 +3,10 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using PortfolioHub.Users.Domain.Interfaces;
 using PortfolioHub.Users.Usecases.User.Login;
-using Serilog;
 
 namespace PortfolioHub.Users.Usecases.User.RefreshToken;
 
 internal sealed class CreateRefreshTokenCommandHandler(
-    ILogger logger,
     JwtService jwtService,
     TokenHasher tokenHasher,
     IRefreshTokenRepo refreshTokenRepo,
@@ -21,10 +19,8 @@ internal sealed class CreateRefreshTokenCommandHandler(
         var hashedRefreshToken = tokenHasher.HashToken(request.RefreshToken);
         var activeRefreshToken = await refreshTokenRepo.GetActiveRefreshTokenByHashedTokenAsync(hashedRefreshToken, cancellationToken);
         if (!activeRefreshToken.IsSuccess)
-        {
-            logger.Error("Failed to retrieve active refresh token: {Error}", activeRefreshToken.Errors);
             return Result.Unauthorized(activeRefreshToken.Errors.ToArray());
-        }
+
         // rotate the refresh token
         var refreshTokenEntity = activeRefreshToken.Value;
         refreshTokenEntity.Revoke();
@@ -48,10 +44,7 @@ internal sealed class CreateRefreshTokenCommandHandler(
         var saveResult = await refreshTokenRepo.SaveChangesAsync(cancellationToken);
 
         if (!(addResult.IsSuccess && saveResult.IsSuccess))
-        {
-            logger.Error("Failed to save new refresh token for user {@UserId}", refreshTokenEntity.User!.Id);
             return Result.Error(new ErrorList(addResult.Errors));
-        }
 
         return Result.Success(new LoginDtoResult(
             AccessToken: accessToken.Value,

@@ -21,7 +21,7 @@ internal sealed class EmailSendingBackgroundService(
         {
             try
             {
-                logger.LogInformation("Checking for emails to send...");
+                logger.LogDebug("Checking for emails to send...");
 
                 using var scope = serviceScopeFactory.CreateScope();
                 var sendEmailFromOutboxService = scope.ServiceProvider.GetRequiredService<ISendEmailFromOutboxService>();
@@ -32,7 +32,7 @@ internal sealed class EmailSendingBackgroundService(
                 logger.LogError(ex, "Error sending email");
             }
 
-            logger.LogInformation("Waiting for the next email check...");
+            logger.LogDebug("Waiting for the next email check...");
         }
         while (await timer.WaitForNextTickAsync(stoppingToken));
     }
