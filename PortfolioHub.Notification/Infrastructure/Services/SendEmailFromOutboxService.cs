@@ -1,14 +1,12 @@
-﻿using Ardalis.Result;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using PortfolioHub.Notification.Domain.Interfaces;
+﻿using PortfolioHub.Notification.Domain.Interfaces;
+using Serilog;
 
 namespace PortfolioHub.Notification.Infrastructure.Services;
 
 class SendEmailFromOutboxService(
     ISendEmail sendEmail,
     IGetUnsentEmailMessages outboxService,
-    ILogger<SendEmailFromOutboxService> logger
+    ILogger logger
     )
     : ISendEmailFromOutboxService
 {
@@ -28,13 +26,13 @@ class SendEmailFromOutboxService(
                     cancellationToken);
                 if (sendResult.IsSuccess)
                 {
-                    logger.LogInformation("Email with Id: {id} sent successfully to {To} with subject '{Subject}'", unsentEmail.Id, unsentEmail.To, unsentEmail.Subject);
+                    logger.Information("Email with Id: {id} sent successfully to {To} with subject '{Subject}'", unsentEmail.Id, unsentEmail.To, unsentEmail.Subject);
                     unsentEmail.MarkAsSent();
                     await outboxService.SaveChangesAsync(cancellationToken);
                 }
                 else
                 {
-                    logger.LogWarning("Failed to send email with Id: {id} to {To} with subject '{Subject}'. Errors: {Errors}",
+                    logger.Information("Failed to send email with Id: {id} to {To} with subject '{Subject}'. Errors: {Errors}",
                         unsentEmail.Id,
                         unsentEmail.To,
                         unsentEmail.Subject,
@@ -43,7 +41,7 @@ class SendEmailFromOutboxService(
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error sending email");
+                logger.Error(ex, "Error sending email");
             }
         }
     }

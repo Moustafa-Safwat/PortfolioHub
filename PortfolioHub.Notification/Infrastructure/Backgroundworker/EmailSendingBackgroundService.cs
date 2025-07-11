@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using PortfolioHub.Notification.Domain.Interfaces;
-
+using Serilog;
 namespace PortfolioHub.Notification.Infrastructure.Backgroundworker;
 
 internal sealed class EmailSendingBackgroundService(
-    ILogger<EmailSendingBackgroundService> logger,
+    ILogger logger,
     IServiceScopeFactory serviceScopeFactory
     )
     : BackgroundService
@@ -21,7 +20,7 @@ internal sealed class EmailSendingBackgroundService(
         {
             try
             {
-                logger.LogDebug("Checking for emails to send...");
+                logger.Debug("Checking for emails to send...");
 
                 using var scope = serviceScopeFactory.CreateScope();
                 var sendEmailFromOutboxService = scope.ServiceProvider.GetRequiredService<ISendEmailFromOutboxService>();
@@ -29,10 +28,10 @@ internal sealed class EmailSendingBackgroundService(
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error sending email");
+                logger.Error(ex, "Error sending email");
             }
 
-            logger.LogDebug("Waiting for the next email check...");
+            logger.Debug("Waiting for the next email check...");
         }
         while (await timer.WaitForNextTickAsync(stoppingToken));
     }
