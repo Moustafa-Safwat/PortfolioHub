@@ -16,7 +16,7 @@ RUN --mount=type=ssh \
 WORKDIR /src/repo
 
 # Restore and build using the cloned source
-RUN dotnet restore PortfolioHub.Web/PortfolioHub.Web.csproj
+RUN dotnet restore 
 RUN dotnet publish PortfolioHub.Web/PortfolioHub.Web.csproj -c Release -o /app/publish --no-restore
 
 # Stage 2: Runtime
