@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Security.Claims;
 using FastEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -72,7 +73,15 @@ var app = builder.Build();
 
 app.UseCors("AllowReverseProxyOnly");
 
-app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging(options =>
+{
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        diagnosticContext.Set("UserId",
+            httpContext.User
+            .FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Anonymous");
+    };
+});
 
 var hostName = System.Net.Dns.GetHostName();
 Log.Information($"Starting up application at Host:{hostName}");
