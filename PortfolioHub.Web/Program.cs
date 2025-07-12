@@ -80,6 +80,9 @@ app.UseSerilogRequestLogging(options =>
         diagnosticContext.Set("UserId",
             httpContext.User
             .FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Anonymous");
+        diagnosticContext.Set("User_Real_IP",
+            httpContext.Request
+            .Headers.FirstOrDefault(h => h.Key == "X-Real-IP").Value);
     };
 });
 
