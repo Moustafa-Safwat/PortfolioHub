@@ -77,12 +77,7 @@ app.UseSerilogRequestLogging(options =>
 {
     options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
     {
-        diagnosticContext.Set("UserId",
-            httpContext.User
-            .FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Anonymous");
-        diagnosticContext.Set("User_Real_IP",
-            httpContext.Request
-            .Headers.FirstOrDefault(h => h.Key == "X-Real-IP").Value.ToString() ?? "NA");
+        diagnosticContext.CustomizeLoggingRequests(httpContext);
     };
 });
 
