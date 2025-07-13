@@ -17,5 +17,20 @@ internal static class CustomizeSerilogLoggingRequests
         diagnosticContext.Set("X-Device-Type",
             httpContext.Request
             .Headers.FirstOrDefault(h => h.Key == "x-device-type").Value.ToString() ?? "NA");
+        diagnosticContext.Set("X-Country-Code",
+            httpContext.Request
+            .Headers.FirstOrDefault(h => h.Key == "X-Country-Code").Value.ToString() ?? "NA");
+        diagnosticContext.Set("X-Country-Name",
+            httpContext.Request
+            .Headers.FirstOrDefault(h => h.Key == "X-Country-Name").Value.ToString() ?? "NA");
+        diagnosticContext.Set("X-City",
+            httpContext.Request
+            .Headers.FirstOrDefault(h => h.Key == "X-City").Value.ToString() ?? "NA");
+        diagnosticContext.Set("X-Latitude",
+            httpContext.Request
+            .Headers.FirstOrDefault(h => h.Key == "X-Latitude").Value.ToString() ?? "NA");
+        diagnosticContext.Set("X-Longitude",
+            httpContext.Request
+            .Headers.FirstOrDefault(h => h.Key == "X-Longitude").Value.ToString() ?? "NA");
     }
 }

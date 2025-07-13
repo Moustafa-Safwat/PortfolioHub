@@ -378,3 +378,4 @@ nginx/nginx.pre.conf
 nginx/nginx.prod.conf
 nginx/nginx_temp.conf
 
+*.dat
