@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nginx", "nginx", "{CDFBB33F-4312-4F95-BD44-AA99FBF92ADA}"
 	ProjectSection(SolutionItems) = preProject
+		nginx\Dockerfile = nginx\Dockerfile
+		nginx\download-geoip2.sh = nginx\download-geoip2.sh
 		nginx\nginx.dev.conf = nginx\nginx.dev.conf
 		nginx\nginx.pre.conf = nginx\nginx.pre.conf
 		nginx\nginx.prod.conf = nginx\nginx.prod.conf

@@ -379,3 +379,6 @@ nginx/nginx.prod.conf
 nginx/nginx_temp.conf
 
 *.dat
+
+nginx/Dockerfile
+nginx/download-geoip2.sh
