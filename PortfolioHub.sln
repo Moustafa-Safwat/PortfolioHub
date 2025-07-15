@@ -43,9 +43,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nginx", "nginx", "{CDFBB33F
 	ProjectSection(SolutionItems) = preProject
 		nginx\Dockerfile = nginx\Dockerfile
 		nginx\download-geoip2.sh = nginx\download-geoip2.sh
+		fluentbit\fluent-bit.conf = fluentbit\fluent-bit.conf
 		nginx\nginx.dev.conf = nginx\nginx.dev.conf
 		nginx\nginx.pre.conf = nginx\nginx.pre.conf
 		nginx\nginx.prod.conf = nginx\nginx.prod.conf
+		fluentbit\parsers.conf = fluentbit\parsers.conf
 	EndProjectSection
 EndProject
 Global

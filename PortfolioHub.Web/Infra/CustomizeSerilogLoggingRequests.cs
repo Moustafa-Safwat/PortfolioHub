@@ -32,5 +32,6 @@ internal static class CustomizeSerilogLoggingRequests
         diagnosticContext.Set("X-Longitude",
             httpContext.Request
             .Headers.FirstOrDefault(h => h.Key == "X-Longitude").Value.ToString() ?? "NA");
+        diagnosticContext.Set("tag","backend");
     }
 }

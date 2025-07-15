@@ -382,3 +382,6 @@ nginx/nginx_temp.conf
 
 nginx/Dockerfile
 nginx/download-geoip2.sh
+
+fluent-bit.conf
+parsers.conf
