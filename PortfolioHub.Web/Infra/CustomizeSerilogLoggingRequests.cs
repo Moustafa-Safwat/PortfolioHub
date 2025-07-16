@@ -12,8 +12,9 @@ internal static class CustomizeSerilogLoggingRequests
          httpContext.User
          .FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Anonymous");
         diagnosticContext.Set("X-Device-Type",
-            httpContext.Request
-            .Headers.FirstOrDefault(h => h.Key == "x-device-type").Value.ToString() ?? "NA");
+            httpContext.Request.Headers.FirstOrDefault(h => 
+            string.Equals(h.Key, "x-device-type", StringComparison.OrdinalIgnoreCase))
+            .Value.ToString() ?? "NA");
         diagnosticContext.Set("User_Real_IP",
             httpContext.Request
             .Headers.FirstOrDefault(h => h.Key == "X-Real-IP").Value.ToString() ?? "NA");
@@ -32,6 +33,6 @@ internal static class CustomizeSerilogLoggingRequests
         diagnosticContext.Set("X-Longitude",
             httpContext.Request
             .Headers.FirstOrDefault(h => h.Key == "X-Longitude").Value.ToString() ?? "NA");
-        diagnosticContext.Set("tag","backend");
+        diagnosticContext.Set("tag", "backend");
     }
 }
