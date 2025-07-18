@@ -15,8 +15,8 @@ internal record RecaptchaResponse(
 
 internal sealed class GoogleRecaptchaValidator(
     HttpClient httpClient,
-    IConfiguration config
-
+    IConfiguration config,
+    Serilog.ILogger logger
     ) : ICaptchaValidator
 {
     public async Task<bool> IsValidAsync(string token, string? action = null,
@@ -47,6 +47,8 @@ internal sealed class GoogleRecaptchaValidator(
             {
                 PropertyNameCaseInsensitive = true
             });
+
+        logger.Information("Recaptcha validation result: {@RecaptchaResponse}", result);
 
         if (result is null || result.Success != true)
             return false;
