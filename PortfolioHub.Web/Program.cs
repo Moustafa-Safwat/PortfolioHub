@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using PortfolioHub.Achievements;
 using PortfolioHub.Notification;
 using PortfolioHub.Projects;
+using PortfolioHub.SharedKernal.Domain.Interfaces;
 using PortfolioHub.Users;
 using PortfolioHub.Web.Infra;
 using PortfolioHub.Web.Infra.Crosscutting;
@@ -49,6 +50,7 @@ builder.Services.AddMediatR(options =>
 {
     options.RegisterServicesFromAssemblies(assemblies.ToArray());
 });
+builder.Services.AddHttpClient<ICaptchaValidator, GoogleRecaptchaValidator>();
 
 // Register logging pipeline
 builder.Services.AddScoped(
@@ -56,7 +58,7 @@ builder.Services.AddScoped(
     typeof(LoggingPipeLineBehaviour<,>));
 
 
-// Add CORS policy to allow any method, header, and origin
+// Add CORS policy to allow any method, header, and speciific origin
 var allowedOrigins = builder.Configuration["ALLOWED_ORIGINS"]?
     .Split(',', StringSplitOptions.RemoveEmptyEntries) ?? [];
 builder.Services.AddCors(options =>
