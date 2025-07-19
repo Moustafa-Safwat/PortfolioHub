@@ -27,7 +27,7 @@ internal sealed class GetProjectByIdQueryHandler(
                 project.Category!.Id,
                 project.Category.Name
             ),
-            project.VideoUrl,
+            project.VideoId,
             project.CoverImageUrl,
             project.Images!.OrderBy(i => i.Order).Select(i => i.ImageUrl).ToArray(),
             project.Skills!.Select(s => new TechSkillDto(s.Id, s.Name)).ToArray(),

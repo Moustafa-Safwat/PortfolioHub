@@ -25,7 +25,7 @@ internal class Add(
             req.CreatedDate,
             req.IsFeatured,
             Guid.Parse(req.CategoryId),
-            req.VideoUrl,
+            req.VideoId,
             req.CoverImageUrl,
             req.ImagesUrls,
             req.SkillsId.Select(skillId => Guid.Parse(skillId)).ToArray(),

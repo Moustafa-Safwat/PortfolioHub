@@ -9,7 +9,7 @@ internal sealed record AddProjectReq(
     DateTime CreatedDate,
     bool IsFeatured,
     string CategoryId, // GUID
-    string? VideoUrl,
+    string? VideoId,
     string? CoverImageUrl,
     string[] ImagesUrls,
     string[] SkillsId, // GUID

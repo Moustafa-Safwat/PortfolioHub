@@ -18,7 +18,7 @@ internal class ProjectVal : IEntityTypeConfiguration<Project>
             .IsRequired()
             .HasMaxLength(DbSchemaConstants.DEFAULT_Description_LENGTH);
 
-        builder.Property(p => p.VideoUrl)
+        builder.Property(p => p.VideoId)
             .HasMaxLength(DbSchemaConstants.DEFAULT_URL_LENGTH);
 
         builder.Property(p => p.CreatedDate)

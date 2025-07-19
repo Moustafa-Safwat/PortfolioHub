@@ -10,7 +10,7 @@ internal sealed record ProjectDto(
     string LongDescription,
     DateTime CreatedAt,
     CategoryDto Category,
-    string VideoUrl,
+    string VideoId,
     string CoverImageUrl,
     string[] ImagesUrls,
     TechSkillDto[] Skills,

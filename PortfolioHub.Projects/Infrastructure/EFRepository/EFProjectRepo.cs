@@ -129,7 +129,7 @@ internal class EFProjectRepo(
         existingProject.SetTitle(project.Title);
         existingProject.SetDescription(project.Description);
         existingProject.SetLongDescription(project.LongDescription);
-        existingProject.SetVideoUrl(project.VideoUrl);
+        existingProject.SetVideoUrl(project.VideoId);
         existingProject.SetCoverImageUrl(project.CoverImageUrl);
         existingProject.SetCreatedDate(project.CreatedDate);
 

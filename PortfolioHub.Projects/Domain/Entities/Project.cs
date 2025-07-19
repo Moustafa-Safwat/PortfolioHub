@@ -8,7 +8,7 @@ internal class Project : BaseEntity
     public string Title { get; private set; } = string.Empty;
     public string Description { get; private set; } = string.Empty;
     public string LongDescription { get; private set; } = string.Empty;
-    public string VideoUrl { get; private set; } = string.Empty;
+    public string VideoId { get; private set; } = string.Empty;
     public DateTime CreatedDate { get; private set; }
     public string CoverImageUrl { get; private set; } = string.Empty;
     public bool IsFeatured { get; private set; } = false;
@@ -31,7 +31,7 @@ internal class Project : BaseEntity
         Title = Guard.Against.NullOrEmpty(title);
         Description = Guard.Against.NullOrEmpty(description);
         LongDescription = Guard.Against.NullOrEmpty(longDescription);
-        VideoUrl = Guard.Against.Null(videoUrl);
+        VideoId = Guard.Against.Null(videoUrl);
         CreatedDate = Guard.Against.OutOfSQLDateRange(createdDate);
         CoverImageUrl = Guard.Against.NullOrEmpty(coverImageUrl);
         IsFeatured = Guard.Against.Null(isFeatured);
@@ -50,7 +50,7 @@ internal class Project : BaseEntity
         => CoverImageUrl = Guard.Against.NullOrEmpty(coverImageUrl);
 
     public void SetVideoUrl(string videoUrl)
-        => VideoUrl = Guard.Against.Null(videoUrl);
+        => VideoId = Guard.Against.Null(videoUrl);
 
     public void SetCreatedDate(DateTime createdDate)
         => CreatedDate = Guard.Against.OutOfSQLDateRange(createdDate);

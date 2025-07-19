@@ -31,9 +31,8 @@ internal sealed class AddProjectReqValidator : Validator<AddProjectReq>
             .NotEmpty().WithMessage("Category is required.")
             .Must(id => Guid.TryParse(id, out _)).WithMessage("CategoryId must be a valid GUID.");
 
-        RuleFor(x => x.VideoUrl)
-            .Must(url => string.IsNullOrWhiteSpace(url) || url.BeAValidUrl())
-            .WithMessage("Video URL must be a valid URL format.");
+        RuleFor(x => x.VideoId)
+            .NotEmpty().WithMessage("Video Id is required.");
 
         RuleFor(x => x.CoverImageUrl)
             .Must(url => url!.BeAValidUrl()).WithMessage("Cover image URL must be a valid URL format.");
