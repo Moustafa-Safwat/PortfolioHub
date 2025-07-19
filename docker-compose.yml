@@ -40,8 +40,12 @@ services:
     build:
       args:
         VITE_API_URL: ${VITE_API_URL}
+        VITE_SITE_KEY: ${VITE_SITE_KEY}
+        VITE_CONTACT_MESSAGE_ACTION: ${VITE_CONTACT_MESSAGE_ACTION}
     environment:
       - VITE_API_URL=${VITE_API_URL}
+      - VITE_SITE_KEY=${VITE_SITE_KEY}
+      - VITE_CONTACT_MESSAGE_ACTION=${VITE_CONTACT_MESSAGE_ACTION}
     depends_on:
       - logging
     expose:
