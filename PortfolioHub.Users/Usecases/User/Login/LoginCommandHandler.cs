@@ -18,9 +18,9 @@ internal sealed class LoginCommandHandler(
 
     public async Task<Result<LoginDtoResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await userManager.FindByNameAsync(request.UserName);
+        var user = await userManager.FindByEmailAsync(request.UserEmail);
         if (user is null)
-            return Result.NotFound($"User {request.UserName} not found");
+            return Result.NotFound($"User with email: {request.UserEmail} not found");
 
         var isPassValid = await userManager.CheckPasswordAsync(user, request.Password);
         if (!isPassValid)

@@ -5,7 +5,7 @@ using static PortfolioHub.Users.Usecases.User.Login.LoginCommandHandler;
 namespace PortfolioHub.Users.Usecases.User.Login;
 
 internal sealed record LoginCommand(
-    string UserName,
+    string UserEmail,
     string Password,
     string Device,
     string IpAddress

@@ -2,6 +2,7 @@
 using Azure.Core;
 using FastEndpoints;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using PortfolioHub.Users.Usecases.User.Login;
 using static PortfolioHub.Users.Usecases.User.Login.LoginCommandHandler;
 
@@ -24,7 +25,7 @@ internal class Login(
             : HttpContext.Request.Headers["User-Agent"].ToString();
         string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
-        var loginCommand = new LoginCommand(req.UserName, req.Password, deviceName, ipAddress);
+        var loginCommand = new LoginCommand(req.UserEmail, req.Password, deviceName, ipAddress);
         var loginResult = await sender.Send(loginCommand);
         if (loginResult.IsSuccess)
         {
@@ -34,15 +35,15 @@ internal class Login(
         {
             if (loginResult.Status == ResultStatus.Unauthorized)
             {
-                await SendUnauthorizedAsync(ct);
+                await SendAsync(loginResult, StatusCodes.Status401Unauthorized, ct);
             }
             else if (loginResult.Status == ResultStatus.NotFound)
             {
-                await SendNotFoundAsync(ct);
+                await SendAsync(loginResult, StatusCodes.Status404NotFound, ct);
             }
             else
             {
-                await SendErrorsAsync(cancellation: ct);
+                await SendAsync(loginResult, StatusCodes.Status400BadRequest, ct);
             }
         }
     }

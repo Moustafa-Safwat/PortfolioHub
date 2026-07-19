@@ -19,8 +19,8 @@ POST {{PortfolioHub.Web_HostAddress}}/user/login
 Content-Type: application/json
 
 {
-    "username": "safwat4",
-    "password": "Ahmed.99"
+    "useremail": "moustafa.safwat.iti.43@gmail.com",
+    "password": "M"
 }
 ###
 // TestUser: {"username":"testuser", "password":"Testpassword.99"}
