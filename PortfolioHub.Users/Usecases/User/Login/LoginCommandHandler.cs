@@ -2,13 +2,14 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using PortfolioHub.Users.Domain.Entities.Users;
 using PortfolioHub.Users.Domain.Interfaces;
 
 namespace PortfolioHub.Users.Usecases.User.Login;
 
 internal sealed record LoginDtoResult(string AccessToken, string RefreshToken);
 internal sealed class LoginCommandHandler(
-    UserManager<IdentityUser> userManager,
+    UserManager<ApplicationUser> userManager,
     JwtService jwtService,
     TokenHasher tokenHasher,
     IRefreshTokenRepo refreshTokenRepo,
@@ -44,7 +45,7 @@ internal sealed class LoginCommandHandler(
 
         var hashedRefreshToken = tokenHasher.HashToken(refreshToken);
 
-        var refreseTokenEntity = new Domain.Entities.RefreshToken(
+        var refreseTokenEntity = new Domain.Entities.Users.RefreshToken(
             id: Guid.NewGuid(),
             userId: user.Id,
             hasedToken: hashedRefreshToken,

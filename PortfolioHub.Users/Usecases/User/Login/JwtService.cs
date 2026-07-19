@@ -4,16 +4,17 @@ using Ardalis.Result;
 using FastEndpoints.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using PortfolioHub.Users.Domain.Entities.Users;
 using Serilog;
 
 namespace PortfolioHub.Users.Usecases.User.Login;
 
 internal sealed class JwtService(
-    UserManager<IdentityUser> userManager,
+    UserManager<ApplicationUser> userManager,
     IConfiguration config,
     ILogger logger)
 {
-    public async Task<Result<string>> GenerateAccessTokenAsync(IdentityUser user, CancellationToken cancellationToken)
+    public async Task<Result<string>> GenerateAccessTokenAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
         logger.Information("Attempting to create token for user: {UserName}, Id: {UserId}", user.UserName, user.Id);
 
@@ -27,7 +28,7 @@ internal sealed class JwtService(
         {
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim(ClaimTypes.Email, user.Email!),
-            new Claim(ClaimTypes.NameIdentifier, user.Id!),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
         };
 
         var token = JwtBearer.CreateToken(options =>
@@ -43,7 +44,7 @@ internal sealed class JwtService(
         return Result.Success(token);
     }
 
-    public Task<Result<string>> GenerateRefreshTokenAsync(IdentityUser user, CancellationToken cancellationToken)
+    public Task<Result<string>> GenerateRefreshTokenAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
         logger.Information("Generating refresh token for user: {UserName}, Id: {UserId}", user.UserName, user.Id);
 

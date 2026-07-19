@@ -1,59 +1,128 @@
 ﻿using Ardalis.Result;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
+using PortfolioHub.SharedKernal.Domain.Interfaces;
+using PortfolioHub.Users.Domain.Entities.Users;
+using PortfolioHub.Users.Domain.Interfaces;
 using PortfolioHub.Users.Infrastructure.Context;
+using ValidBuild.Sharedkernal.Domain.CQRS;
 
 namespace PortfolioHub.Users.Usecases.User.Create;
 
 internal sealed class CreateUserCommandHandler(
-  UserManager<IdentityUser> userManager,
-  RoleManager<IdentityRole> roleManager,
-  UsersDbContext dbContext // Added DbContext for database transaction support  
-  )
-  : IRequestHandler<CreateUserCommand, Result<Guid>>
+    UserManager<ApplicationUser> userManager,
+    IUsernameGenerator usernameGenerator,
+    IEntityRepo<UserProfile> userProfileRepo,
+    IEntityRepo<UserSecurity> userSecurityRepo,
+    IUnitOfWork<UsersDbContext> unitOfWork
+    ) : ICommandHandler<CreateUserCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        IdentityUser identityUser = new IdentityUser
-        {
-            UserName = request.UserName,
-            Email = request.Email,
-        };
+        // Start transaction for atomicity
+        var beginTransactionResult = await unitOfWork.BeginTransactionAsync(cancellationToken);
+        if (!beginTransactionResult.IsSuccess)
+            return Result.Error(new ErrorList(beginTransactionResult.Errors.ToArray()));
 
-        // Start transaction using DbContext  
-        using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            var identityResult = await userManager.CreateAsync(identityUser, request.Password);
-
-            if (!identityResult.Succeeded)
-                return Result.Error(new ErrorList(identityResult.Errors.Select(e => e.Description).ToArray()));
-
-            // Check if role exists using RoleManager  
-            var roleExists = await roleManager.RoleExistsAsync(request.Role);
-            if (!roleExists)
+            // Step 1: Check if email already exists
+            var existingUser = await userManager.FindByEmailAsync(request.Email);
+            if (existingUser is not null)
             {
-                // Rollback user creation  
-                await userManager.DeleteAsync(identityUser);
-                return Result.Error($"Role '{request.Role}' does not exist.");
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
+                return Result.Error($"A user with email '{request.Email}' already exists.");
             }
 
-            var addRoleResult = await userManager.AddToRoleAsync(identityUser, request.Role);
-            if (!addRoleResult.Succeeded)
+            // Step 2: Generate unique username
+            var usernameResult = await usernameGenerator.GenerateUniqueUsernameAsync(
+                email: request.Email,
+                firstName: request.FirstName,
+                lastName: request.LastName,
+                cancellationToken: cancellationToken
+            );
+
+            if (!usernameResult.IsSuccess)
             {
-                // Rollback user creation  
-                await userManager.DeleteAsync(identityUser);
-                return Result.Error(new ErrorList(addRoleResult.Errors.Select(e => e.Description).ToArray()));
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
+                return Result.Error(new ErrorList(usernameResult.Errors.ToArray()));
             }
 
-            await transaction.CommitAsync(cancellationToken);
+            // Step 3: Create ApplicationUser with auto-generated username
+            var user = new ApplicationUser(
+                email: request.Email,
+                firstName: request.FirstName,
+                lastName: request.LastName,
+                profileImageUrl: string.Empty // Default empty, can be updated later
+            );
 
-            return Result.Success(Guid.Parse(identityUser.Id));
+            // Set the auto-generated username
+            user.SetUsername(usernameResult.Value);
+
+            // Step 4: Use UserManager to create user with password (handles password hashing)
+            var createUserResult = await userManager.CreateAsync(user, request.Password);
+            if (!createUserResult.Succeeded)
+            {
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
+                var errors = createUserResult.Errors.Select(e => e.Description).ToArray();
+                return Result.Error(new ErrorList(errors));
+            }
+
+            // Step 5: Assign default role 
+            var assignRoleResult = await userManager.AddToRoleAsync(user, request.Role);
+            if (!assignRoleResult.Succeeded)
+            {
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
+                var errors = assignRoleResult.Errors.Select(e => e.Description).ToArray();
+                return Result.Error(new ErrorList(errors));
+            }
+
+            // Step 6: Create UserSecurity with default settings
+            var userSecurity = new UserSecurity(
+                id: Guid.NewGuid(),
+                userId: user.Id
+            );
+
+            var addSecurityResult = await userSecurityRepo.AddAsync(userSecurity, cancellationToken);
+            if (!addSecurityResult.IsSuccess)
+            {
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
+                return Result.Error(new ErrorList(addSecurityResult.Errors.ToArray()));
+            }
+
+            // Step 7: Create UserProfile with default/empty values (can be updated later)
+            var userProfile = new UserProfile(
+                id: Guid.NewGuid(),
+                userId: user.Id
+            );
+
+            var addProfileResult = await userProfileRepo.AddAsync(userProfile, cancellationToken);
+            if (!addProfileResult.IsSuccess)
+            {
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
+                return Result.Error(new ErrorList(addProfileResult.Errors.ToArray()));
+            }
+
+            // Step 8: Save all changes
+            var saveResult = await unitOfWork.SaveChangesAsync(cancellationToken);
+            if (!saveResult.IsSuccess)
+            {
+                await unitOfWork.RollbackTransactionAsync(cancellationToken);
+                return Result.Error(new ErrorList(saveResult.Errors.ToArray()));
+            }
+
+            // Step 9: Commit transaction
+            var commitResult = await unitOfWork.CommitTransactionAsync(cancellationToken);
+            if (!commitResult.IsSuccess)
+            {
+                return Result.Error(new ErrorList(commitResult.Errors.ToArray()));
+            }
+
+            return Result.Success(user.Id);
         }
-        catch
+        catch (Exception ex)
         {
-            await transaction.RollbackAsync(cancellationToken);
-            return Result.Error("An error occurred while creating the user.");
+            await unitOfWork.RollbackTransactionAsync(cancellationToken);
+            return Result.Error($"An unexpected error occurred while creating the user: {ex.Message}");
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Ardalis.Result;
 using Microsoft.EntityFrameworkCore;
-using PortfolioHub.SharedKernal.Domain.Interfaces;
-using PortfolioHub.Users.Domain.Entities;
+using PortfolioHub.Users.Domain.Entities.Users;
 using PortfolioHub.Users.Domain.Interfaces;
 using PortfolioHub.Users.Infrastructure.Context;
 using Serilog;
@@ -211,7 +210,7 @@ internal sealed class EFRefreshTokenRepo(
     {
         var existing = await usersDbContext.RefreshTokens
            .Include(u => u.User)
-           .Where(r => r.UserId == userId && r.RevokedAt == null && r.ExpiresAt > DateTime.Now)
+           .Where(r => r.UserId.ToString() == userId && r.RevokedAt == null && r.ExpiresAt > DateTime.Now)
            .FirstOrDefaultAsync(cancellationToken);
 
         if (existing is null)

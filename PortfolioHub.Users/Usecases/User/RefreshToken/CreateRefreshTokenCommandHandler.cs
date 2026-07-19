@@ -31,7 +31,7 @@ internal sealed class CreateRefreshTokenCommandHandler(
         if (!double.TryParse(configuration["Auth:RefreshTokenExpirationDays"], out double refreshTokenExpirationDays))
             throw new InvalidOperationException("Refresh token expiration time is not configured or is invalid.");
 
-        var refreseTokenEntity = new Domain.Entities.RefreshToken(
+        var refreseTokenEntity = new Domain.Entities.Users.RefreshToken(
             id: Guid.NewGuid(),
             userId: refreshTokenEntity.User!.Id,
             hasedToken: tokenHasher.HashToken(refreshToken),

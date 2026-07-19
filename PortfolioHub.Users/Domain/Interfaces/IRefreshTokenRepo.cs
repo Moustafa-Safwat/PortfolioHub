@@ -1,6 +1,6 @@
 ﻿using Ardalis.Result;
 using PortfolioHub.SharedKernal.Domain.Interfaces;
-using PortfolioHub.Users.Domain.Entities;
+using PortfolioHub.Users.Domain.Entities.Users;
 
 namespace PortfolioHub.Users.Domain.Interfaces;
 

@@ -2,5 +2,5 @@
 
 internal static class DbSchemaConstants
 {
-    public const string Users_SCHEMA = "Users";
+    public const string USERS_SCHEMA = "Users";
 }

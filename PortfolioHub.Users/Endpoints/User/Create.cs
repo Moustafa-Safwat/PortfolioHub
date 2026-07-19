@@ -1,5 +1,7 @@
 ﻿using FastEndpoints;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using PortfolioHub.Users.Domain.Entities.Users;
 using PortfolioHub.Users.Usecases.User.Create;
 
 namespace PortfolioHub.Users.Endpoints.User;
@@ -15,22 +17,28 @@ internal class Create(ISender sender)
 
     public override async Task HandleAsync(CreateUserReq req, CancellationToken ct)
     {
-        var createUserCommand = new CreateUserCommand(req.UserName,
-              req.Email,
-              req.Password,
-              req.Role);
+        // Create the command with validated role
+        var createUserCommand = new CreateUserCommand(
+            Email: req.Email,
+            Password: req.Password,
+            FirstName: req.FirstName,
+            LastName: req.LastName,
+            Role: nameof(ApplicationUserRoles.User).ToLower()
+        );
 
         var createUserResult = await sender.Send(createUserCommand, ct);
 
         if (createUserResult.IsSuccess)
         {
-            await SendCreatedAtAsync<Create>($"/user/{createUserResult.Value}",
-                createUserResult.Value,
+            var userId = createUserResult.Value;
+            await SendCreatedAtAsync<Create>(
+                $"/users/{userId}",
+                createUserResult,
                 cancellation: ct);
         }
         else
         {
-            await SendErrorsAsync();
+            await SendAsync(createUserResult, StatusCodes.Status400BadRequest, ct);
         }
     }
 }
