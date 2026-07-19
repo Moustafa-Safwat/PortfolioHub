@@ -1,10 +1,8 @@
 ﻿using Ardalis.Result;
-using Azure.Core;
 using FastEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using PortfolioHub.Users.Usecases.User.Login;
-using static PortfolioHub.Users.Usecases.User.Login.LoginCommandHandler;
 
 namespace PortfolioHub.Users.Endpoints.User;
 
