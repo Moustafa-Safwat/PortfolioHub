@@ -18,13 +18,19 @@ internal sealed class LoginCommandHandler(
 
     public async Task<Result<LoginDtoResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await userManager.FindByNameAsync(request.UserName);
+        var user = await userManager.FindByEmailAsync(request.UserEmail);
         if (user is null)
-            return Result.NotFound($"User {request.UserName} not found");
+            return Result.NotFound($"User with email: {request.UserEmail} not found");
 
         var isPassValid = await userManager.CheckPasswordAsync(user, request.Password);
         if (!isPassValid)
             return Result.Unauthorized("Invalid password");
+
+        var isEmailConfirmed = await userManager.IsEmailConfirmedAsync(user);
+        if (!isEmailConfirmed)
+            return Result.Error(new ErrorList([
+            "Your email address has not been confirmed. " +
+            "Please check your inbox and verify your email before signing in."]));
 
         // Additional logic for successful login can be added here
         var tokenResult = await jwtService.GenerateAccessTokenAsync(user, cancellationToken);

@@ -385,3 +385,5 @@ nginx/download-geoip2.sh
 
 fluent-bit.conf
 parsers.conf
+
+PortfolioHub.Web.http
