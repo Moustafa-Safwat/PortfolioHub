@@ -26,6 +26,12 @@ internal sealed class LoginCommandHandler(
         if (!isPassValid)
             return Result.Unauthorized("Invalid password");
 
+        var isEmailConfirmed = await userManager.IsEmailConfirmedAsync(user);
+        if (!isEmailConfirmed)
+            return Result.Error(new ErrorList([
+            "Your email address has not been confirmed. " +
+            "Please check your inbox and verify your email before signing in."]));
+
         // Additional logic for successful login can be added here
         var tokenResult = await jwtService.GenerateAccessTokenAsync(user, cancellationToken);
         if (!tokenResult.IsSuccess)
