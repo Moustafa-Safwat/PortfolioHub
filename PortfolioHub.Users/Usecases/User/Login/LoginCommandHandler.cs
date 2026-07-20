@@ -13,6 +13,7 @@ internal sealed class LoginCommandHandler(
     JwtService jwtService,
     TokenHasher tokenHasher,
     IRefreshTokenRepo refreshTokenRepo,
+    IUserSecurityRepo userSecurityRepo,
     IConfiguration configuration
     ) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
 {
@@ -67,6 +68,14 @@ internal sealed class LoginCommandHandler(
             AccessToken: tokenResult.Value,
             RefreshToken: refreshToken
         );
+
+        // Record the last login time for the user in the UserSecurity entity
+        var userSecurityResult = await userSecurityRepo.GetUserWithSecurityByIdAsync(user.Id, cancellationToken);
+        if (!userSecurityResult.IsSuccess)
+            return Result.Error(new ErrorList(userSecurityResult.Errors));
+
+        userSecurityResult.Value?.UserSecurity?.RecordLogin();
+        await userSecurityRepo.SaveChangesAsync(cancellationToken);
 
         return Result.Success(loginDto);
     }
