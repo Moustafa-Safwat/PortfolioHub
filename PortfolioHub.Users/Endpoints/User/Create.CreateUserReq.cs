@@ -1,8 +1,10 @@
 ﻿namespace PortfolioHub.Users.Endpoints.User;
 
-internal record CreateUserReq(
-    string UserName,
+internal sealed record CreateUserReq
+(
+    string FirstName,
+    string LastName,
     string Email,
     string Password,
-    string Role
-    );
+    string CompanyName
+);

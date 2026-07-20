@@ -1,16 +1,18 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PortfolioHub.Projects.Infrastructure.EFRepository;
 using PortfolioHub.SharedKernal.Domain.Entities;
 using PortfolioHub.SharedKernal.Domain.Interfaces;
-using PortfolioHub.Users.Domain.Entities;
+using PortfolioHub.Users.Domain.Entities.Users;
 using PortfolioHub.Users.Domain.Interfaces;
 using PortfolioHub.Users.Infrastructure.Context;
 using PortfolioHub.Users.Infrastructure.EFRepository;
+using PortfolioHub.Users.Usecases.User.Create;
 using PortfolioHub.Users.Usecases.User.Login;
+using System.Reflection;
+using ValidBuild.Account.Infrastructure.DbSeed;
+using ValidBuild.Sharedkernal.Infrastructure;
 
 namespace PortfolioHub.Users;
 
@@ -20,7 +22,7 @@ public static class RegisterUsersModule
         IConfiguration configuration, IList<Assembly> assemblies)
     {
         service.AddSqlServer<UsersDbContext>(configuration.GetConnectionString("UsersDb"));
-        service.AddIdentity<IdentityUser, IdentityRole>(options =>
+        service.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
         {
             options.Password.RequireDigit = true;
             options.Password.RequireLowercase = true;
@@ -30,13 +32,17 @@ public static class RegisterUsersModule
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
             options.Lockout.MaxFailedAccessAttempts = 5;
             options.Lockout.AllowedForNewUsers = true;
-        })
-            .AddEntityFrameworkStores<UsersDbContext>();
+        }).AddEntityFrameworkStores<UsersDbContext>()
+        .AddDefaultTokenProviders();
 
         service.AddScoped<JwtService>();
         service.AddSingleton<TokenHasher>();
         service.AddScoped<IRefreshTokenRepo, EFRefreshTokenRepo>();
         service.AddScoped<IInfoRepo, EFInfoRepository>();
+        service.AddScoped<IUnitOfWork<UsersDbContext>, UnitOfWork<UsersDbContext>>();
+        service.AddScoped<IUserSecurityRepo, EFUserSecurityRepo>();
+        service.AddScoped<IUsernameGenerator, UsernameGenerator>();
+        service.AddScoped<DbUsersSeeder>();
 
         var entityTypes = typeof(RegisterUsersModule).Assembly
            .GetTypes()

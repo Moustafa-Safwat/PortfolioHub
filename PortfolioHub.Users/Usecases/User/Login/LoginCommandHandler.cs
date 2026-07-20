@@ -2,16 +2,18 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using PortfolioHub.Users.Domain.Entities.Users;
 using PortfolioHub.Users.Domain.Interfaces;
 
 namespace PortfolioHub.Users.Usecases.User.Login;
 
 internal sealed record LoginDtoResult(string AccessToken, string RefreshToken);
 internal sealed class LoginCommandHandler(
-    UserManager<IdentityUser> userManager,
+    UserManager<ApplicationUser> userManager,
     JwtService jwtService,
     TokenHasher tokenHasher,
     IRefreshTokenRepo refreshTokenRepo,
+    IUserSecurityRepo userSecurityRepo,
     IConfiguration configuration
     ) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
 {
@@ -44,7 +46,7 @@ internal sealed class LoginCommandHandler(
 
         var hashedRefreshToken = tokenHasher.HashToken(refreshToken);
 
-        var refreseTokenEntity = new Domain.Entities.RefreshToken(
+        var refreseTokenEntity = new Domain.Entities.Users.RefreshToken(
             id: Guid.NewGuid(),
             userId: user.Id,
             hasedToken: hashedRefreshToken,
@@ -66,6 +68,14 @@ internal sealed class LoginCommandHandler(
             AccessToken: tokenResult.Value,
             RefreshToken: refreshToken
         );
+
+        // Record the last login time for the user in the UserSecurity entity
+        var userSecurityResult = await userSecurityRepo.GetUserWithSecurityByIdAsync(user.Id, cancellationToken);
+        if (!userSecurityResult.IsSuccess)
+            return Result.Error(new ErrorList(userSecurityResult.Errors));
+
+        userSecurityResult.Value?.UserSecurity?.RecordLogin();
+        await userSecurityRepo.SaveChangesAsync(cancellationToken);
 
         return Result.Success(loginDto);
     }

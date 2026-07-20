@@ -1,5 +1,3 @@
-using System.Reflection;
-using System.Security.Claims;
 using FastEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,7 +10,8 @@ using PortfolioHub.Users;
 using PortfolioHub.Web.Infra;
 using PortfolioHub.Web.Infra.Crosscutting;
 using Serilog;
-using Serilog.Events;
+using System.Reflection;
+using ValidBuild.Web.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +24,8 @@ builder.Host.UseSerilog((context, services, configuration) =>
 });
 
 IList<Assembly> assemblies = [typeof(Program).Assembly];
-builder.Services.AddUsersModule(builder.Configuration, assemblies)
+builder.Services
+    .AddUsersModule(builder.Configuration, assemblies)
     .AddProjectsModule(builder.Configuration, assemblies)
     .AddAchievementsModule(builder.Configuration, assemblies)
     .AddNotificationModule(builder.Configuration, assemblies);
@@ -100,8 +100,9 @@ app.UseAuthentication()
    });
 
 app.ApplyPendingMigrations(assemblies);
+await app.DbSeedData(assemblies);
 
-app.Run();
+await app.RunAsync();
 
 public partial class Program { } // For testing purposes only
 

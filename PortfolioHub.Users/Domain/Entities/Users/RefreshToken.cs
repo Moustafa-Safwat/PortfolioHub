@@ -1,11 +1,12 @@
-﻿namespace PortfolioHub.Users.Domain.Entities;
+﻿namespace PortfolioHub.Users.Domain.Entities.Users;
+
 using Ardalis.GuardClauses;
 using Microsoft.AspNetCore.Identity;
 using PortfolioHub.SharedKernal.Domain.Entities;
 
 internal class RefreshToken : BaseEntity
 {
-    public string UserId { get; private set; } = null!;
+    public Guid UserId { get; private set; }
     public string HasedToken { get; private set; } = null!;
     public string Device { get; private set; } = null!;
     public string IpAddress { get; private set; } = null!;
@@ -14,16 +15,16 @@ internal class RefreshToken : BaseEntity
     public DateTime? RevokedAt { get; private set; }
 
     // Navigation property
-    public IdentityUser? User { get; private set; } = null!;
+    public ApplicationUser? User { get; private set; } = null!;
 
     // Parameterless constructor for EF Core
     public RefreshToken() { }
-    public RefreshToken(Guid id, string userId, string hasedToken,
+    public RefreshToken(Guid id, Guid userId, string hasedToken,
         string device, string ipAddress, DateTime expiresAt,
         DateTime createdAt)
     {
         Id = Guard.Against.Default(id);
-        UserId = Guard.Against.NullOrWhiteSpace(userId);
+        UserId = Guard.Against.Default(userId);
         HasedToken = Guard.Against.NullOrWhiteSpace(hasedToken);
         Device = Guard.Against.NullOrWhiteSpace(device);
         IpAddress = Guard.Against.NullOrWhiteSpace(ipAddress);

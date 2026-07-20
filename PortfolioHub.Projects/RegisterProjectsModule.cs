@@ -19,7 +19,7 @@ public static class RegisterProjectsModule
         service.AddSqlServer<ProjectsDbContext>(configuration.GetConnectionString("ProjectsDb"));
 
         service.AddScoped<IProjectsRepo, EFProjectRepo>();
-        service.AddScoped<IUnitOfWork, UnitOfWork>();
+        service.AddScoped<Infrastructure.IUnitOfWork, UnitOfWork>();
 
         var entityTypes = typeof(RegisterProjectsModule).Assembly
             .GetTypes()
@@ -35,7 +35,7 @@ public static class RegisterProjectsModule
             service.AddScoped(repoInterface, repoImplementation);
         }
 
-        
+
 
         assemblies.Add(typeof(RegisterProjectsModule).Assembly);
         return service;
