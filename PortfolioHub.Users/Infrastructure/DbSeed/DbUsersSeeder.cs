@@ -54,7 +54,8 @@ internal class DbUsersSeeder
                 Password: configuration["SystemUser:Password"] ?? throw new NullReferenceException("Missing 'SystemUser:Password' configuration"),
                 FirstName: configuration["SystemUser:FirstName"] ?? throw new NullReferenceException("Missing 'SystemUser:FirstName' configuration"),
                 LastName: configuration["SystemUser:LastName"] ?? throw new NullReferenceException("Missing 'SystemUser:LastName' configuration"),
-                Role: nameof(ApplicationUserRoles.System).ToLower()
+                Role: nameof(ApplicationUserRoles.System).ToLower(),
+                "MSafwatHub"
             );
             var userResult = await sender.Send(createUserCommand);
             if (!userResult.IsSuccess)

@@ -7,5 +7,6 @@ internal sealed record CreateUserCommand(
     string Password,
     string FirstName,
     string LastName,
-    string Role
+    string Role,
+    string CompanyName
     ) : ICommand<Guid>;

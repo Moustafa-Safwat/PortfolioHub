@@ -28,5 +28,11 @@ internal sealed class CreateUserReqValidator : Validator<CreateUserReq>
             .Matches(@"[a-z]").WithMessage("Password must contain at least one lowercase letter.")
             .Matches(@"\d").WithMessage("Password must contain at least one digit.")
             .Matches(@"[\W_]").WithMessage("Password must contain at least one special character.");
+
+        RuleFor(x => x.CompanyName)
+            .NotEmpty().WithMessage("Company name is required.")
+            .MinimumLength(2).WithMessage("Company name must be at least 2 characters long.")
+            .MaximumLength(50).WithMessage("Company name must not exceed 50 characters.");
+
     }
 }

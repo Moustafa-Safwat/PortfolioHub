@@ -22,10 +22,11 @@ internal class UserProfile : BaseEntity
     // EF Constructor
     public UserProfile() { }
 
-    public UserProfile(Guid id, Guid userId)
+    public UserProfile(Guid id, Guid userId, string companyName)
     {
         Id = Guard.Against.Default(id);
         UserId = Guard.Against.Default(userId);
+        CompanyName = Guard.Against.NullOrEmpty(companyName);
         CreatedAt = DateTime.UtcNow;
     }
 

@@ -92,7 +92,8 @@ internal sealed class CreateUserCommandHandler(
             // Step 7: Create UserProfile with default/empty values (can be updated later)
             var userProfile = new UserProfile(
                 id: Guid.NewGuid(),
-                userId: user.Id
+                userId: user.Id,
+                companyName: request.CompanyName
             );
 
             var addProfileResult = await userProfileRepo.AddAsync(userProfile, cancellationToken);

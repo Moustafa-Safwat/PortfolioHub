@@ -23,7 +23,8 @@ internal class Create(ISender sender)
             Password: req.Password,
             FirstName: req.FirstName,
             LastName: req.LastName,
-            Role: nameof(ApplicationUserRoles.User).ToLower()
+            Role: nameof(ApplicationUserRoles.User).ToLower(),
+            CompanyName: req.CompanyName
         );
 
         var createUserResult = await sender.Send(createUserCommand, ct);
