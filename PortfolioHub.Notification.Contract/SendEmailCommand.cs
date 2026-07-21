@@ -3,7 +3,7 @@ using MediatR;
 
 namespace PortfolioHub.Notification.Usecases;
 
-internal sealed record SendEmailCommand(
+public sealed record SendEmailCommand(
     string From,
     string To,
     string Subject,

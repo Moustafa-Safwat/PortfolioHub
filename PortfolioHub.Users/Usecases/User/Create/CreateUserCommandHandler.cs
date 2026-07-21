@@ -1,9 +1,11 @@
 ﻿using Ardalis.Result;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using PortfolioHub.SharedKernal.Domain.Interfaces;
 using PortfolioHub.Users.Domain.Entities.Users;
 using PortfolioHub.Users.Domain.Interfaces;
 using PortfolioHub.Users.Infrastructure.Context;
+using PortfolioHub.Users.Usecases.VerifyEmail.Send;
 using ValidBuild.Sharedkernal.Domain.CQRS;
 
 namespace PortfolioHub.Users.Usecases.User.Create;
@@ -13,7 +15,8 @@ internal sealed class CreateUserCommandHandler(
     IUsernameGenerator usernameGenerator,
     IEntityRepo<UserProfile> userProfileRepo,
     IEntityRepo<UserSecurity> userSecurityRepo,
-    IUnitOfWork<UsersDbContext> unitOfWork
+    IUnitOfWork<UsersDbContext> unitOfWork,
+    ISender sender
     ) : ICommandHandler<CreateUserCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -116,6 +119,14 @@ internal sealed class CreateUserCommandHandler(
             if (!commitResult.IsSuccess)
             {
                 return Result.Error(new ErrorList(commitResult.Errors.ToArray()));
+            }
+
+            // Step 10: Send email verification
+            var sendVerificationEmailCommand = new SendEmailVerificationCommand(user.Id);
+            var sendEmailResult = await sender.Send(sendVerificationEmailCommand, cancellationToken);
+            if (!sendEmailResult.IsSuccess)
+            {
+                return Result.Error(new ErrorList(["Can't send verification Email"]));
             }
 
             return Result.Success(user.Id);
