@@ -10,6 +10,7 @@ using PortfolioHub.Users.Infrastructure.Context;
 using PortfolioHub.Users.Infrastructure.EFRepository;
 using PortfolioHub.Users.Usecases.User.Create;
 using PortfolioHub.Users.Usecases.User.Login;
+using PortfolioHub.Users.Usecases.VerifyEmail.Send;
 using System.Reflection;
 using ValidBuild.Account.Infrastructure.DbSeed;
 using ValidBuild.Sharedkernal.Infrastructure;
@@ -43,6 +44,8 @@ public static class RegisterUsersModule
         service.AddScoped<IUserSecurityRepo, EFUserSecurityRepo>();
         service.AddScoped<IUsernameGenerator, UsernameGenerator>();
         service.AddScoped<DbUsersSeeder>();
+        service.AddScoped<IEmailVerificationLink, EmailVerificationLinkService>();
+        service.AddScoped<IEmailVerificationMessageFormatter, EmailVerificationMessageFormatter>();
 
         var entityTypes = typeof(RegisterUsersModule).Assembly
            .GetTypes()
