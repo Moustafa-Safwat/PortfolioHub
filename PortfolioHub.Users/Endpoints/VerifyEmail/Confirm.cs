@@ -2,13 +2,15 @@
 using FastEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using PortfolioHub.Users.Usecases.VerifyEmail.Confirm;
 
 namespace PortfolioHub.Users.Endpoints.VerifyEmail;
 
 internal sealed class Confirm
 (
-    ISender sender
+    ISender sender,
+    IConfiguration configuration
 ) : EndpointWithoutRequest<Result>
 {
     public const string RoutePath = "auth/verify-email/confirm";
@@ -41,8 +43,13 @@ internal sealed class Confirm
             return;
         }
 
-        var response = Result.SuccessWithMessage($"Your email has been successfully verified.");
-        await SendOkAsync(response, ct);
+        string frontendUrl = configuration["Frontend:BaseUrl"]
+            ?? throw new InvalidOperationException("Frontend:BaseUrl configuration value is missing.");
+
+        await SendRedirectAsync(
+            location: $"{frontendUrl}/email-verified",
+            isPermanent: false,
+            allowRemoteRedirects: true);
     }
 }
 
