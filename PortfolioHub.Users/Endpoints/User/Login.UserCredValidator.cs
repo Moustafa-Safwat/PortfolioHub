@@ -6,7 +6,7 @@ internal sealed class UserCredValidator : AbstractValidator<UserCred>
 {
     public UserCredValidator()
     {
-        RuleFor(x => x.UserEmail)
+        RuleFor(x => x.Email)
             .EmailAddress().WithMessage("Please enter a valid email address")
             .NotEmpty().WithMessage("User Email is required")
             .MaximumLength(100).WithMessage("User Email must not exceed 100 characters");

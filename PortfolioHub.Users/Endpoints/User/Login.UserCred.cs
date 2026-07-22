@@ -1,6 +1,7 @@
 ﻿namespace PortfolioHub.Users.Endpoints.User;
 
 internal sealed record UserCred(
-    string UserEmail,
-    string Password
+    string Email,
+    string Password,
+    string Token
     );

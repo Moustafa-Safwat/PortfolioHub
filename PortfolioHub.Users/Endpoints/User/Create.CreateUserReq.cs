@@ -6,5 +6,6 @@ internal sealed record CreateUserReq
     string LastName,
     string Email,
     string Password,
-    string CompanyName
+    string CompanyName,
+    string Token
 );
