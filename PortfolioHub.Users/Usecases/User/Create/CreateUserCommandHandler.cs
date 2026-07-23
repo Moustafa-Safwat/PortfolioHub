@@ -114,19 +114,23 @@ internal sealed class CreateUserCommandHandler(
                 return Result.Error(new ErrorList(saveResult.Errors.ToArray()));
             }
 
-            // Step 9: Commit transaction
+            // Step 9: Send email verification
+            if (request.VerifyEmail)
+            {
+                var sendVerificationEmailCommand = new SendEmailVerificationCommand(user.Id);
+                var sendEmailResult = await sender.Send(sendVerificationEmailCommand, cancellationToken);
+                if (!sendEmailResult.IsSuccess)
+                {
+                    await unitOfWork.RollbackTransactionAsync(cancellationToken);
+                    return Result.Error(new ErrorList(["Can't send verification Email"]));
+                }
+            }
+
+            // Step 10: Commit transaction
             var commitResult = await unitOfWork.CommitTransactionAsync(cancellationToken);
             if (!commitResult.IsSuccess)
             {
                 return Result.Error(new ErrorList(commitResult.Errors.ToArray()));
-            }
-
-            // Step 10: Send email verification
-            var sendVerificationEmailCommand = new SendEmailVerificationCommand(user.Id);
-            var sendEmailResult = await sender.Send(sendVerificationEmailCommand, cancellationToken);
-            if (!sendEmailResult.IsSuccess)
-            {
-                return Result.Error(new ErrorList(["Can't send verification Email"]));
             }
 
             return Result.Success(user.Id);
