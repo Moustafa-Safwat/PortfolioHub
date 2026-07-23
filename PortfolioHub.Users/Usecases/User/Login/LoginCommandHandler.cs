@@ -8,18 +8,22 @@ using PortfolioHub.Users.Domain.Interfaces;
 namespace PortfolioHub.Users.Usecases.User.Login;
 
 internal sealed record LoginDtoResult(string AccessToken, string RefreshToken);
-internal sealed class LoginCommandHandler(
+internal sealed class LoginCommandHandler
+(
     UserManager<ApplicationUser> userManager,
     JwtService jwtService,
     TokenHasher tokenHasher,
     IRefreshTokenRepo refreshTokenRepo,
     IUserSecurityRepo userSecurityRepo,
     IConfiguration configuration
-    ) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
+) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
 {
 
     public async Task<Result<LoginDtoResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
+        if (IsSystemUser(request))
+            return Result.Unauthorized("Invalid User");
+
         var user = await userManager.FindByEmailAsync(request.UserEmail);
         if (user is null)
             return Result.NotFound($"User with email: {request.UserEmail} not found");
@@ -78,5 +82,18 @@ internal sealed class LoginCommandHandler(
         await userSecurityRepo.SaveChangesAsync(cancellationToken);
 
         return Result.Success(loginDto);
+    }
+
+    private bool IsSystemUser(LoginCommand request)
+    {
+        string systemEmail = configuration["SystemUser:Email"] ??
+                    throw new InvalidOperationException("System user email configuration value is missing.");
+
+        var isSystemUser = string.Equals(
+            request.UserEmail.Trim(),
+            systemEmail.Trim(),
+            StringComparison.OrdinalIgnoreCase);
+
+        return isSystemUser;
     }
 }
