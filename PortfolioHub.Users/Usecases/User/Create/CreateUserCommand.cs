@@ -8,5 +8,6 @@ internal sealed record CreateUserCommand(
     string FirstName,
     string LastName,
     string Role,
-    string CompanyName
+    string CompanyName,
+    bool VerifyEmail = true
     ) : ICommand<Guid>;

@@ -46,6 +46,7 @@ public static class RegisterUsersModule
         service.AddScoped<DbUsersSeeder>();
         service.AddScoped<IEmailVerificationLink, EmailVerificationLinkService>();
         service.AddScoped<IEmailVerificationMessageFormatter, EmailVerificationMessageFormatter>();
+        service.AddScoped<IValidUser, ValidUserService>();
 
         var entityTypes = typeof(RegisterUsersModule).Assembly
            .GetTypes()

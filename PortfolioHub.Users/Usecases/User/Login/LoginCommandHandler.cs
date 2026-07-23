@@ -8,14 +8,16 @@ using PortfolioHub.Users.Domain.Interfaces;
 namespace PortfolioHub.Users.Usecases.User.Login;
 
 internal sealed record LoginDtoResult(string AccessToken, string RefreshToken);
-internal sealed class LoginCommandHandler(
+internal sealed class LoginCommandHandler
+(
     UserManager<ApplicationUser> userManager,
     JwtService jwtService,
     TokenHasher tokenHasher,
     IRefreshTokenRepo refreshTokenRepo,
     IUserSecurityRepo userSecurityRepo,
-    IConfiguration configuration
-    ) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
+    IConfiguration configuration,
+    IValidUser validUser
+) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
 {
 
     public async Task<Result<LoginDtoResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -23,6 +25,12 @@ internal sealed class LoginCommandHandler(
         var user = await userManager.FindByEmailAsync(request.UserEmail);
         if (user is null)
             return Result.NotFound($"User with email: {request.UserEmail} not found");
+
+        var validUserResult = await validUser.IsValidUserAsync(user, cancellationToken);
+        if (!validUserResult.IsSuccess)
+            return Result.Unauthorized("Invalid user");
+
+        var applicationUserWithSecurity = validUserResult.Value;
 
         var isPassValid = await userManager.CheckPasswordAsync(user, request.Password);
         if (!isPassValid)
@@ -64,18 +72,14 @@ internal sealed class LoginCommandHandler(
         if (!saveRefreshTokenResult.IsSuccess)
             return Result.Error(new ErrorList(saveRefreshTokenResult.Errors));
 
+        // Record the last login time for the user in the UserSecurity entity
+        applicationUserWithSecurity?.UserSecurity?.RecordLogin();
+        await userSecurityRepo.SaveChangesAsync(cancellationToken);
+
         var loginDto = new LoginDtoResult(
             AccessToken: tokenResult.Value,
             RefreshToken: refreshToken
         );
-
-        // Record the last login time for the user in the UserSecurity entity
-        var userSecurityResult = await userSecurityRepo.GetUserWithSecurityByIdAsync(user.Id, cancellationToken);
-        if (!userSecurityResult.IsSuccess)
-            return Result.Error(new ErrorList(userSecurityResult.Errors));
-
-        userSecurityResult.Value?.UserSecurity?.RecordLogin();
-        await userSecurityRepo.SaveChangesAsync(cancellationToken);
 
         return Result.Success(loginDto);
     }
