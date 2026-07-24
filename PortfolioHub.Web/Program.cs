@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using PortfolioHub.Achievements;
+using PortfolioHub.Blogs;
 using PortfolioHub.Notification;
 using PortfolioHub.Projects;
 using PortfolioHub.SharedKernal.Domain.Interfaces;
@@ -28,7 +29,8 @@ builder.Services
     .AddUsersModule(builder.Configuration, assemblies)
     .AddProjectsModule(builder.Configuration, assemblies)
     .AddAchievementsModule(builder.Configuration, assemblies)
-    .AddNotificationModule(builder.Configuration, assemblies);
+    .AddNotificationModule(builder.Configuration, assemblies)
+    .AddBlogsModule(builder.Configuration, assemblies);
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
