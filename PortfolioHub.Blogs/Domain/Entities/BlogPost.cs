@@ -17,7 +17,7 @@ internal sealed class BlogPost : DeletionEntity
     public string CoverImageUrl { get; private set; } = null!;
     public string Slug { get; private set; } = null!;
     public string Description { get; private set; } = null!;
-    public DateTime? PublishedAt { get; private set; }
+    public DateTime? PublishedAtUtc { get; private set; }
     public BlogStatus Status { get; private set; }
     public IReadOnlyCollection<BlogPostLike> BlogPostLikes => _blogPostLikes.AsReadOnly();
     public IReadOnlyCollection<BlogPostView> BlogPostViews => _blogPostViews.AsReadOnly();
@@ -32,7 +32,7 @@ internal sealed class BlogPost : DeletionEntity
     public void Publish(Guid userId)
     {
         Status = BlogStatus.Published;
-        PublishedAt = DateTime.UtcNow;
+        PublishedAtUtc = DateTime.UtcNow;
         MarkAsUpdated(userId);
     }
     public void Archive(Guid userId)

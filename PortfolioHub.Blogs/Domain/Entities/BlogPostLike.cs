@@ -7,9 +7,9 @@ internal sealed class BlogPostLike : BaseEntity
 {
     public Guid BlogPostId { get; private set; }
     public Guid UserId { get; private set; }
-    public DateTime LikedAt { get; private set; }
+    public DateTime LikedAtUtc { get; private set; }
     public bool IsLiked { get; private set; }
-    public DateTime UnLikedAt { get; private set; }
+    public DateTime? UnLikedAtUtc { get; private set; }
     // Navigation property
     public BlogPost BlogPost { get; private set; } = null!;
     // EF
@@ -21,13 +21,13 @@ internal sealed class BlogPostLike : BaseEntity
         Id = Guid.NewGuid();
         BlogPostId = Guard.Against.Default(blogPostId);
         UserId = Guard.Against.Default(userId);
-        LikedAt = DateTime.UtcNow;
+        LikedAtUtc = DateTime.UtcNow;
         IsLiked = true;
     }
     // Methods
     public void UnLike()
     {
         IsLiked = false;
-        UnLikedAt = DateTime.UtcNow;
+        UnLikedAtUtc = DateTime.UtcNow;
     }
 }

@@ -7,8 +7,8 @@ internal sealed class BlogPostView : BaseEntity
 {
     public Guid BlogPostId { get; private set; }
     public Guid UserId { get; private set; }
-    public DateTime ViewAt { get; private set; }
-    public DateTime? LastViewAt { get; private set; }
+    public DateTime FirstViewedAtUtc { get; private set; }
+    public DateTime? LastViewAtUtc { get; private set; }
     public int ViewCount { get; private set; }
     // Navigation property
     public BlogPost BlogPost { get; private set; } = null!;
@@ -22,13 +22,13 @@ internal sealed class BlogPostView : BaseEntity
         Id = Guid.NewGuid();
         BlogPostId = Guard.Against.Default(blogPostId);
         UserId = Guard.Against.Default(userId);
-        ViewAt = viewedAtUtc;
+        FirstViewedAtUtc = viewedAtUtc;
         ViewCount = 1;
     }
     // Methods
     public void IncrementViewCount()
     {
         ViewCount++;
-        LastViewAt = DateTime.UtcNow;
+        LastViewAtUtc = DateTime.UtcNow;
     }
 }
