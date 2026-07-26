@@ -1,7 +1,6 @@
 ﻿using Ardalis.Result;
 using PortfolioHub.Blogs.Domain.Entities;
 using PortfolioHub.Blogs.Domain.Interfaces;
-using PortfolioHub.Blogs.Endpoints;
 using PortfolioHub.Blogs.Endpoints.Blogs;
 using PortfolioHub.SharedKernal.Config;
 using ValidBuild.Sharedkernal.Domain.CQRS;
