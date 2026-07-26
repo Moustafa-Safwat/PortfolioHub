@@ -13,7 +13,6 @@
 	<ItemGroup>
 		<Folder Include="Domain\Interfaces\" />
 		<Folder Include="Endpoints\" />
-		<Folder Include="Infrastructure\EFRepository\" />
 		<Folder Include="Infrastructure\Migrations\" />
 		<Folder Include="Usecases\" />
 	</ItemGroup>
