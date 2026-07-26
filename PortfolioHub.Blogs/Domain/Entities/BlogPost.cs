@@ -116,6 +116,9 @@ internal sealed class BlogPost : DeletionEntity
     {
         int averageWordsPerMinute = 200;
 
+        if (!_blogPostBlocks.Any())
+            return 0;
+
         Func<string, int> countWords = (string text)
                 => text.Split(
                     [' ', '\t', '\r', '\n'],
@@ -143,8 +146,8 @@ internal sealed class BlogPost : DeletionEntity
             BlogStatus status,
             bool isFeatured,
             IEnumerable<BlogPostTag> tags,
-            IEnumerable<(string Url, string Label)> references,
-            IEnumerable<BlogPostBlock> blocks)
+            IEnumerable<BlogPostReferenceDto> references,
+            IEnumerable<BlogPostBlockDto> blocks)
 
         {
             var blogPost = new BlogPost();
@@ -159,7 +162,25 @@ internal sealed class BlogPost : DeletionEntity
             blogPost.AddAuthor(userId, BlogPostAuthorRole.Owner, userId);// Add the creator as the owner of the blog post
             references.ToList().ForEach(reference => blogPost.AddReference(userId, reference.Url, reference.Label));
             tags.ToList().ForEach(tag => blogPost.AddTag(tag));
-            blocks.ToList().ForEach(block => blogPost._blogPostBlocks.Add(block));
+            blocks.ToList().ForEach(block =>
+            {
+                var blogPostBlock = new BlogPostBlock(blogPost.Id, userId, block.Text, block.Type, block.Order);
+
+                if (block.Url is not null)
+                    blogPostBlock.SetUrl(block.Url);
+                if (block.FileName is not null)
+                    blogPostBlock.SetFileName(block.FileName);
+                if (block.MimeType is not null)
+                    blogPostBlock.SetFileName(block.MimeType);
+                if (block.CodeTitle is not null)
+                    blogPostBlock.SetCodeTitle(block.CodeTitle);
+                if (block.CodeLanguage is not null)
+                    blogPostBlock.SetCodeLanguage(block.CodeLanguage);
+                if (block.TextAlign is not null)
+                    blogPostBlock.SetTextAlign(block.TextAlign);
+
+                blogPost._blogPostBlocks.Add(blogPostBlock);
+            });
             return blogPost;
         }
     }
