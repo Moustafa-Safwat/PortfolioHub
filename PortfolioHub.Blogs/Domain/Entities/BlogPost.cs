@@ -19,6 +19,7 @@ internal sealed class BlogPost : DeletionEntity
     public string Description { get; private set; } = null!;
     public DateTime? PublishedAtUtc { get; private set; }
     public BlogStatus Status { get; private set; }
+    public bool IsFeatured { get; private set; } = false;
     public IReadOnlyCollection<BlogPostLike> BlogPostLikes => _blogPostLikes.AsReadOnly();
     public IReadOnlyCollection<BlogPostView> BlogPostViews => _blogPostViews.AsReadOnly();
     public IReadOnlyCollection<BlogPostAuthor> BlogPostAuthors => _blogPostAuthors.AsReadOnly();
@@ -109,6 +110,7 @@ internal sealed class BlogPost : DeletionEntity
             _blogReferences.Remove(reference);
         }
     }
+    public void SetFeatured() => IsFeatured = true;
 
     public int GetReadTimeMinutes()
     {
@@ -139,6 +141,7 @@ internal sealed class BlogPost : DeletionEntity
             string slug,
             string description,
             BlogStatus status,
+            bool isFeatured,
             IEnumerable<BlogPostTag> tags,
             IEnumerable<(string Url, string Label)> references,
             IEnumerable<BlogPostBlock> blocks)
@@ -151,6 +154,7 @@ internal sealed class BlogPost : DeletionEntity
             blogPost.Slug = Guard.Against.NullOrWhiteSpace(slug);
             blogPost.Description = Guard.Against.NullOrWhiteSpace(description);
             blogPost.Status = Guard.Against.EnumOutOfRange(status);
+            blogPost.IsFeatured = isFeatured;
             blogPost.MarkAsCreated(userId);
             blogPost.AddAuthor(userId, BlogPostAuthorRole.Owner, userId);// Add the creator as the owner of the blog post
             references.ToList().ForEach(reference => blogPost.AddReference(userId, reference.Url, reference.Label));
