@@ -109,6 +109,26 @@ internal sealed class BlogPost : DeletionEntity
             _blogReferences.Remove(reference);
         }
     }
+
+    public int GetReadTimeMinutes()
+    {
+        int averageWordsPerMinute = 200;
+
+        Func<string, int> countWords = (string text)
+                => text.Split(
+                    [' ', '\t', '\r', '\n'],
+                    StringSplitOptions.RemoveEmptyEntries).Length;
+
+        var totalWords = _blogPostBlocks
+            .Where(block =>
+                !block.IsDeleted &&
+                !string.IsNullOrWhiteSpace(block.Text) &&
+                !block.BlockType.Contains("image", StringComparison.OrdinalIgnoreCase) &&
+                !block.BlockType.Contains("file", StringComparison.OrdinalIgnoreCase))
+            .Sum(block => countWords(block.Text));
+
+        return totalWords == 0 ? 0 : (int)Math.Ceiling((double)totalWords / averageWordsPerMinute);
+    }
     // Factory
     internal class Factory
     {
