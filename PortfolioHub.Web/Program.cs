@@ -53,7 +53,7 @@ builder.Services.AddMediatR(options =>
     options.RegisterServicesFromAssemblies(assemblies.ToArray());
 });
 builder.Services.AddHttpClient<ICaptchaValidator, GoogleRecaptchaValidator>();
-
+builder.Services.AddScoped<IGetUserIdFromToken, GetUserIdFromToken>();
 // Register logging pipeline
 builder.Services.AddScoped(
     typeof(IPipelineBehavior<,>),
