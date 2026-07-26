@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PortfolioHub.Blogs.Domain.Interfaces;
 using PortfolioHub.Blogs.Infrastructure.Context;
 using PortfolioHub.Blogs.Infrastructure.DbSeed;
 using PortfolioHub.Blogs.Infrastructure.EFRepository;
@@ -17,6 +18,7 @@ public static class RegisterBlogsModule
         service.AddSqlServer<BlogsDbContext>(configuration.GetConnectionString("BlogsDb"));
 
         service.AddScoped<DbBlogTagSeeder>();
+        service.AddScoped<IBlogsRepo, EFBlogPostsRepo>();
 
         var entityTypes = typeof(RegisterBlogsModule).Assembly
        .GetTypes()
