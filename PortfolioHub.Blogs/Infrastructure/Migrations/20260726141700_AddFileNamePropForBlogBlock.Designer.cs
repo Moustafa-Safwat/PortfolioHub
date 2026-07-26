@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortfolioHub.Blogs.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using PortfolioHub.Blogs.Infrastructure.Context;
 namespace PortfolioHub.Blogs.Infrastructure.Migrations
 {
     [DbContext(typeof(BlogsDbContext))]
-    partial class BlogsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260726141700_AddFileNamePropForBlogBlock")]
+    partial class AddFileNamePropForBlogBlock
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

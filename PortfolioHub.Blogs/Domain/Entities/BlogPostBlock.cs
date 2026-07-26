@@ -9,6 +9,7 @@ internal sealed class BlogPostBlock : DeletionEntity
     public string Text { get; private set; } = null!;
     public string BlockType { get; private set; } = null!;
     public string? Url { get; private set; }
+    public string? FileName { get; private set; }
     public string? MimeType { get; private set; }
     public string? CodeTitle { get; private set; }
     public string? CodeLanguage { get; private set; }
@@ -35,6 +36,10 @@ internal sealed class BlogPostBlock : DeletionEntity
     public void SetMimeType(string mimeType)
     {
         MimeType = Guard.Against.NullOrWhiteSpace(mimeType);
+    }
+    public void SetFileName(string fileName)
+    {
+        FileName = Guard.Against.NullOrWhiteSpace(fileName);
     }
     public void SetCodeTitle(string codeTitle)
     {
