@@ -16,12 +16,17 @@ internal record RecaptchaResponse(
 internal sealed class GoogleRecaptchaValidator(
     HttpClient httpClient,
     IConfiguration config,
-    Serilog.ILogger logger
+    Serilog.ILogger logger,
+    IWebHostEnvironment webHostEnvironment
     ) : ICaptchaValidator
 {
     public async Task<bool> IsValidAsync(string token, string? action = null,
         CancellationToken cancellationToken = default, string? remoteIp = null)
     {
+        // Skip in development mode only to can use postman
+        if (webHostEnvironment.IsDevelopment())
+            return true;
+
         Guard.Against.NullOrEmpty(token);
 
         var secretKey = config["GoogleRecaptcha:SecretKey"]
