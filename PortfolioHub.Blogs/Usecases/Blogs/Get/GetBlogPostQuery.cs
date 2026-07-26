@@ -1,7 +1,7 @@
-﻿using PortfolioHub.Blogs.Endpoints;
+﻿using PortfolioHub.Blogs.Endpoints.Blogs;
 using ValidBuild.Sharedkernal.Domain.CQRS;
 
-namespace PortfolioHub.Blogs.Usecases.Get;
+namespace PortfolioHub.Blogs.Usecases.Blogs.Get;
 
 internal sealed record GetBlogPostQuery
 (
@@ -9,5 +9,6 @@ internal sealed record GetBlogPostQuery
     string Search,
     int PageNumber,
     int PageSize,
-    bool IsFeatured
+    bool IsFeatured,
+    Guid UserId
 ) : IQuery<GetBlogsResponse>;

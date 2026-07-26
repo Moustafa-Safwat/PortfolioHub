@@ -2,10 +2,11 @@
 using PortfolioHub.Blogs.Domain.Entities;
 using PortfolioHub.Blogs.Domain.Interfaces;
 using PortfolioHub.Blogs.Endpoints;
+using PortfolioHub.Blogs.Endpoints.Blogs;
 using PortfolioHub.SharedKernal.Config;
 using ValidBuild.Sharedkernal.Domain.CQRS;
 
-namespace PortfolioHub.Blogs.Usecases.Get;
+namespace PortfolioHub.Blogs.Usecases.Blogs.Get;
 
 internal sealed class GetBlogPostQueryHandler
 (
@@ -19,6 +20,7 @@ internal sealed class GetBlogPostQueryHandler
             request.PageSize,
             request.TagIds,
             request.Search,
+            request.UserId,
             request.IsFeatured,
             cancellationToken);
 
@@ -34,12 +36,14 @@ internal sealed class GetBlogPostQueryHandler
                 return new BlogsReadDto(
                     blog.Id,
                     blog.Title,
+                    blog.CoverImageUrl,
+                    blog.Status,
                     blog.Description,
-                    (DateTime)blog.PublishedAtUtc!,
+                    blog.PublishedAtUtc,
                     blog.GetReadTimeMinutes(),
                     blog.BlogPostLikes.Count,
                     blog.BlogComments.Count,
-                    blog.BlogPostTags
+                    blog!.BlogPostTags
                         .Select(tag => tag.Name)
                         .ToList()
                         .AsReadOnly());

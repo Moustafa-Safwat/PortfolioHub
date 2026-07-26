@@ -7,7 +7,7 @@ internal interface IReadOnlyBlogsRepo
 {
     Task<Result<BlogPost>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Result<IReadOnlyList<BlogPost>>> GetAllAsync(int pageNumber, int pageSize, List<Guid>? tagIds = null,
-        string? search = null, bool isFeatured = false, CancellationToken cancellationToken = default);
+        string? search = null, Guid userId = default, bool isFeatured = false, CancellationToken cancellationToken = default);
     Task<Result<bool>> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Result<int>> GetTotalCount(CancellationToken cancellationToken = default);
 }
