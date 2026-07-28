@@ -14,27 +14,43 @@ internal sealed class EFBlogPostsRepo
 {
     public async Task<Result> AddAsync(BlogPost blog, CancellationToken cancellationToken = default)
     {
-        Guard.Against.Null(blog);
-
         try
         {
+            Guard.Against.Null(blog);
             var result = await dbContext.BlogPost.AddAsync(blog, cancellationToken);
             return Result.Success();
         }
         catch (Exception ex)
         {
-            return Result.Error($"Failed to add project: {ex.Message}");
+            return Result.Error($"Failed to add blog: {ex.Message}");
         }
     }
 
-    public Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var blog = await GetByIdAsync(id);
+            dbContext.BlogPost.Remove(blog);
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            return Result.Error($"Failed to remove blog: {ex.Message}");
+        }
     }
 
-    public Task<Result<bool>> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        Guard.Against.Default(id);
+
+        var blog = await dbContext.BlogPost
+            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+
+        if (blog is null)
+            return Result.NotFound();
+
+        return Result.Success();
     }
 
     public async Task<Result<IReadOnlyList<BlogPost>>> GetAllAsync(int pageNumber, int pageSize, List<Guid>? tagIds = null, string? search = null, Guid userId = default, bool isFeatured = false, CancellationToken cancellationToken = default)
@@ -90,9 +106,44 @@ internal sealed class EFBlogPostsRepo
         return Result.Success<IReadOnlyList<BlogPost>>(blogs);
     }
 
-    public Task<Result<BlogPost>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<BlogPost>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        Guard.Against.Default(id);
+
+        var blog = await dbContext.BlogPost
+            .Include(b => b.BlogComments)
+            .Include(b => b.BlogPostBlocks)
+            .Include(b => b.BlogReferences)
+            .Include(b => b.BlogPostTags)
+            .Include(b => b.BlogPostLikes)
+            .Include(b => b.BlogPostAuthors)
+            .Include(b => b.BlogPostViews)
+            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+
+        if (blog is null)
+            return Result.NotFound($"Blog with id: {id.ToString()} is not found");
+
+        return Result.Success(blog);
+    }
+
+    public async Task<Result<BlogPost>> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
+    {
+        Guard.Against.NullOrWhiteSpace(slug);
+
+        var blog = await dbContext.BlogPost
+            .Include(b => b.BlogComments)
+            .Include(b => b.BlogPostBlocks)
+            .Include(b => b.BlogReferences)
+            .Include(b => b.BlogPostTags)
+            .Include(b => b.BlogPostLikes)
+            .Include(b => b.BlogPostAuthors)
+            .Include(b => b.BlogPostViews)
+            .FirstOrDefaultAsync(b => string.Equals(b.Slug, slug, StringComparison.OrdinalIgnoreCase), cancellationToken);
+
+        if (blog is null)
+            return Result.NotFound($"Blog with slug: {slug} is not found");
+
+        return Result.Success(blog);
     }
 
     public async Task<Result<int>> GetTotalCount(CancellationToken cancellationToken = default)
@@ -105,21 +156,41 @@ internal sealed class EFBlogPostsRepo
         catch (Exception ex)
         {
             // Optionally log the exception here
-            return Result<int>.Error($"Failed to get total project count: {ex.Message}");
+            return Result<int>.Error($"Failed to get total blogs count: {ex.Message}");
         }
     }
 
     public async Task<Result> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var result = await dbContext.SaveChangesAsync(cancellationToken);
-        if (result > 0)
-            return Result.Success();
-        else
-            return Result.Error("No changes were made to the database.");
+        try
+        {
+            var result = await dbContext.SaveChangesAsync(cancellationToken);
+            if (result > 0)
+                return Result.Success();
+            else
+                return Result.Error("No changes were made to the database.");
+        }
+        catch (Exception ex)
+        {
+            var errorMessages = new List<string>() { ex.Message };
+            if (ex?.InnerException is not null && !string.IsNullOrEmpty(ex?.InnerException.Message))
+                errorMessages.Add(ex?.InnerException.Message!);
+            var errors = new ErrorList([ex?.Message ?? "", ex?.InnerException?.Message ?? ""]);
+            return Result.Error(errors);
+        }
     }
 
-    public Task<Result> UpdateAsync(BlogPost blog, CancellationToken cancellationToken = default)
+    public async Task<Result> UpdateAsync(BlogPost blog, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Guard.Against.Null(blog);
+            dbContext.BlogPost.Update(blog);
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            return Result.Error($"Failed to update blog: {ex.Message}");
+        }
     }
 }
