@@ -16,19 +16,25 @@ internal sealed class BlogPostReferences : DeletionEntity
     {
         Id = Guid.NewGuid();
         BlogPostId = Guard.Against.Default(blogPostId);
-        Url = Guard.Against.NullOrWhiteSpace(url);
-        Label = Guard.Against.NullOrWhiteSpace(label);
+        SetUrl(url);
+        SetLabel(label);
         MarkAsCreated(userId);
     }
     // Methods
     public void Delete(Guid userId)
-    {
-        MarkAsDeleted(userId);
-    }
+        => MarkAsDeleted(userId);
+
     public void Update(string url, string label, Guid userId)
     {
         Url = Guard.Against.NullOrWhiteSpace(url);
         Label = Guard.Against.NullOrWhiteSpace(label);
         MarkAsUpdated(userId);
     }
+
+    public void SetUrl(string url)
+        => Url = Guard.Against.NullOrWhiteSpace(url);
+
+    public void SetLabel(string label)
+        => Label = Guard.Against.NullOrWhiteSpace(label);
+
 }

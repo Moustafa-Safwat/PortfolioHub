@@ -23,34 +23,28 @@ internal sealed class BlogPostBlock : DeletionEntity
     {
         Id = Guid.NewGuid();
         BlogPostId = Guard.Against.Default(blogPostId);
-        Text = Guard.Against.NullOrWhiteSpace(text);
-        BlockType = Guard.Against.NullOrWhiteSpace(blockType);
-        Order = Guard.Against.Negative(order);
+        SetText(text);
+        SetBlockType(blockType);
+        SetOrder(order);
         MarkAsCreated(userId);
     }
     // Methods
+    public void SetText(string text)
+        => Text = Guard.Against.NullOrWhiteSpace(text);
+    public void SetBlockType(string blockType)
+        => BlockType = Guard.Against.NullOrWhiteSpace(blockType);
     public void SetUrl(string url)
-    {
-        Url = Guard.Against.NullOrWhiteSpace(url);
-    }
+        => Url = Guard.Against.NullOrWhiteSpace(url);
     public void SetMimeType(string mimeType)
-    {
-        MimeType = Guard.Against.NullOrWhiteSpace(mimeType);
-    }
+        => MimeType = Guard.Against.NullOrWhiteSpace(mimeType);
     public void SetFileName(string fileName)
-    {
-        FileName = Guard.Against.NullOrWhiteSpace(fileName);
-    }
+        => FileName = Guard.Against.NullOrWhiteSpace(fileName);
     public void SetCodeTitle(string codeTitle)
-    {
-        CodeTitle = Guard.Against.NullOrWhiteSpace(codeTitle);
-    }
+        => CodeTitle = Guard.Against.NullOrWhiteSpace(codeTitle);
     public void SetCodeLanguage(string codeLanguage)
-    {
-        CodeLanguage = Guard.Against.NullOrWhiteSpace(codeLanguage);
-    }
+        => CodeLanguage = Guard.Against.NullOrWhiteSpace(codeLanguage);
     public void SetTextAlign(string textAlign)
-    {
-        TextAlign = Guard.Against.NullOrWhiteSpace(textAlign);
-    }
+        => TextAlign = Guard.Against.NullOrWhiteSpace(textAlign);
+    public void SetOrder(int order)
+        => Order = Guard.Against.Negative(order);
 }

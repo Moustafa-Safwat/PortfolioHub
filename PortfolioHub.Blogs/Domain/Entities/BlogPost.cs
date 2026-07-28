@@ -83,6 +83,7 @@ internal sealed class BlogPost : DeletionEntity
     }
     public void AddTag(BlogPostTag tag)
     {
+        Guard.Against.Null(tag);
         if (!_blogPostTags.Any(t => t.Name == tag.Name))
         {
             _blogPostTags.Add(tag);
@@ -96,8 +97,26 @@ internal sealed class BlogPost : DeletionEntity
             _blogPostTags.Remove(tag);
         }
     }
+    public void BlogView(Guid userId)
+    {
+        var blogView = _blogPostViews.FirstOrDefault(b => b.UserId == userId);
+        if (blogView is null)
+        {
+            var blogViewToAdd = new BlogPostView(Id, userId, DateTime.UtcNow);
+            _blogPostViews.Add(blogViewToAdd);
+        }
+        else
+        {
+            blogView.IncrementViewCount();
+        }
+    }
     public void AddReference(Guid userId, string url, string label)
     {
+        // Can't add a reference with the same url
+        var existingRefByUrl = _blogReferences.FirstOrDefault(b => b.Url == url);
+        if (existingRefByUrl is not null)
+            existingRefByUrl.MarkAsDeleted(userId);
+
         var reference = new BlogPostReferences(Id, userId, url, label);
         _blogReferences.Add(reference);
     }
@@ -110,8 +129,219 @@ internal sealed class BlogPost : DeletionEntity
             _blogReferences.Remove(reference);
         }
     }
-    public void SetFeatured() => IsFeatured = true;
+    // Setters
+    public void SetFeatured(bool isFeatured)
+        => IsFeatured = isFeatured;
+    public void SetTitle(string title)
+        => Title = Guard.Against.NullOrWhiteSpace(title);
+    public void SetCoverImageUrl(string coverImageUrl)
+        => CoverImageUrl = Guard.Against.NullOrWhiteSpace(coverImageUrl);
+    public void SetSlug(string slug)
+        => Slug = Guard.Against.NullOrWhiteSpace(slug);
+    public void SetDescription(string description)
+        => Description = Guard.Against.NullOrWhiteSpace(description);
+    public void SetStatus(BlogStatus status)
+        => Status = Guard.Against.EnumOutOfRange(status);
+    // Update
+    public void UpdateTags(IEnumerable<BlogPostTag> tagsToUpdate)
+    {
+        Guard.Against.Null(tagsToUpdate);
 
+        var requestedTags = tagsToUpdate
+            .Where(tag => tag is not null)
+            .GroupBy(tag => tag.Id)
+            .Select(group => group.First())
+            .ToList();
+
+        if (requestedTags.Any(tag => tag.Id == Guid.Empty))
+            throw new ArgumentException("A tag cannot have an empty ID.", nameof(tagsToUpdate));
+
+        var requestedTagIds = requestedTags
+            .Select(tag => tag.Id)
+            .ToHashSet();
+
+        var currentTagIds = _blogPostTags
+            .Select(tag => tag.Id)
+            .ToHashSet();
+
+        var tagsToRemove = _blogPostTags
+            .Where(tag => !requestedTagIds.Contains(tag.Id))
+            .ToList();
+
+        var tagsToAdd = requestedTags
+            .Where(tag => !currentTagIds.Contains(tag.Id))
+            .ToList();
+
+        if (tagsToRemove.Count == 0 && tagsToAdd.Count == 0)
+            return;
+
+        tagsToRemove.ForEach(tag => RemoveTag(tag));
+        tagsToAdd.ForEach(tag => AddTag(tag));
+    }
+    public void UpdateReferences(IEnumerable<BlogPostReferenceIdDto> referencesToUpdate, Guid userId)
+    {
+        Guard.Against.Null(referencesToUpdate);
+        Guard.Against.Default(userId);
+
+        var existingBlogRefIds = _blogReferences.Select(blogRef => blogRef.Id);
+        var blogRefToBeUpdated = referencesToUpdate.Select(b => b.Id);
+
+        existingBlogRefIds
+            .Except(blogRefToBeUpdated)
+            .ToList()
+            .ForEach(blogRefId => RemoveReference(userId, blogRefId));
+
+        referencesToUpdate
+            .ToList()
+            .ForEach(refToUpdate =>
+            {
+                var exisitingBlogRef = _blogReferences
+                    .FirstOrDefault(reference => reference.Id == refToUpdate.Id);
+                if (exisitingBlogRef is not null)
+                {
+                    // existing blog => need to be updated
+                    exisitingBlogRef.Update(refToUpdate.Url, refToUpdate.Label, userId);
+                }
+                else
+                {
+                    if (!existingBlogRefIds.Contains(refToUpdate.Id))
+                    {
+                        // new blog reference
+                        AddReference(userId, refToUpdate.Url, refToUpdate.Label);
+                    }
+                    else
+                    {
+                        // removed blog reference
+                        RemoveReference(userId, refToUpdate.Id);
+                    }
+                }
+            });
+    }
+    public void UpdateBlogBlock(IEnumerable<BlogPostBlockIdDto> blocksToUpdate, Guid userId)
+    {
+        Guard.Against.Null(blocksToUpdate);
+        Guard.Against.Default(userId);
+
+        var requestedBlocks = blocksToUpdate
+            .Select(b => new BlogPostBlockIdDto(
+                b.Id,
+                Guard.Against.NullOrWhiteSpace(b.Type).Trim(),
+                Guard.Against.NullOrWhiteSpace(b.Text).Trim(),
+                Guard.Against.Negative(b.Order),
+                b.Url?.Trim(),
+                b.FileName?.Trim(),
+                b.MimeType?.Trim(),
+                b.CodeTitle?.Trim(),
+                b.CodeLanguage?.Trim(),
+                b.TextAlign?.Trim()))
+            .ToList();
+
+        // Ensure there are no duplicate IDs for existing blocks
+        var duplicateIds = requestedBlocks
+            .Where(b => b.Id != Guid.Empty)
+            .GroupBy(b => b.Id)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToList();
+
+        if (duplicateIds.Count > 0)
+            throw new ArgumentException($"Duplicate block IDs were provided: {string.Join(", ", duplicateIds)}.", nameof(blocksToUpdate));
+
+        // Ensure no duplicate order positions in the requested set
+        var duplicateOrders = requestedBlocks
+            .GroupBy(b => b.Order)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToList();
+
+        if (duplicateOrders.Count > 0)
+            throw new ArgumentException($"Duplicate block orders were provided: {string.Join(", ", duplicateOrders)}.", nameof(blocksToUpdate));
+
+        var activeBlocks = _blogPostBlocks
+            .Where(b => !b.IsDeleted)
+            .ToList();
+
+        var activeBlocksById = activeBlocks
+            .ToDictionary(b => b.Id);
+
+        var requestedExistingIds = requestedBlocks
+            .Where(b => b.Id != Guid.Empty)
+            .Select(b => b.Id)
+            .ToHashSet();
+
+        // Mark blocks that are no longer present as deleted
+        var blocksToRemove = activeBlocks
+            .Where(b => !requestedExistingIds.Contains(b.Id))
+            .ToList();
+
+        foreach (var block in blocksToRemove)
+        {
+            block.MarkAsDeleted(userId);
+        }
+
+        var existsingPostBlockIds = _blogPostBlocks.Select(b => b.Id);
+        // Apply requested changes and add new blocks
+        foreach (var requested in requestedBlocks)
+        {
+            if (!existsingPostBlockIds.Contains(requested.Id))
+            {
+                var newBlock = new BlogPostBlock(Id, userId, requested.Text, requested.Type, requested.Order);
+
+                if (!string.IsNullOrWhiteSpace(requested.Url))
+                    newBlock.SetUrl(requested.Url!);
+                if (!string.IsNullOrWhiteSpace(requested.FileName))
+                    newBlock.SetFileName(requested.FileName!);
+                if (!string.IsNullOrWhiteSpace(requested.MimeType))
+                    newBlock.SetMimeType(requested.MimeType!);
+                if (!string.IsNullOrWhiteSpace(requested.CodeTitle))
+                    newBlock.SetCodeTitle(requested.CodeTitle!);
+                if (!string.IsNullOrWhiteSpace(requested.CodeLanguage))
+                    newBlock.SetCodeLanguage(requested.CodeLanguage!);
+                if (!string.IsNullOrWhiteSpace(requested.TextAlign))
+                    newBlock.SetTextAlign(requested.TextAlign!);
+
+                _blogPostBlocks.Add(newBlock);
+                continue;
+            }
+
+            if (!activeBlocksById.TryGetValue(requested.Id, out var existingBlock))
+                throw new InvalidOperationException($"Block '{requested.Id}' does not belong to this blog post.");
+
+            var typeChanged = !string.Equals(existingBlock.BlockType, requested.Type, StringComparison.Ordinal);
+            var textChanged = !string.Equals(existingBlock.Text, requested.Text, StringComparison.Ordinal);
+            var orderChanged = existingBlock.Order != requested.Order;
+            var urlChanged = !string.Equals(existingBlock.Url ?? string.Empty, requested.Url ?? string.Empty, StringComparison.Ordinal);
+            var fileNameChanged = !string.Equals(existingBlock.FileName ?? string.Empty, requested.FileName ?? string.Empty, StringComparison.Ordinal);
+            var mimeChanged = !string.Equals(existingBlock.MimeType ?? string.Empty, requested.MimeType ?? string.Empty, StringComparison.Ordinal);
+            var codeTitleChanged = !string.Equals(existingBlock.CodeTitle ?? string.Empty, requested.CodeTitle ?? string.Empty, StringComparison.Ordinal);
+            var codeLangChanged = !string.Equals(existingBlock.CodeLanguage ?? string.Empty, requested.CodeLanguage ?? string.Empty, StringComparison.Ordinal);
+            var textAlignChanged = !string.Equals(existingBlock.TextAlign ?? string.Empty, requested.TextAlign ?? string.Empty, StringComparison.Ordinal);
+
+            if (!typeChanged && !textChanged && !orderChanged && !urlChanged && !fileNameChanged && !mimeChanged && !codeTitleChanged && !codeLangChanged && !textAlignChanged)
+                continue;
+
+            if (typeChanged)
+                existingBlock.SetBlockType(requested.Type);
+            if (textChanged)
+                existingBlock.SetText(requested.Text);
+            if (orderChanged)
+                existingBlock.SetOrder(requested.Order);
+            if (urlChanged)
+                existingBlock.SetUrl(requested.Url ?? string.Empty);
+            if (fileNameChanged)
+                existingBlock.SetFileName(requested.FileName ?? string.Empty);
+            if (mimeChanged)
+                existingBlock.SetMimeType(requested.MimeType ?? string.Empty);
+            if (codeTitleChanged)
+                existingBlock.SetCodeTitle(requested.CodeTitle ?? string.Empty);
+            if (codeLangChanged)
+                existingBlock.SetCodeLanguage(requested.CodeLanguage ?? string.Empty);
+            if (textAlignChanged)
+                existingBlock.SetTextAlign(requested.TextAlign ?? string.Empty);
+
+            existingBlock.MarkAsUpdated(userId);
+        }
+    }
     public int GetReadTimeMinutes()
     {
         int averageWordsPerMinute = 200;
@@ -120,9 +350,9 @@ internal sealed class BlogPost : DeletionEntity
             return 0;
 
         Func<string, int> countWords = (string text)
-                => text.Split(
-                    [' ', '\t', '\r', '\n'],
-                    StringSplitOptions.RemoveEmptyEntries).Length;
+            => text.Split(
+                [' ', '\t', '\r', '\n'],
+                StringSplitOptions.RemoveEmptyEntries).Length;
 
         var totalWords = _blogPostBlocks
             .Where(block =>
@@ -152,12 +382,12 @@ internal sealed class BlogPost : DeletionEntity
         {
             var blogPost = new BlogPost();
             blogPost.Id = Guid.NewGuid();
-            blogPost.Title = Guard.Against.NullOrWhiteSpace(title);
-            blogPost.CoverImageUrl = Guard.Against.NullOrWhiteSpace(coverImageUrl);
-            blogPost.Slug = Guard.Against.NullOrWhiteSpace(slug);
-            blogPost.Description = Guard.Against.NullOrWhiteSpace(description);
-            blogPost.Status = Guard.Against.EnumOutOfRange(status);
-            blogPost.IsFeatured = isFeatured;
+            blogPost.SetTitle(title);
+            blogPost.SetCoverImageUrl(coverImageUrl);
+            blogPost.SetSlug(slug);
+            blogPost.SetDescription(description);
+            blogPost.SetStatus(status);
+            blogPost.SetFeatured(isFeatured);
             blogPost.MarkAsCreated(userId);
             blogPost.AddAuthor(userId, BlogPostAuthorRole.Owner, userId);// Add the creator as the owner of the blog post
             references.ToList().ForEach(reference => blogPost.AddReference(userId, reference.Url, reference.Label));
