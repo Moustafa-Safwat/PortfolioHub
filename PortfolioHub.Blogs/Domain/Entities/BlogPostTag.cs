@@ -13,6 +13,9 @@ internal sealed class BlogPostTag : BaseEntity
     public BlogPostTag(string name)
     {
         Id = Guid.NewGuid();
-        Name = Guard.Against.NullOrWhiteSpace(name);
+        SetName(name);
     }
+
+    public void SetName(string name)
+        => Name = Guard.Against.NullOrWhiteSpace(name);
 }
