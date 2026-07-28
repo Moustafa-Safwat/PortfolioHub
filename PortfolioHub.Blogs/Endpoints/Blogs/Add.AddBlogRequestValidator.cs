@@ -69,21 +69,8 @@ internal sealed class AddBlogRequestValidator : Validator<AddBlogRequest>
             RuleFor(x => x.Order)
                 .GreaterThanOrEqualTo(0).WithMessage("Block order must be zero or greater.");
 
-            //RuleFor(x => x.Url)
-            //    .Must(url => string.IsNullOrWhiteSpace(url) || url!.BeAValidUrl())
-            //    .WithMessage("If provided, block URL must be a valid URL.");
-
-            //RuleFor(x => x.FileName)
-            //    .MaximumLength(250).WithMessage("File name must not exceed 250 characters.");
-
             RuleFor(x => x.MimeType)
                 .MaximumLength(150).WithMessage("Mime type must not exceed 150 characters.");
-
-            //RuleFor(x => x.CodeTitle)
-            //    .MaximumLength(250).WithMessage("Code title must not exceed 250 characters.");
-
-            //RuleFor(x => x.CodeLanguage)
-            //    .MaximumLength(100).WithMessage("Code language must not exceed 100 characters.");
 
             RuleFor(x => x.TextAlign)
                 .MaximumLength(20).WithMessage("Text align must not exceed 20 characters.");
