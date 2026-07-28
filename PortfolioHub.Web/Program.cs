@@ -99,6 +99,11 @@ app.UseAuthentication()
               {
                   configure.AuthSchemes(JwtBearerDefaults.AuthenticationScheme);
               };
+       options.Errors.ResponseBuilder =
+        (failures, httpContext, statusCode) =>
+        {
+            return failures.ToArdalisResult();
+        };
    });
 
 app.ApplyPendingMigrations(assemblies);
