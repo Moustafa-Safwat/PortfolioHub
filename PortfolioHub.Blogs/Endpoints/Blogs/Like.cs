@@ -15,7 +15,6 @@ internal sealed class Like
     public override void Configure()
     {
         Put("/blogs/{blogId}/like");
-        Roles(["admin", "contributor"]);
         Claims(ClaimTypes.NameIdentifier);
     }
 
