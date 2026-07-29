@@ -59,8 +59,8 @@ internal sealed class BlogPost : DeletionEntity
         var like = _blogPostLikes.FirstOrDefault(b => b.UserId == userId);
         if (like is not null)
         {
+            // soft delete
             like.UnLike();
-            _blogPostLikes.Remove(like);
         }
     }
     public void AddAuthor(Guid userId, BlogPostAuthorRole role, Guid addedByUserId)
