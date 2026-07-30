@@ -26,7 +26,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\PortfolioHub.Notification.Contract\PortfolioHub.Notification.Contract.csproj" />
-	  <ProjectReference Include="..\PortfolioHub.SharedKernal\PortfolioHub.SharedKernal.csproj" />
 	  <ProjectReference Include="..\PortfolioHub.Users.Contract\PortfolioHub.Users.Contract.csproj" />
 	</ItemGroup>
 
