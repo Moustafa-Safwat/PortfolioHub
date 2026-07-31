@@ -14,7 +14,7 @@ internal sealed class Update
 {
     public override void Configure()
     {
-        Put("/api/blogs/{blogId:guid}/comments/{commentId:guid}");
+        Put("/blogs/{blogId:guid}/comments/{commentId:guid}");
         Claims(ClaimTypes.NameIdentifier);
     }
 
