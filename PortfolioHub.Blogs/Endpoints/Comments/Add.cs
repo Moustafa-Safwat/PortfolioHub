@@ -14,7 +14,7 @@ internal sealed class Add
 {
     public override void Configure()
     {
-        Post("/api/blogs/{blogId:guid}/comments");
+        Post("/blogs/{blogId:guid}/comments");
         Claims(ClaimTypes.NameIdentifier);
     }
 
