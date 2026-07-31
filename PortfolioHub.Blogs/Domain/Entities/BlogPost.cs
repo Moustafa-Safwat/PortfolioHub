@@ -129,6 +129,28 @@ internal sealed class BlogPost : DeletionEntity
             _blogReferences.Remove(reference);
         }
     }
+    public Guid AddComment(Guid userId, string comment, Guid? parentCommentGuid)
+    {
+        var parentComment = _blogComments.FirstOrDefault(comment => comment.Id == parentCommentGuid);
+        var newComment = new BlogPostComment(Id, userId, comment);
+        if (parentCommentGuid is not null && parentComment is not null)
+        {
+            parentComment.AddReply(newComment);
+        }
+        else
+        {
+            _blogComments.Add(newComment);
+        }
+        return newComment.Id;
+    }
+    public void RemoveComment(Guid userId, Guid commentId)
+    {
+        var comment = _blogComments.FirstOrDefault(comment => comment.Id == commentId);
+        if (comment is not null)
+        {
+            comment.MarkAsDeleted(userId);
+        }
+    }
     // Setters
     public void SetFeatured(bool isFeatured)
         => IsFeatured = isFeatured;

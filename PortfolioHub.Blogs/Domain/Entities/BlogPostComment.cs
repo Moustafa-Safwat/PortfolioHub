@@ -24,7 +24,7 @@ internal sealed class BlogPostComment : DeletionEntity
         Id = Guid.NewGuid();
         BlogPostId = Guard.Against.Default(blogPostId);
         UserId = Guard.Against.Default(userId);
-        Content = Guard.Against.NullOrWhiteSpace(content);
+        SetContent(content);
         MarkAsCreated(userId);
     }
     // Methods
@@ -42,4 +42,7 @@ internal sealed class BlogPostComment : DeletionEntity
             _mentions.Add(userId);
         }
     }
+
+    public void SetContent(string content)
+        => Content = Guard.Against.NullOrWhiteSpace(content);
 }
