@@ -14,7 +14,7 @@ internal sealed class Get
 {
     public override void Configure()
     {
-        Get("/api/blogs/{blogId:guid}/comments");
+        Get("/blogs/{blogId:guid}/comments");
         Claims(ClaimTypes.NameIdentifier);
     }
 
