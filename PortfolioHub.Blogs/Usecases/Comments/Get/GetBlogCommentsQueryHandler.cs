@@ -30,8 +30,7 @@ internal sealed class GetBlogCommentsQueryHandler
         var rootComments = blogPost.BlogComments
             .Where(comment =>
                 !comment.IsDeleted &&
-                comment.Replies is not null &&
-                comment.Replies.Any())
+                comment.Replies is not null)
             .OrderByDescending(comment => comment.CreatedAtUtc)
             .Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize)
