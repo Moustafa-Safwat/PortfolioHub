@@ -130,6 +130,8 @@ internal sealed class EFBlogPostsRepo
     {
         Guard.Against.NullOrWhiteSpace(slug);
 
+        var normalizedSlug = slug.Trim();
+
         var blog = await dbContext.BlogPost
             .Include(b => b.BlogComments)
             .Include(b => b.BlogPostBlocks)
@@ -138,7 +140,7 @@ internal sealed class EFBlogPostsRepo
             .Include(b => b.BlogPostLikes)
             .Include(b => b.BlogPostAuthors)
             .Include(b => b.BlogPostViews)
-            .FirstOrDefaultAsync(b => string.Equals(b.Slug, slug, StringComparison.OrdinalIgnoreCase), cancellationToken);
+            .FirstOrDefaultAsync(b => b.Slug == normalizedSlug, cancellationToken);
 
         if (blog is null)
             return Result.NotFound($"Blog with slug: {slug} is not found");
