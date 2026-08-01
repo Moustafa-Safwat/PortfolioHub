@@ -149,6 +149,10 @@ internal sealed class BlogPost : DeletionEntity
         if (comment is not null)
         {
             comment.MarkAsDeleted(userId);
+            comment.Replies
+                .SelectMany(reply => reply.Replies)
+                .ToList()
+                .ForEach(reply => reply.MarkAsDeleted(userId));
         }
     }
     public int CommentsCount()

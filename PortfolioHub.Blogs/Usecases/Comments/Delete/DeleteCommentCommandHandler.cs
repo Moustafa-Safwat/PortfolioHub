@@ -27,7 +27,7 @@ internal sealed class DeleteCommentCommandHandler
             return Result.Error(error);
         }
 
-        commnetToDelete.MarkAsDeleted(request.UserId);
+        blog.RemoveComment(request.UserId, request.CommentId);
 
         var saveResult = await blogsRepo.SaveChangesAsync(cancellationToken);
         if (!saveResult.IsSuccess)
