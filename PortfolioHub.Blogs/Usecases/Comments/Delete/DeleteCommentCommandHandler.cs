@@ -21,6 +21,12 @@ internal sealed class DeleteCommentCommandHandler
         if (commnetToDelete is null)
             return Result.NotFound($"Blog comment with id: {request.CommentId} is not found for blog id: {request.BlogId}");
 
+        if (commnetToDelete.UserId != request.UserId)
+        {
+            var error = new ErrorList(["Only the comment author can delete this comment"]);
+            return Result.Error(error);
+        }
+
         commnetToDelete.MarkAsDeleted(request.UserId);
 
         var saveResult = await blogsRepo.SaveChangesAsync(cancellationToken);

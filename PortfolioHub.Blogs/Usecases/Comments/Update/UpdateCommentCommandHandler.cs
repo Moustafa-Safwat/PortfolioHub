@@ -22,6 +22,12 @@ internal sealed class UpdateCommentCommandHandler
         if (blocCommentToUpdate is null)
             return Result.NotFound($"Comment is not found with id: {request.Comment}");
 
+        if (blocCommentToUpdate.UserId != request.UserId)
+        {
+            var error = new ErrorList(["Only the comment author can edit this comment"]);
+            return Result.Error(error);
+        }
+
         blocCommentToUpdate.SetContent(request.Comment);
         blocCommentToUpdate.MarkAsUpdated(request.UserId);
 
