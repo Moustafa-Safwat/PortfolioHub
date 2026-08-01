@@ -10,6 +10,7 @@ internal sealed class BlogPostComment : DeletionEntity
 
     public Guid BlogPostId { get; private set; }
     public Guid UserId { get; private set; }
+    public Guid? ParentCommentId { get; private set; }
     public string Content { get; private set; } = null!;
     public IReadOnlyCollection<BlogPostComment> Replies => _replies.AsReadOnly();
     public IReadOnlyCollection<Guid> Mentions => _mentions.AsReadOnly();

@@ -26,95 +26,41 @@ internal sealed class GetBlogCommentsQueryHandler
 
         var blogPost = blogResult.Value;
 
-        // Pagination should normally be applied only to root comments.
-        var rootComments = blogPost.BlogComments
-            .Where(comment =>
-                !comment.IsDeleted &&
-                comment.Replies is not null)
-            .OrderByDescending(comment => comment.CreatedAtUtc)
-            .Skip((request.PageNumber - 1) * request.PageSize)
-            .Take(request.PageSize)
-            .ToList();
+        var blogComments = blogPost.BlogComments.Where(c => c.ParentCommentId is null);
 
-        if (rootComments.Count == 0)
-        {
-            return Result.Success<IReadOnlyCollection<GetCommentsResponse>>(
-                Array.Empty<GetCommentsResponse>());
-        }
-
-        // Include user IDs from both root comments and all nested replies.
-        var userIds = rootComments
-            .SelectMany(FlattenCommentTree)
-            .Where(comment => !comment.IsDeleted)
+        var userIds = blogComments
             .Select(comment => comment.UserId)
-            .Distinct()
-            .ToArray();
+            .Concat(blogComments.SelectMany(comment => comment.Replies)
+                                .Select(reply => reply.UserId)
+            ).Distinct();
 
-        var usersResult = await sender.Send(
-            new GetUsersByIdQuery(userIds),
-            cancellationToken);
+        var getUserQuery = new GetUsersByIdQuery(userIds);
+        var userQueryResult = await sender.Send(getUserQuery);
+        if (!userQueryResult.IsSuccess)
+            return userQueryResult.PropagateFailure<IEnumerable<GetUserDto>, IReadOnlyCollection<GetCommentsResponse>>(); ;
 
-        if (!usersResult.IsSuccess)
-        {
-            return usersResult.PropagateFailure<
-                IEnumerable<GetUserDto>,
-                IReadOnlyCollection<GetCommentsResponse>>();
-        }
+        var usersData = userQueryResult.Value;
 
-        var usersById = usersResult.Value
-            .GroupBy(user => user.Id)
-            .ToDictionary(
-                group => group.Key,
-                group => group.First());
+        var response = blogComments
+            .Select(c => MapComment(c, usersData))
+            .ToList()
+            .AsReadOnly();
 
-        var response = rootComments
-            .Select(comment => MapComment(
-                comment,
-                usersById))
-            .ToArray();
-
-        return Result.Success<IReadOnlyCollection<GetCommentsResponse>>(
-            response);
+        return Result.Success<IReadOnlyCollection<GetCommentsResponse>>(response);
     }
 
-    private static IEnumerable<BlogPostComment> FlattenCommentTree(
-        BlogPostComment comment)
+    private GetCommentsResponse MapComment(BlogPostComment blogComments, IEnumerable<GetUserDto> usersData)
     {
-        yield return comment;
-
-        foreach (var reply in comment.Replies)
-        {
-            foreach (var nestedComment in FlattenCommentTree(reply))
-            {
-                yield return nestedComment;
-            }
-        }
-    }
-
-    private static GetCommentsResponse MapComment(
-        BlogPostComment comment,
-        IReadOnlyDictionary<Guid, GetUserDto> usersById)
-    {
-        usersById.TryGetValue(
-            comment.UserId,
-            out var user);
-
-        var replies = comment.Replies
-            .Where(reply => !reply.IsDeleted)
-            .OrderBy(reply => reply.CreatedAtUtc)
-            .Select(reply => MapComment(
-                reply,
-                usersById))
-            .ToArray();
-
-        return new GetCommentsResponse(
-            comment.Id,
-            user?.Id ?? Guid.Empty,
-            user?.FirstName ?? "-",
-            user?.LastName ?? "-",
-            comment.Content,
-            comment.CreatedAtUtc,
-            comment.UpdatedAtUtc is not null,
-            replies);
+        return new GetCommentsResponse
+        (
+          blogComments.Id,
+          blogComments.UserId,
+          usersData.FirstOrDefault(u => u.Id == blogComments.UserId)?.FirstName ?? "NA",
+          usersData.FirstOrDefault(u => u.Id == blogComments.UserId)?.LastName ?? "NA",
+          blogComments.Content,
+          blogComments.CreatedAtUtc,
+          blogComments.UpdatedAtUtc is not null,
+          blogComments.Replies.Select(reply => MapComment(reply, usersData)).ToList()
+        );
     }
 }
