@@ -7,5 +7,6 @@ internal sealed record GetCommentsResponse
     string UserLastName,
     string Comment,
     DateTime CreatedAtUtc,
+    bool IsEdited,
     IReadOnlyCollection<GetCommentsResponse> Replies
 );
