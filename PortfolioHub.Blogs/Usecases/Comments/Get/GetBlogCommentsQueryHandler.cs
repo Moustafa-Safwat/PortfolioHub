@@ -109,6 +109,7 @@ internal sealed class GetBlogCommentsQueryHandler
 
         return new GetCommentsResponse(
             comment.Id,
+            user?.Id ?? Guid.Empty,
             user?.FirstName ?? "-",
             user?.LastName ?? "-",
             comment.Content,

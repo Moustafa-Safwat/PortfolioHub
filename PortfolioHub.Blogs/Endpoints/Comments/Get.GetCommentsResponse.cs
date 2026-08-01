@@ -3,6 +3,7 @@
 internal sealed record GetCommentsResponse
 (
     Guid Id,
+    Guid UserId,
     string UserFirstName,
     string UserLastName,
     string Comment,
