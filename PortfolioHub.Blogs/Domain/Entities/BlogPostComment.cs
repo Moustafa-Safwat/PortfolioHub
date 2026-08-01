@@ -45,4 +45,7 @@ internal sealed class BlogPostComment : DeletionEntity
 
     public void SetContent(string content)
         => Content = Guard.Against.NullOrWhiteSpace(content);
+
+    public int GetRepliesCount()
+        => _replies.SelectMany(reply => reply.Replies).Count();
 }

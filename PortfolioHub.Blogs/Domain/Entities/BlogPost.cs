@@ -151,6 +151,10 @@ internal sealed class BlogPost : DeletionEntity
             comment.MarkAsDeleted(userId);
         }
     }
+    public int CommentsCount()
+    {
+        return _blogComments.Count + _blogComments.Sum(comment => comment.GetRepliesCount());
+    }
     // Setters
     public void SetFeatured(bool isFeatured)
         => IsFeatured = isFeatured;
