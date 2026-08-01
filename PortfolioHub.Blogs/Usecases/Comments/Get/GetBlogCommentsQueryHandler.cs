@@ -113,6 +113,7 @@ internal sealed class GetBlogCommentsQueryHandler
             user?.LastName ?? "-",
             comment.Content,
             comment.CreatedAtUtc,
+            comment.UpdatedAtUtc is not null,
             replies);
     }
 }
