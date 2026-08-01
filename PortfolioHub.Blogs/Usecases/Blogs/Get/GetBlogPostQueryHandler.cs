@@ -35,6 +35,7 @@ internal sealed class GetBlogPostQueryHandler
                 return new BlogsReadDto(
                     blog.Id,
                     blog.Title,
+                    blog.Slug,
                     blog.CoverImageUrl,
                     blog.Status,
                     blog.Description,
