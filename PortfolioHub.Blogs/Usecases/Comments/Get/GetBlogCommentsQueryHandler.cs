@@ -28,6 +28,9 @@ internal sealed class GetBlogCommentsQueryHandler
 
         var blogComments = blogPost.BlogComments.Where(c => c.ParentCommentId is null);
 
+        if (!blogComments.Any())
+            return Result.SuccessWithMessage("No comments found for this artical");
+
         var userIds = blogComments
             .Select(comment => comment.UserId)
             .Concat(blogComments.SelectMany(comment => comment.Replies)

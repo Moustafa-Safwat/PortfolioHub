@@ -44,6 +44,17 @@ internal sealed class BlogPostComment : DeletionEntity
         }
     }
 
+    public void RemoveReplies(Guid userId)
+    {
+        _replies
+            .ToList()
+            .ForEach(reply =>
+            {
+                reply.MarkAsDeleted(userId);
+                reply.RemoveReplies(userId);
+            });
+    }
+
     public void SetContent(string content)
         => Content = Guard.Against.NullOrWhiteSpace(content);
 
