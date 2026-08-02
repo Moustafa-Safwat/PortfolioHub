@@ -13,4 +13,6 @@ internal sealed record BlogsReadDto(
     int ReadTime,
     int LikesNo,
     int CommentsNo,
+    int ViewNo,
+    bool IsFeatured,
     IReadOnlyCollection<string> Tags);
