@@ -51,6 +51,7 @@ internal sealed class GetBlogByIdQueryHandler
             blog.CoverImageUrl,
             blog.Slug,
             blog.Description,
+            blog.IsFeatured,
             blog.Status,
             blog.PublishedAtUtc,
             blog.GetReadTimeMinutes(),

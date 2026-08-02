@@ -8,6 +8,7 @@ internal sealed record BlogDetailsDto(
     string CoverImageUrl,
     string Slug,
     string Description,
+    bool IsFeatured,
     BlogStatus Status,
     DateTime? PublishedAt,
     int ReadTime,

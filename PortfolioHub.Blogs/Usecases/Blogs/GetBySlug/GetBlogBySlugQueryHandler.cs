@@ -45,6 +45,7 @@ internal sealed class GetBlogBySlugQueryHandler
             blog.CoverImageUrl,
             blog.Slug,
             blog.Description,
+            blog.IsFeatured,
             blog.Status,
             blog.PublishedAtUtc,
             blog.GetReadTimeMinutes(),
