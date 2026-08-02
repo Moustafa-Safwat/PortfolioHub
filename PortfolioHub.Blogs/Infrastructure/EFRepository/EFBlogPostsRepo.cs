@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PortfolioHub.Blogs.Domain.Entities;
 using PortfolioHub.Blogs.Domain.Interfaces;
 using PortfolioHub.Blogs.Infrastructure.Context;
+using PortfolioHub.SharedKernal.Config;
 
 namespace PortfolioHub.Blogs.Infrastructure.EFRepository;
 
@@ -30,7 +31,24 @@ internal sealed class EFBlogPostsRepo
     {
         try
         {
-            var blog = await GetByIdAsync(id, query => IncludeAll(query), cancellationToken);
+            var blogResult = await GetByIdAsync(
+                id,
+                query => IncludeAll(query).IgnoreQueryFilters(),
+                cancellationToken);
+
+            if (!blogResult.IsSuccess)
+                return blogResult.PropagateFailure();
+
+            var blog = blogResult.Value;
+
+            blog.BlogComments
+                .GroupBy(c => c.ParentCommentId)
+                .Where(c => c.Key is not null)
+                .ToList()
+                .ForEach(comments => dbContext.BlogPostComments.RemoveRange(comments));
+
+            await dbContext.SaveChangesAsync(cancellationToken);
+
             dbContext.BlogPost.Remove(blog);
             return Result.Success();
         }
