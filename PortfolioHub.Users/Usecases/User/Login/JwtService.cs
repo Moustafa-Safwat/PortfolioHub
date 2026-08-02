@@ -29,6 +29,8 @@ internal sealed class JwtService(
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim(ClaimTypes.Email, user.Email!),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim("FirstName", user.FirstName),
+            new Claim("LastName", user.LastName),
         };
 
         var token = JwtBearer.CreateToken(options =>
