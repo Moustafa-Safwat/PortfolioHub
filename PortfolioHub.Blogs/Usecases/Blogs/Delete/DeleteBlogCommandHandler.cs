@@ -14,7 +14,11 @@ internal sealed class DeleteBlogCommandHandler
     {
         try
         {
-            var existingBlogResult = await blogsRepo.GetByIdAsync(request.BlogId, cancellationToken);
+            var existingBlogResult = await blogsRepo.GetByIdAsync(
+                request.BlogId,
+                null!,
+                cancellationToken);
+
             if (!existingBlogResult.IsSuccess)
                 return existingBlogResult.PropagateFailure();
 

@@ -45,12 +45,14 @@ internal sealed class GetBlogBySlugQueryHandler
             blog.CoverImageUrl,
             blog.Slug,
             blog.Description,
+            blog.IsFeatured,
             blog.Status,
             blog.PublishedAtUtc,
             blog.GetReadTimeMinutes(),
-            blog.BlogPostLikes.Count,
+            blog.BlogPostLikes.Where(b => b.IsLiked).Count(),
             blog.BlogComments.Count,
-            blog.BlogPostViews.Sum(b => b.ViewCount),
+            blog.BlogPostViews.Count,
+            blog.BlogPostLikes.Any(b => b.UserId == request.UserId && b.IsLiked),
             blog.BlogPostTags
                 .Select(t => t.Name)
                 .ToList()

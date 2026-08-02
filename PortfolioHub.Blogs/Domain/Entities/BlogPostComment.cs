@@ -10,6 +10,7 @@ internal sealed class BlogPostComment : DeletionEntity
 
     public Guid BlogPostId { get; private set; }
     public Guid UserId { get; private set; }
+    public Guid? ParentCommentId { get; private set; }
     public string Content { get; private set; } = null!;
     public IReadOnlyCollection<BlogPostComment> Replies => _replies.AsReadOnly();
     public IReadOnlyCollection<Guid> Mentions => _mentions.AsReadOnly();
@@ -43,6 +44,20 @@ internal sealed class BlogPostComment : DeletionEntity
         }
     }
 
+    public void RemoveReplies(Guid userId)
+    {
+        _replies
+            .ToList()
+            .ForEach(reply =>
+            {
+                reply.MarkAsDeleted(userId);
+                reply.RemoveReplies(userId);
+            });
+    }
+
     public void SetContent(string content)
         => Content = Guard.Against.NullOrWhiteSpace(content);
+
+    public int GetRepliesCount()
+        => _replies.Sum(reply => 1 + reply.GetRepliesCount());
 }

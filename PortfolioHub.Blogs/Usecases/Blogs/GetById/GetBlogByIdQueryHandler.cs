@@ -17,7 +17,11 @@ internal sealed class GetBlogByIdQueryHandler
 {
     public async Task<Result<BlogDetailsDto>> Handle(GetBlogByIdQuery request, CancellationToken cancellationToken)
     {
-        var blogRes = await blogsRepo.GetByIdAsync(request.BlogId, cancellationToken);
+        var blogRes = await blogsRepo.GetByIdAsync(
+            request.BlogId,
+            blogsRepo.IncludeAll, // Include all related entities
+            cancellationToken);
+
         if (!blogRes.IsSuccess)
             return blogRes.PropagateFailure<BlogPost, BlogDetailsDto>();
 
@@ -51,12 +55,14 @@ internal sealed class GetBlogByIdQueryHandler
             blog.CoverImageUrl,
             blog.Slug,
             blog.Description,
+            blog.IsFeatured,
             blog.Status,
             blog.PublishedAtUtc,
             blog.GetReadTimeMinutes(),
-            blog.BlogPostLikes.Count,
+            blog.BlogPostLikes.Where(b => b.IsLiked).Count(),
             blog.BlogComments.Count,
-            blog.BlogPostViews.Sum(b => b.ViewCount),
+            blog.BlogPostViews.Count,
+            blog.BlogPostLikes.Any(b => b.UserId == request.UserId && b.IsLiked),
             blog.BlogPostTags
                 .Select(t => t.Name)
                 .ToList()

@@ -30,7 +30,7 @@ internal sealed class EFBlogPostsRepo
     {
         try
         {
-            var blog = await GetByIdAsync(id);
+            var blog = await GetByIdAsync(id, query => IncludeAll(query), cancellationToken);
             dbContext.BlogPost.Remove(blog);
             return Result.Success();
         }
@@ -62,13 +62,13 @@ internal sealed class EFBlogPostsRepo
 
         var queryable = dbContext.BlogPost
             .Include(b => b.BlogComments)
-            .Include(b => b.BlogPostBlocks)
-            .Include(b => b.BlogReferences)
             .Include(b => b.BlogPostTags)
+            .Include(b => b.BlogPostBlocks)
             .Include(b => b.BlogPostLikes)
             .Include(b => b.BlogPostAuthors)
             .Include(b => b.BlogPostViews)
             .OrderByDescending(b => b.CreatedAtUtc)
+            .AsSplitQuery()
             .AsQueryable();
 
         if (userId == Guid.Empty)
@@ -106,24 +106,40 @@ internal sealed class EFBlogPostsRepo
         return Result.Success<IReadOnlyList<BlogPost>>(blogs);
     }
 
-    public async Task<Result<BlogPost>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Result<BlogPost>> GetByIdAsync(
+        Guid id,
+        Func<IQueryable<BlogPost>, IQueryable<BlogPost>>? queryBuilder,
+        CancellationToken cancellationToken = default)
     {
         Guard.Against.Default(id);
 
-        var blog = await dbContext.BlogPost
-            .Include(b => b.BlogComments)
-            .Include(b => b.BlogPostBlocks)
-            .Include(b => b.BlogReferences)
-            .Include(b => b.BlogPostTags)
-            .Include(b => b.BlogPostLikes)
-            .Include(b => b.BlogPostAuthors)
-            .Include(b => b.BlogPostViews)
-            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+        IQueryable<BlogPost> query = dbContext.BlogPost;
 
-        if (blog is null)
-            return Result.NotFound($"Blog with id: {id.ToString()} is not found");
+        if (queryBuilder is not null)
+        {
+            query = queryBuilder(query);
+        }
 
-        return Result.Success(blog);
+        BlogPost? blog = await query.FirstOrDefaultAsync(
+            blog => blog.Id == id,
+            cancellationToken);
+
+        return blog is null
+            ? Result<BlogPost>.NotFound($"Blog with ID '{id}' was not found.")
+            : Result<BlogPost>.Success(blog);
+    }
+
+    public IQueryable<BlogPost> IncludeAll(IQueryable<BlogPost> query)
+    {
+        return query
+            .Include(blog => blog.BlogComments)
+            .Include(blog => blog.BlogPostBlocks)
+            .Include(blog => blog.BlogReferences)
+            .Include(blog => blog.BlogPostTags)
+            .Include(blog => blog.BlogPostLikes)
+            .Include(blog => blog.BlogPostAuthors)
+            .Include(blog => blog.BlogPostViews)
+            .AsSplitQuery();
     }
 
     public async Task<Result<BlogPost>> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
@@ -140,6 +156,7 @@ internal sealed class EFBlogPostsRepo
             .Include(b => b.BlogPostLikes)
             .Include(b => b.BlogPostAuthors)
             .Include(b => b.BlogPostViews)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(b => b.Slug == normalizedSlug, cancellationToken);
 
         if (blog is null)

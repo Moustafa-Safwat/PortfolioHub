@@ -41,8 +41,8 @@ internal sealed class GetBlogPostQueryHandler
                     blog.Description,
                     blog.PublishedAtUtc,
                     blog.GetReadTimeMinutes(),
-                    blog.BlogPostLikes.Count,
-                    blog.BlogComments.Count,
+                    blog.BlogPostLikes.Where(b => b.IsLiked).Count(),
+                    blog.CommentsCount(),
                     blog!.BlogPostTags
                         .Select(tag => tag.Name)
                         .ToList()

@@ -30,4 +30,8 @@ internal sealed class BlogPostLike : BaseEntity
         IsLiked = false;
         UnLikedAtUtc = DateTime.UtcNow;
     }
+    public void Like()
+    {
+        IsLiked = true;
+    }
 }

@@ -47,11 +47,17 @@ internal sealed class BlogPost : DeletionEntity
     }
     public void AddLike(Guid userId)
     {
+        var likedPost = _blogPostLikes.FirstOrDefault(l => l.UserId == userId);
         // Add only like if the user hasn't liked the post yet
-        if (!_blogPostLikes.Any(b => b.UserId == userId))
+        if (likedPost is null)
         {
             var blogPostLike = new BlogPostLike(Id, userId);
             _blogPostLikes.Add(blogPostLike);
+        }
+        else
+        {
+            likedPost.UnLike();
+            likedPost.Like();
         }
     }
     public void RemoveLike(Guid userId)
@@ -149,7 +155,12 @@ internal sealed class BlogPost : DeletionEntity
         if (comment is not null)
         {
             comment.MarkAsDeleted(userId);
+            comment.RemoveReplies(userId);
         }
+    }
+    public int CommentsCount()
+    {
+        return _blogComments.Sum(comment => comment.GetRepliesCount() + 1);
     }
     // Setters
     public void SetFeatured(bool isFeatured)
