@@ -12,5 +12,5 @@ internal sealed record BlogsReadDto(
     DateTime? PublishedAt,
     int ReadTime,
     int LikesNo,
-    int commentsNo,
+    int CommentsNo,
     IReadOnlyCollection<string> Tags);

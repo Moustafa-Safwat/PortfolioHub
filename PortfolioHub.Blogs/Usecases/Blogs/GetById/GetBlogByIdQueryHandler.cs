@@ -59,10 +59,10 @@ internal sealed class GetBlogByIdQueryHandler
             blog.Status,
             blog.PublishedAtUtc,
             blog.GetReadTimeMinutes(),
-            blog.BlogPostLikes.Count,
+            blog.BlogPostLikes.Where(b => b.IsLiked).Count(),
             blog.BlogComments.Count,
-            blog.BlogPostViews.Sum(b => b.ViewCount),
-            blog.BlogPostLikes.Any(b => b.UserId == request.UserId),
+            blog.BlogPostViews.Count,
+            blog.BlogPostLikes.Any(b => b.UserId == request.UserId && b.IsLiked),
             blog.BlogPostTags
                 .Select(t => t.Name)
                 .ToList()
