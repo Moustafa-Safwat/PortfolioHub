@@ -12,7 +12,11 @@ internal sealed class PublishBlogCommandHandler
 {
     public async Task<Result> Handle(PublishBlogCommand request, CancellationToken cancellationToken)
     {
-        var getByIdResult = await blogsRepo.GetByIdAsync(request.BlogId, cancellationToken);
+        var getByIdResult = await blogsRepo.GetByIdAsync(
+            request.BlogId,
+            null!, // Assuming no specific includes are needed
+            cancellationToken);
+
         if (!getByIdResult.IsSuccess)
             return getByIdResult.PropagateFailure();
 

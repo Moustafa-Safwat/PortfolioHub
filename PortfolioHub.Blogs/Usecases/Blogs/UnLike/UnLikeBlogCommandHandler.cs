@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using Microsoft.EntityFrameworkCore;
 using PortfolioHub.Blogs.Domain.Interfaces;
 using PortfolioHub.SharedKernal.Config;
 using ValidBuild.Sharedkernal.Domain.CQRS;
@@ -12,7 +13,11 @@ internal sealed class UnLikeBlogCommandHandler
 {
     public async Task<Result> Handle(UnLikeBlogCommand request, CancellationToken cancellationToken)
     {
-        var getBlogResult = await blogsRepo.GetByIdAsync(request.BlogId, cancellationToken);
+        var getBlogResult = await blogsRepo.GetByIdAsync(
+            request.BlogId,
+            query => query.Include(b => b.BlogPostLikes),
+            cancellationToken);
+
         if (!getBlogResult.IsSuccess)
             return getBlogResult.PropagateFailure();
 

@@ -21,7 +21,7 @@ internal sealed class UpdateBlogPostCommandHandler(
             if (!tagValidationResult.IsSuccess)
                 return tagValidationResult.PropagateFailure();
             // get existing blog to update
-            var existingBlogResult = await blogsRepo.GetByIdAsync(request.BlogId);
+            var existingBlogResult = await blogsRepo.GetByIdAsync(request.BlogId, blogsRepo.IncludeAll, cancellationToken);
             if (!existingBlogResult.IsSuccess)
                 return existingBlogResult.PropagateFailure();
 

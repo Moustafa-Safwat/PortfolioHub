@@ -5,7 +5,7 @@ namespace PortfolioHub.Blogs.Domain.Interfaces;
 
 internal interface IReadOnlyBlogsRepo
 {
-    Task<Result<BlogPost>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<BlogPost>> GetByIdAsync(Guid id, Func<IQueryable<BlogPost>, IQueryable<BlogPost>>? queryBuilder, CancellationToken cancellationToken = default);
     Task<Result<BlogPost>> GetBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<Result<IReadOnlyList<BlogPost>>> GetAllAsync(int pageNumber, int pageSize, List<Guid>? tagIds = null,
         string? search = null, Guid userId = default, bool isFeatured = false, CancellationToken cancellationToken = default);
@@ -15,6 +15,7 @@ internal interface IReadOnlyBlogsRepo
 
 internal interface IBlogsRepo : IReadOnlyBlogsRepo
 {
+    IQueryable<BlogPost> IncludeAll(IQueryable<BlogPost> query);
     Task<Result> AddAsync(BlogPost blog, CancellationToken cancellationToken = default);
     Task<Result> UpdateAsync(BlogPost blog, CancellationToken cancellationToken = default);
     Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken = default);

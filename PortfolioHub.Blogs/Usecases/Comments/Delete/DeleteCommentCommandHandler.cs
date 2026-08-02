@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using Microsoft.EntityFrameworkCore;
 using PortfolioHub.Blogs.Domain.Interfaces;
 using PortfolioHub.SharedKernal.Config;
 using ValidBuild.Sharedkernal.Domain.CQRS;
@@ -12,7 +13,11 @@ internal sealed class DeleteCommentCommandHandler
 {
     public async Task<Result> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
     {
-        var getBlogByIdResult = await blogsRepo.GetByIdAsync(request.BlogId, cancellationToken);
+        var getBlogByIdResult = await blogsRepo.GetByIdAsync(
+            request.BlogId,
+            query => query.Include(blog => blog.BlogComments),
+            cancellationToken);
+
         if (!getBlogByIdResult.IsSuccess)
             return getBlogByIdResult.PropagateFailure();
 

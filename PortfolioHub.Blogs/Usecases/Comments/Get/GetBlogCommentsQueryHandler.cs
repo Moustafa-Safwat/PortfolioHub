@@ -1,5 +1,6 @@
 ﻿using Ardalis.Result;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using PortfolioHub.Blogs.Domain.Entities;
 using PortfolioHub.Blogs.Domain.Interfaces;
 using PortfolioHub.Blogs.Endpoints.Comments;
@@ -19,7 +20,10 @@ internal sealed class GetBlogCommentsQueryHandler
         GetBlogCommentsQuery request,
         CancellationToken cancellationToken)
     {
-        var blogResult = await blogsRepo.GetByIdAsync(request.BlogId, cancellationToken);
+        var blogResult = await blogsRepo.GetByIdAsync(
+            request.BlogId,
+            query => query.Include(b => b.BlogComments),
+            cancellationToken);
 
         if (!blogResult.IsSuccess)
             return blogResult.PropagateFailure<BlogPost, IReadOnlyCollection<GetCommentsResponse>>();

@@ -52,6 +52,7 @@ internal sealed class GetBlogBySlugQueryHandler
             blog.BlogPostLikes.Count,
             blog.BlogComments.Count,
             blog.BlogPostViews.Sum(b => b.ViewCount),
+            blog.BlogPostLikes.Any(b => b.UserId == request.UserId),
             blog.BlogPostTags
                 .Select(t => t.Name)
                 .ToList()

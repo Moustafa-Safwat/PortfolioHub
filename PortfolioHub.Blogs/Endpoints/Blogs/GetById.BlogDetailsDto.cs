@@ -15,6 +15,7 @@ internal sealed record BlogDetailsDto(
     int LikesNo,
     int CommentsNo,
     int ViewsNo,
+    bool IsUserLiked,
     IReadOnlyCollection<string> Tags,
     IReadOnlyCollection<BlogAuthorDto> Authors,
     IReadOnlyCollection<BlogPostReferenceIdDto> References,
