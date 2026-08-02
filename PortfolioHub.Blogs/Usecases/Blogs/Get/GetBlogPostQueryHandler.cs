@@ -42,7 +42,9 @@ internal sealed class GetBlogPostQueryHandler
                     blog.PublishedAtUtc,
                     blog.GetReadTimeMinutes(),
                     blog.BlogPostLikes.Where(b => b.IsLiked).Count(),
-                    blog.CommentsCount(),
+                    blog.BlogComments.Count,
+                    blog.BlogPostViews.Count,
+                    blog.IsFeatured,
                     blog!.BlogPostTags
                         .Select(tag => tag.Name)
                         .ToList()
