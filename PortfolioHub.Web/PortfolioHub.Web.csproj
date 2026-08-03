@@ -27,6 +27,7 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\PortfolioHub.Achievements\PortfolioHub.Achievements.csproj" />
+    <ProjectReference Include="..\PortfolioHub.Blogs\PortfolioHub.Blogs.csproj" />
     <ProjectReference Include="..\PortfolioHub.Notification\PortfolioHub.Notification.csproj" />
     <ProjectReference Include="..\PortfolioHub.Projects\PortfolioHub.Projects.csproj" />
     <ProjectReference Include="..\PortfolioHub.Users\PortfolioHub.Users.csproj" />

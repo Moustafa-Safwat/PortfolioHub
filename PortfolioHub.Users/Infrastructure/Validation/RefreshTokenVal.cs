@@ -1,8 +1,7 @@
-﻿using PortfolioHub.Users.Domain.Entities;
-
-namespace PortfolioHub.Users.Infrastructure.Validation;
+﻿namespace PortfolioHub.Users.Infrastructure.Validation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PortfolioHub.Users.Domain.Entities.Users;
 
 internal class RefreshTokenVal : IEntityTypeConfiguration<RefreshToken>
 {

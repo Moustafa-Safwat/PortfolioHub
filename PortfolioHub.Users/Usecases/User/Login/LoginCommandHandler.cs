@@ -2,29 +2,45 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using PortfolioHub.Users.Domain.Entities.Users;
 using PortfolioHub.Users.Domain.Interfaces;
 
 namespace PortfolioHub.Users.Usecases.User.Login;
 
 internal sealed record LoginDtoResult(string AccessToken, string RefreshToken);
-internal sealed class LoginCommandHandler(
-    UserManager<IdentityUser> userManager,
+internal sealed class LoginCommandHandler
+(
+    UserManager<ApplicationUser> userManager,
     JwtService jwtService,
     TokenHasher tokenHasher,
     IRefreshTokenRepo refreshTokenRepo,
-    IConfiguration configuration
-    ) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
+    IUserSecurityRepo userSecurityRepo,
+    IConfiguration configuration,
+    IValidUser validUser
+) : IRequestHandler<LoginCommand, Result<LoginDtoResult>>
 {
 
     public async Task<Result<LoginDtoResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await userManager.FindByNameAsync(request.UserName);
+        var user = await userManager.FindByEmailAsync(request.UserEmail);
         if (user is null)
-            return Result.NotFound($"User {request.UserName} not found");
+            return Result.NotFound($"User with email: {request.UserEmail} not found");
+
+        var validUserResult = await validUser.IsValidUserAsync(user, cancellationToken);
+        if (!validUserResult.IsSuccess)
+            return Result.Unauthorized("Invalid user");
+
+        var applicationUserWithSecurity = validUserResult.Value;
 
         var isPassValid = await userManager.CheckPasswordAsync(user, request.Password);
         if (!isPassValid)
             return Result.Unauthorized("Invalid password");
+
+        var isEmailConfirmed = await userManager.IsEmailConfirmedAsync(user);
+        if (!isEmailConfirmed)
+            return Result.Error(new ErrorList([
+            "Your email address has not been confirmed. " +
+            "Please check your inbox and verify your email before signing in."]));
 
         // Additional logic for successful login can be added here
         var tokenResult = await jwtService.GenerateAccessTokenAsync(user, cancellationToken);
@@ -38,7 +54,7 @@ internal sealed class LoginCommandHandler(
 
         var hashedRefreshToken = tokenHasher.HashToken(refreshToken);
 
-        var refreseTokenEntity = new Domain.Entities.RefreshToken(
+        var refreseTokenEntity = new Domain.Entities.Users.RefreshToken(
             id: Guid.NewGuid(),
             userId: user.Id,
             hasedToken: hashedRefreshToken,
@@ -55,6 +71,10 @@ internal sealed class LoginCommandHandler(
         var saveRefreshTokenResult = await refreshTokenRepo.SaveChangesAsync(cancellationToken);
         if (!saveRefreshTokenResult.IsSuccess)
             return Result.Error(new ErrorList(saveRefreshTokenResult.Errors));
+
+        // Record the last login time for the user in the UserSecurity entity
+        applicationUserWithSecurity?.UserSecurity?.RecordLogin();
+        await userSecurityRepo.SaveChangesAsync(cancellationToken);
 
         var loginDto = new LoginDtoResult(
             AccessToken: tokenResult.Value,

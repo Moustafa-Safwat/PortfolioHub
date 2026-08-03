@@ -1,11 +1,13 @@
-﻿using Ardalis.Result;
-using MediatR;
-using PortfolioHub.Users.Endpoints.User;
+﻿using ValidBuild.Sharedkernal.Domain.CQRS;
 
 namespace PortfolioHub.Users.Usecases.User.Create;
 
 internal sealed record CreateUserCommand(
-    string UserName,
     string Email,
     string Password,
-    string Role) : IRequest<Result<Guid>>;
+    string FirstName,
+    string LastName,
+    string Role,
+    string CompanyName,
+    bool VerifyEmail = true
+    ) : ICommand<Guid>;

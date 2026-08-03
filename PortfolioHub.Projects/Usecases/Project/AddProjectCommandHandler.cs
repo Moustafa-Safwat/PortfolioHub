@@ -12,7 +12,7 @@ internal sealed class AddProjectCommandHandler(
     IEntityRepo<Domain.Entities.LinkProvider> linkProviderRepo,
     IEntityRepo<TechanicalSkills> techinicalSkillsRepo,
     IEntityRepo<Domain.Entities.Category> categoryRepo,
-    IUnitOfWork unitOfWork
+    Infrastructure.IUnitOfWork unitOfWork
     ) : IRequestHandler<AddProjectCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(AddProjectCommand request, CancellationToken cancellationToken)

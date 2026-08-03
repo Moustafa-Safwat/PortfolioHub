@@ -20,8 +20,8 @@ public interface IEntityRepo<TEntity>
     : IReadOnlyEntityRepo<TEntity>
     where TEntity : BaseEntity
 {
-    Task<Result> AddAsync(TEntity project, CancellationToken cancellationToken = default);
-    Task<Result> UpdateAsync(TEntity project, CancellationToken cancellationToken = default);
+    Task<Result> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
+    Task<Result> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
     Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Result> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
