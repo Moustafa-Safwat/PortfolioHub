@@ -85,44 +85,44 @@ internal class DbUsersSeeder
         {
             var user = await userManager.FindByEmailAsync(authUser.Email);
 
-            if (user is not null)
-                await userManager.DeleteAsync(user);
+            if (user is null)
+            {   // ONLE Create users if not exists
+                var authUserRole = authUser.Role.ToString().ToLower();
 
-            var authUserRole = authUser.Role.ToString().ToLower();
+                var createUserCommand = new CreateUserCommand
+                (
+                    Email: authUser.Email,
+                    Password: authUser.Password,
+                    FirstName: authUser.FristName,
+                    LastName: authUser.LastName,
+                    Role: authUserRole,
+                    CompanyName: "MSafwatHub",
+                    VerifyEmail: false
+                );
 
-            var createUserCommand = new CreateUserCommand
-            (
-                Email: authUser.Email,
-                Password: authUser.Password,
-                FirstName: authUser.FristName,
-                LastName: authUser.LastName,
-                Role: authUserRole,
-                CompanyName: "MSafwatHub",
-                VerifyEmail: false
-            );
+                var userResult = await sender.Send(createUserCommand);
+                if (!userResult.IsSuccess)
+                    throw new InvalidOperationException($"{authUserRole} can't be created");
 
-            var userResult = await sender.Send(createUserCommand);
-            if (!userResult.IsSuccess)
-                throw new InvalidOperationException($"{authUserRole} can't be created");
+                var userId = userResult.Value;
 
-            var userId = userResult.Value;
+                var applicationUserResult = await userSecurityRepo.GetUserWithSecurityByIdAsync(userId);
+                if (!applicationUserResult.IsSuccess)
+                    throw new InvalidOperationException($"Can't find object for application user for {authUserRole} user");
 
-            var applicationUserResult = await userSecurityRepo.GetUserWithSecurityByIdAsync(userId);
-            if (!applicationUserResult.IsSuccess)
-                throw new InvalidOperationException($"Can't find object for application user for {authUserRole} user");
+                var applicationUser = applicationUserResult.Value;
+                // verify email
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(applicationUser!);
+                await userManager.ConfirmEmailAsync(applicationUser!, token);
+                applicationUser.VerifyEmail();
+                if (authUser.Role == ApplicationUserRoles.System)
+                {
+                    // mark as system user
+                    applicationUser.UserSecurity?.SetAsSystemUser();
+                }
 
-            var applicationUser = applicationUserResult.Value;
-            // verify email
-            var token = await userManager.GenerateEmailConfirmationTokenAsync(applicationUser!);
-            await userManager.ConfirmEmailAsync(applicationUser!, token);
-            applicationUser.VerifyEmail();
-            if (authUser.Role == ApplicationUserRoles.System)
-            {
-                // mark as system user
-                applicationUser.UserSecurity?.SetAsSystemUser();
+                await userSecurityRepo.SaveChangesAsync();
             }
-
-            await userSecurityRepo.SaveChangesAsync();
         }
 
     }
