@@ -97,7 +97,7 @@ internal class DbUsersSeeder
                     LastName: authUser.LastName,
                     Role: authUserRole,
                     CompanyName: "MSafwatHub",
-                    VerifyEmail: false
+                    SendEmailVerification: false
                 );
 
                 var userResult = await sender.Send(createUserCommand);

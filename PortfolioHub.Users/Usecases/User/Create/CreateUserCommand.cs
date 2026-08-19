@@ -9,5 +9,6 @@ internal sealed record CreateUserCommand(
     string LastName,
     string Role,
     string CompanyName,
-    bool VerifyEmail = true
+    bool SendEmailVerification = true,
+    string ImageUrl = ""
     ) : ICommand<Guid>;

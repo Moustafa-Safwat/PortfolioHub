@@ -18,7 +18,7 @@ internal class RefreshToken : BaseEntity
     public ApplicationUser? User { get; private set; } = null!;
 
     // Parameterless constructor for EF Core
-    public RefreshToken() { }
+    private RefreshToken() { }
     public RefreshToken(Guid id, Guid userId, string hasedToken,
         string device, string ipAddress, DateTime expiresAt,
         DateTime createdAt)

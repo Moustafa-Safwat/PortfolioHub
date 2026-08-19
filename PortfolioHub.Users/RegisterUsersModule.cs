@@ -9,6 +9,7 @@ using PortfolioHub.Users.Domain.Interfaces;
 using PortfolioHub.Users.Infrastructure.Context;
 using PortfolioHub.Users.Infrastructure.EFRepository;
 using PortfolioHub.Users.Usecases.User.Create;
+using PortfolioHub.Users.Usecases.User.GoogleAuth;
 using PortfolioHub.Users.Usecases.User.Login;
 using PortfolioHub.Users.Usecases.VerifyEmail.Send;
 using System.Reflection;
@@ -47,6 +48,7 @@ public static class RegisterUsersModule
         service.AddScoped<IEmailVerificationLink, EmailVerificationLinkService>();
         service.AddScoped<IEmailVerificationMessageFormatter, EmailVerificationMessageFormatter>();
         service.AddScoped<IValidUser, ValidUserService>();
+        service.AddScoped<IGooglePayloadValidator, GooglePayloadValidator>();
 
         var entityTypes = typeof(RegisterUsersModule).Assembly
            .GetTypes()

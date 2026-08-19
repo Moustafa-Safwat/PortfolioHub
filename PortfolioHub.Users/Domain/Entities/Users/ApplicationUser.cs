@@ -16,7 +16,7 @@ internal class ApplicationUser : IdentityUser<Guid>
     public UserSecurity? UserSecurity { get; set; } = null!;
 
     // Parameterless constructor for EF Core
-    public ApplicationUser() { }
+    private ApplicationUser() { }
 
     public ApplicationUser(string email, string firstName, string lastName, string profileImageUrl = "")
     {
