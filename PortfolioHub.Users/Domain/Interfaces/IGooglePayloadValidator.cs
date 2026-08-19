@@ -1,7 +1,7 @@
 ﻿using Ardalis.Result;
 using Google.Apis.Auth;
 
-namespace PortfolioHub.Users.Usecases.User.GoogleAuth;
+namespace PortfolioHub.Users.Domain.Interfaces;
 
 internal interface IGooglePayloadValidator
 {

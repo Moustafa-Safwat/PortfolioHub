@@ -1,8 +1,9 @@
 ﻿using Ardalis.Result;
 using Google.Apis.Auth;
 using Microsoft.Extensions.Configuration;
+using PortfolioHub.Users.Domain.Interfaces;
 
-namespace PortfolioHub.Users.Usecases.User.GoogleAuth;
+namespace PortfolioHub.Users.Infrastructure.GoogleAuth;
 
 internal sealed class GooglePayloadValidator
 (
