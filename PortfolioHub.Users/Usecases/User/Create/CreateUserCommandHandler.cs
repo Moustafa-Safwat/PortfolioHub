@@ -55,7 +55,7 @@ internal sealed class CreateUserCommandHandler(
                 email: request.Email,
                 firstName: request.FirstName,
                 lastName: request.LastName,
-                profileImageUrl: string.Empty // Default empty, can be updated later
+                profileImageUrl: request.ImageUrl
             );
 
             // Set the auto-generated username
@@ -115,7 +115,7 @@ internal sealed class CreateUserCommandHandler(
             }
 
             // Step 9: Send email verification
-            if (request.VerifyEmail)
+            if (request.SendEmailVerification)
             {
                 var sendVerificationEmailCommand = new SendEmailVerificationCommand(user.Id);
                 var sendEmailResult = await sender.Send(sendVerificationEmailCommand, cancellationToken);
