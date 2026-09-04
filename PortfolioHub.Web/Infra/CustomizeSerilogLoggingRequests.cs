@@ -1,21 +1,51 @@
-﻿using System.Security.Claims;
-using Serilog;
+﻿using Serilog;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace PortfolioHub.Web.Infra;
 
 internal static class CustomizeSerilogLoggingRequests
 {
+    private static string GetUserInfo(this HttpContext httpContext, string claim)
+    {
+        bool hasAuthHeader = httpContext.Request.Headers.ContainsKey("Authorization");
+        if (!hasAuthHeader) return "Anonymous";
+
+        string? authHeaderValue = httpContext.Request.Headers["Authorization"].FirstOrDefault();
+
+        Func<bool> isNotValidAuthHeader = () =>
+        {
+            return string.IsNullOrEmpty(authHeaderValue) ||
+                   !authHeaderValue.StartsWith("Bearer ");
+        };
+
+        if (isNotValidAuthHeader()) return "Anonymous";
+
+        var token = authHeaderValue!.Substring("Bearer ".Length).Trim();
+
+        try
+        {
+            var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
+            return jwtToken.Claims.FirstOrDefault(c => c.Type == claim)?.Value ?? "Anonymous";
+        }
+        catch
+        {
+            return "Anonymous";
+        }
+    }
+
     public static void CustomizeLoggingRequests(this IDiagnosticContext diagnosticContext,
         HttpContext httpContext)
     {
-        Func<string, string> userInfo = (string claim)
-            => httpContext?.User?.FindFirst(claim)?.Value ?? "Anonymous";
-
         // User Data
-        diagnosticContext.Set("UserId", userInfo(ClaimTypes.NameIdentifier));
-        diagnosticContext.Set("UserEmail", userInfo(ClaimTypes.Email));
-        diagnosticContext.Set("UserName", userInfo(ClaimTypes.Name));
-        diagnosticContext.Set("UserFullName", $"{userInfo("FirstName")} {userInfo("LastName")}");
+        diagnosticContext.Set("UserId",
+            httpContext.GetUserInfo(ClaimTypes.NameIdentifier));
+        diagnosticContext.Set("UserEmail",
+            httpContext.GetUserInfo(ClaimTypes.Email));
+        diagnosticContext.Set("UserName",
+            httpContext.GetUserInfo(ClaimTypes.Name));
+        diagnosticContext.Set("UserFullName",
+            $"{httpContext.GetUserInfo("FirstName")} {httpContext.GetUserInfo("LastName")}");
         // Location Data
         diagnosticContext.Set("X-Device-Type",
             httpContext.Request.Headers.FirstOrDefault(h =>
