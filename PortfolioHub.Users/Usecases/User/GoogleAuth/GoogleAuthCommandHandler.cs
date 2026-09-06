@@ -48,12 +48,18 @@ internal sealed class GoogleAuthCommandHandler(
             {
                 var authUserRole = ApplicationUserRoles.User.ToString().ToLower();
 
+                // Some times the the name comes from google as empty
+                Func<string, string> getValue = (string name) =>
+                {
+                    return string.IsNullOrEmpty(name) ? "Unknown" : name;
+                };
+
                 var createUserCommand = new CreateUserCommand
                 (
                     payload.Email,
                     $"A1@{Guid.NewGuid().ToString()}#9Z",
-                    payload.GivenName ?? string.Empty,
-                    payload.FamilyName ?? string.Empty,
+                    getValue(payload.GivenName),
+                    getValue(payload.FamilyName),
                     authUserRole,
                     "UnKnown",
                     false,
